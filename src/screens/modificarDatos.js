@@ -29,7 +29,7 @@ const SingUp = ({ navigation }) => {
 
   const [isVisible, setIsVisible] = React.useState(false);
 
-  const toggleVisibility = ({navigation}) => {
+  const toggleVisibility = () => {
     setIsVisible(!isVisible);
   };
 
