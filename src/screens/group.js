@@ -1,47 +1,34 @@
-import { useState, useEffect } from 'react';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  Image,
-  StyleSheet,
-  ScrollView,
-} from 'react-native';
+import React, { useState, useEffect, useContext } from 'react';
+import { View, Text, TouchableOpacity, Image, StyleSheet, ScrollView } from 'react-native';
 import { Button } from 'react-native-paper';
+import ScreenContext from "./ScreenContext"; // Adjust the path based on the actual location of ScreenContext
 
 const GroupsAll = ({ navigation }) => {
-  const [favoriteTots, setFavoriteTots] = useState(false);
+  const { userData } = useContext(ScreenContext);
   const [groupsData, setGroupsData] = useState([]);
 
-  const normalGroupsData = [
-    { id: 1, name: 'Example 1', favorite: false, selected: false },
-    { id: 2, name: 'Example 2', favorite: false, selected: false },
-    { id: 3, name: 'Example 3', favorite: false, selected: false },
-    { id: 4, name: 'Example 4', favorite: false, selected: false },
-    { id: 5, name: 'Example 5', favorite: false, selected: false },
-    { id: 6, name: 'Example 6', favorite: false, selected: false },
-    { id: 7, name: 'Example 7', favorite: false, selected: false },
-    { id: 8, name: 'Example 8', favorite: false, selected: false },
-  ];
-
-  const favoriteGroupsData = [
-    { id: 9, name: 'Favorite Group 1', favorite: true, selected: false },
-    { id: 10, name: 'Favorite Group 2', favorite: true, selected: false },
-  ];
-
-  const loadGroupsData = () => {
-    setGroupsData(favoriteTots ? favoriteGroupsData : normalGroupsData);
-  };
-
-  const handleToggleFavorite = (id) => {
-    const updatedGroups = groupsData.map((group) => {
-      if (group.id === id) {
-        return { ...group, favorite: !group.favorite };
+  useEffect(() => {
+    try {
+      const parsedUserData = JSON.parse(userData);
+      if (parsedUserData && parsedUserData.id) {
+        fetch(`http://44.194.67.133:8080/TimeTogether/userGroups?userId=${parsedUserData.id}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            setGroupsData(data.groups);
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
       }
-      return group;
-    });
-    setGroupsData(updatedGroups);
-  };
+    } catch (error) {
+      console.error("Error parsing userData:", error);
+    }
+  }, [userData]);
 
   const handleGroupClick = (id) => {
     const updatedGroups = groupsData.map((group) => {
@@ -52,10 +39,6 @@ const GroupsAll = ({ navigation }) => {
     });
     setGroupsData(updatedGroups);
   };
-
-  useEffect(() => {
-    loadGroupsData();
-  }, [favoriteTots]);
 
   return (
     <View style={styles.outerContainer}>
@@ -79,64 +62,33 @@ const GroupsAll = ({ navigation }) => {
 
       <View style={styles.container}>
         <View style={styles.filterContainer}>
-          <TouchableOpacity onPress={() => setFavoriteTots(false)}>
-            <Text
-              style={[
-                styles.filterText,
-                !favoriteTots && styles.selectedFilter,
-              ]}>
-              All
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity onPress={() => setFavoriteTots(true)}>
-            <Text
-              style={[
-                styles.filterText,
-                favoriteTots && styles.selectedFilter,
-              ]}>
-              Favourites
-            </Text>
+          <TouchableOpacity>
+            <Text style={styles.filterText}>All</Text>
           </TouchableOpacity>
         </View>
 
         <ScrollView contentContainerStyle={styles.scrollViewContent}>
-          {groupsData.map((group) => (
+          {groupsData.map((group, index) => (
             <TouchableOpacity
-              key={group.id}
-              style={styles.groupWrapper}
-              onPress={() => navigation.navigate("InfoGrupo")}>
+              key={index}
+              onPress={() => navigation.navigate('InfoGrupo', { userId: group.id })}>
               <View style={styles.groupContainer}>
                 <Text style={styles.groupName}>{group.name}</Text>
-                <TouchableOpacity
-                  style={styles.starContainer}
-                  onPress={() => handleToggleFavorite(group.id)}>
-                  <Image
-                    source={
-                      group.favorite
-                        ? require('../image/starFav.png')
-                        : require('../image/starTots.png')
-                    }
-                    style={styles.starIcon}
-                  />
-                </TouchableOpacity>
               </View>
             </TouchableOpacity>
           ))}
+
         </ScrollView>
 
-        {!favoriteTots && (
-          <TouchableOpacity
-            style={styles.createGroupButton}
-            onPress={() => navigation.navigate('NewGroup')}>
-            <Text style={styles.createGroupButtonText}>+ CREATE NEW GROUP</Text>
-          </TouchableOpacity>
-        )}
+        <TouchableOpacity
+          style={styles.createGroupButton}
+          onPress={() => navigation.navigate('NewGroup')}>
+          <Text style={styles.createGroupButtonText}>+ CREATE NEW GROUP</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
 };
-
 const styles = StyleSheet.create({
   outerContainer: {
     flex: 1,
@@ -156,12 +108,6 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     width: 160,
     alignSelf: 'center',
-  },
-  title: {
-    fontSize: 24,
-    color: 'white',
-    padding: 8,
-    textAlign: 'center',
   },
   filterContainer: {
     flexDirection: 'row',
@@ -191,9 +137,6 @@ const styles = StyleSheet.create({
     marginRight: 10,
     fontWeight: 'bold',
   },
-  starContainer: {
-    marginLeft: 'auto',
-  },
   createGroupButton: {
     backgroundColor: '#EF9009',
     padding: 12,
@@ -203,10 +146,6 @@ const styles = StyleSheet.create({
   createGroupButtonText: {
     fontSize: 18,
     color: 'white',
-  },
-  starIcon: {
-    width: 30,
-    height: 30,
   },
   scrollViewContent: {
     paddingBottom: 10,

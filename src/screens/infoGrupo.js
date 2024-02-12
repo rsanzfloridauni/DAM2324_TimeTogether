@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ScrollView, View, Text, StyleSheet, Image } from 'react-native';
 import {
   TextInput,
@@ -11,14 +11,28 @@ import {
 } from 'react-native-paper';
 import Participantes from './participants';
 
-const InfoGroup = ({navigation}) => {
-  const [groupName, setGroupName] = useState('');
-  const [groupDescription, setGroupDescription] = useState('');
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedPeople, setSelectedPeople] = useState(['ejemplo']);
-  const [names, setNames] = React.useState(['Pepe', 'Juan']);
-  const [color, setColor] = React.useState("#C9C9C9");
+const InfoGroup = ({route, navigation}) => {
+  const userId = route.params.userId;
+  const [groupName, setGroupName] = useState();
+  const [groupDescription, setGroupDescription] = useState();
+  const [names, setNames] = useState([]);
+  const [color, setColor] = useState();
 
+  useEffect(() => {
+    fetch(`http://44.194.67.133:8080/TimeTogether/group?id=${userId}`, {
+      method: "GET",
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setGroupName(data.name);
+        setGroupDescription(data.description);
+        setNames(data.members);
+        setColor(data.color);
+      })
+      .catch((error) => {
+        console.error("Error fetching friend info:", error);
+      });
+  }, [userId]);
 
   return (
     <ScrollView style={styles.container}>
@@ -60,11 +74,10 @@ const InfoGroup = ({navigation}) => {
                 Integrantes del grupo
               </List.Subheader>
               <ScrollView>
-                {names.map((name, index) => (
+                {names.map((obj, index) => (
                   <Participantes
                     key={index}
-                    imageSource={require('../image/logo.png')}
-                    name={name}
+                    name={obj.name}
                   />
                 ))}
               </ScrollView>

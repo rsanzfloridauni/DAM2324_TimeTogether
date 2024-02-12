@@ -1,35 +1,47 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { View, StyleSheet, ScrollView, TouchableOpacity } from "react-native";
 import { Button, TextInput } from "react-native-paper";
 import Friend from "../../components/friend";
+import ScreenContext from "./ScreenContext"; // Ajusta la ruta según la ubicación real de ScreenContext
+
 
 export default function Friends({ navigation }) {
+  const { userData, setUserData } = useContext(ScreenContext);
   const [addFriend, setAddFriend] = useState(true);
   const [mail, setMail] = useState("");
   const [friendList, setFriendList] = useState([]);
 
+
   const handleAddPress = () => {
     setAddFriend(!addFriend);
   };
+
+
   useEffect(() => {
-    fetch(
-      "http://44.194.67.133:8080/TimeTogether/friends?id=65c5114e7824b86e21010260",
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
+    try {
+      // Intenta parsear userData como JSON
+      const parsedUserData = JSON.parse(userData);
+      if (parsedUserData && parsedUserData.id) {
+        fetch(`http://44.194.67.133:8080/TimeTogether/friends?id=${parsedUserData.id}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            setFriendList(data.friends); // Actualiza el estado con los amigos recibidos.
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
       }
-    )
-      .then((response) => response.json())
-      .then((data) => {
-        setFriendList(data.friends); // Actualiza el estado con los amigos recibidos.
-      })
-      .catch((error) => {
-        console.error("Error:", error);
-      });
-  }, []);
-  
+    } catch (error) {
+      // Maneja el error si el parseo falla
+      console.error("Error parsing userData:", error);
+    }
+  }, [userData]);
+
   return (
     <View style={styles.container}>
       <View style={styles.titleContainer}>
@@ -56,16 +68,16 @@ export default function Friends({ navigation }) {
       {addFriend ? (
         <View style={styles.panel}>
           <ScrollView>
-          {friendList.map((friend, index) => (
-            <TouchableOpacity
-              key={index}
-              onPress={() => navigation.navigate('FriendsInfo', { userId: friend.id })}>
-              <Friend
-                imageSource={{ uri: friend.profile_picture }}
-                name={friend.name}
-              />
-            </TouchableOpacity>
-          ))}
+            {friendList.map((friend, index) => (
+              <TouchableOpacity
+                key={index}
+                onPress={() => navigation.navigate('FriendsInfo', { userId: friend.id })}>
+                <Friend
+                  imageSource={{ uri: friend.profile_picture }}
+                  name={friend.name}
+                />
+              </TouchableOpacity>
+            ))}
           </ScrollView>
         </View>
       ) : (

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ScrollView, View, Text, StyleSheet, Image } from 'react-native';
+import { ScrollView, View, Text, StyleSheet, Image, Alert } from 'react-native';
 import {
   TextInput,
   Button,
@@ -15,8 +15,41 @@ const CreateGroup = (props) => {
   const [groupName, setGroupName] = useState('');
   const [groupDescription, setGroupDescription] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedPeople, setSelectedPeople] = useState(['ejemplo']);
+  const [color, setColor] = useState('blue');
   const [names, setNames] = React.useState(['Pepe', 'Juan']);
+  const [events, setEvents] = React.useState(['65c511317824b86e2101025c']);
+
+  const createGroup = async () => {
+    try {
+      const response = await fetch(
+        'http://44.194.67.133:8080/TimeTogether/newGroup',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            description: groupDescription,
+            events: events,
+            members: names,
+            name: groupName,
+            color: color
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const json = await response.json();
+      console.log('Response from server:', json); // Agrega esta línea para imprimir la respuesta
+      setUserData(JSON.stringify(json));
+      props.navigation.navigate('Start');
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <ScrollView style={styles.container}>
@@ -77,7 +110,7 @@ const CreateGroup = (props) => {
         <Divider style={styles.divider} />
         <Button
           mode="contained"
-          onPress={() => console.log('Button Pressed')}
+          onPress={() => createGroup()}
           style={styles.button}
           labelStyle={styles.buttonLabel}
           theme={{ colors: { primary: '#EF9009' } }}>
