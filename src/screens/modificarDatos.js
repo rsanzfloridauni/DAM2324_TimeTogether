@@ -8,8 +8,9 @@ import {
 } from 'react-native';
 import { Slider } from '@react-native-assets/slider';
 import { TextInput, Button, Divider } from 'react-native-paper';
-import { DateTimePicker } from '@hashiprobr/react-native-paper-datetimepicker';
 import { Avatar, Modal, Portal, IconButton } from 'react-native-paper';
+import { DatePickerInput } from 'react-native-paper-dates';
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 import snackIcon from '../../assets/snack-icon.png';
 
@@ -26,6 +27,7 @@ const SingUp = ({ navigation }) => {
   const [address, setAddress] = useState('');
   const [allergies, setAllergies] = useState('');
   const [hobbies, setHobbies] = useState('');
+  const [inputDate, setInputDate] = React.useState(undefined)
 
   const [isVisible, setIsVisible] = React.useState(false);
 
@@ -68,11 +70,13 @@ const SingUp = ({ navigation }) => {
             theme={{ colors: { primary: '#EF9009' } }}
             onChangeText={(txt) => setMail(txt)}
           />
-          <DateTimePicker
+          <DatePickerInput
             style={{ flex: 1 }}
-            type="date"
-            value={date}
-            onChangeDate={setDate}
+            locale="en"
+            label="Cumpleaños"
+            value={inputDate}
+            onChange={(d) => setInputDate(d)}
+            inputMode="start"
           />
           <TextInput
             style={styles.input}
