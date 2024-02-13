@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
-import { View, StyleSheet, ScrollView, TouchableOpacity } from "react-native";
-import { Button, TextInput } from "react-native-paper";
+import { View, StyleSheet, ScrollView, TouchableOpacity, Text } from "react-native";
+import { Button, TextInput, Modal, Portal } from 'react-native-paper';
 import Friend from "../../components/friend";
 import ScreenContext from "./ScreenContext"; // Ajusta la ruta según la ubicación real de ScreenContext
 
@@ -10,12 +10,18 @@ export default function Friends({ navigation }) {
   const [addFriend, setAddFriend] = useState(true);
   const [mail, setMail] = useState("");
   const [friendList, setFriendList] = useState([]);
-
+  const [confirmationVisible, setConfirmationVisible] = useState(false);
 
   const handleAddPress = () => {
     setAddFriend(!addFriend);
+    if (!addFriend) {
+      setConfirmationVisible(false);
+    }
   };
 
+  const toggleConfirmationVisibility = () => {
+    setConfirmationVisible(!confirmationVisible);
+  };
 
   useEffect(() => {
     try {
@@ -43,29 +49,23 @@ export default function Friends({ navigation }) {
   }, [userData]);
 
   return (
-    <View style={styles.container}>
-      <View style={styles.titleContainer}>
-        <Button
-          style={styles.titles}
-          mode="contained"
-          color="#304999"
-          labelStyle={styles.text}
-        >
-          {" "}
-          Amics
-        </Button>
-        <Button
-          style={styles.titles}
-          mode="contained"
-          color="#304999"
-          onPress={() => navigation.navigate("Group")}
-          labelStyle={styles.text}
-        >
-          {" "}
-          Grups
-        </Button>
-      </View>
-      {addFriend ? (
+    <Portal.Host>
+      <View style={styles.container}>
+        <View style={styles.buttonsContainer}>
+          <TouchableOpacity
+            style={styles.buttonFriends}
+            onPress={() => navigation.navigate('Friends')}>
+            <Text style={styles.textButton} > Amigos </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.buttonGroup}
+            onPress={() => navigation.navigate('Group')}>
+            <Text style={styles.textButton} > Grupos </Text>
+          </TouchableOpacity>
+        </View>
+
+
         <View style={styles.panel}>
           <ScrollView>
             {friendList.map((friend, index) => (
@@ -80,88 +80,102 @@ export default function Friends({ navigation }) {
             ))}
           </ScrollView>
         </View>
-      ) : (
-        <View style={styles.panel2}>
-          <TextInput
-            style={styles.input}
-            mode="outlined"
-            label="Email"
-            value={mail}
-            theme={{ colors: { primary: "#EF9009" } }}
-            onChangeText={(mail) => setMail(mail)}
-          />
 
-          <Button
-            style={styles.button2}
-            mode="contained"
-            color="#304999"
-            labelStyle={styles.text}
-          >
-            Aceptar
-          </Button>
-        </View>
-      )}
+        <Button
+          mode="contained"
+          theme={{ colors: { primary: "#304999" } }}
+          style={styles.button}
+          onPress={toggleConfirmationVisibility}>
+          Agregar amigo
+        </Button>
+      </View>
 
-      <Button mode="contained" style={styles.button} onPress={handleAddPress}>
-        {addFriend ? "Agregar amigo" : "Cerrar panel"}
-      </Button>
-    </View>
+      <Portal>
+        <Modal
+          visible={confirmationVisible}
+          onDismiss={toggleConfirmationVisibility}
+          contentContainerStyle={[styles.modalContainer]}>
+          <View style={styles.modalContent}>
+            <Text>Ingrese el email de el amigo que quieres agregar:</Text>
+            <TextInput
+              style={styles.input}
+              mode="outlined"
+              label="Email"
+              placeholder="Ingrese el email"
+              theme={{ colors: { primary: '#EF9009' } }}
+            />
+            <Button
+              mode="contained"
+              style={styles.button}
+              labelStyle={styles.buttonLabel}
+              theme={{ colors: { primary: '#304999' } }}
+              onPress={() => navigation.navigate('Login')}>
+              Enviar
+            </Button>
+          </View>
+        </Modal>
+      </Portal>
+    </Portal.Host>
   );
 }
+
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
-    backgroundColor: "#ecf0f1",
-    padding: 20,
-    alignItems: "center",
+    marginTop: 50,
   },
   button: {
-    backgroundColor: "#304999",
-    borderRadius: 15,
-    margin: 5,
+    margin: 20,
+    marginBottom: 10,
+    marginTop: 0,
+    borderRadius: 20,
+    alignItems: 'center',
   },
   panel: {
-    backgroundColor: "#C9C9C9",
     flex: 1,
-    width: "100%",
-    padding: 20,
-    borderRadius: 15,
+    padding: 16,
+    backgroundColor: '#C9C9C9',
+    borderRadius: 20,
+    margin: 20,
+    marginBottom: 10,
   },
-  panel2: {
-    backgroundColor: "#C9C9C9",
-    flex: 1,
-    width: "100%",
-    padding: 20,
-    borderRadius: 15,
-    alignItems: "center",
+  buttonsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
   },
-  text: {
-    textTransform: "none",
-    fontSize: 18,
+  modalContent: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+  },
+  modalContainer: {
+    backgroundColor: 'white',
+    padding: 20,
+    borderRadius: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   input: {
-    flex: 2,
-    marginBottom: "30%",
-    marginTop: "80%",
-    width: "80%",
-    backgroundColor: "#C9C9C9",
+    width: 300,
+    height: 50,
+    marginBottom: 10
   },
-  button2: {
-    backgroundColor: "#304999",
-    borderRadius: 15,
-    margin: 5,
-    marginBottom: 300,
+  buttonFriends: {
+    backgroundColor: '#EF9009',
+    alignContent: 'center',
+    textAlign: 'center',
+    borderRadius: 5,
   },
-  titles: {
-    backgroundColor: "#304999",
-    borderRadius: 15,
-    margin: 5,
+  buttonGroup: {
+    backgroundColor: '#000000',
+    alignContent: 'center',
+    textAlign: 'center',
+    borderRadius: 5,
   },
-  titleContainer: {
-    flex: 0.1,
-    backgroundColor: "#ecf0f1",
-    flexDirection: "row",
-  },
+  textButton: {
+    textAlign: 'center',
+    margin: 10,
+    color: 'white'
+  }
 });

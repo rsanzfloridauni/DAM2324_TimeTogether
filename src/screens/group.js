@@ -30,46 +30,28 @@ const GroupsAll = ({ navigation }) => {
     }
   }, [userData]);
 
-  const handleGroupClick = (id) => {
-    const updatedGroups = groupsData.map((group) => {
-      if (group.id === id) {
-        return { ...group, selected: !group.selected };
-      }
-      return group;
-    });
-    setGroupsData(updatedGroups);
-  };
-
   return (
     <View style={styles.outerContainer}>
-      <View style={styles.titleContainer}>
-        <Button
-          style={styles.titles}
-          mode="contained"
-          color="#304999"
-          onPress={() => navigation.navigate('Friends')}
-          labelStyle={styles.text}>
-          Amics
-        </Button>
-        <Button
-          style={styles.titles}
-          mode="contained"
-          color="#304999"
-          labelStyle={styles.text}>
-          Grups
-        </Button>
+      <View style={styles.buttonsContainer}>
+        <TouchableOpacity
+          style={styles.buttonFriends}
+          onPress={() => navigation.navigate('Friends')}>
+          <Text style={styles.textButton} > Amigos </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.buttonGroup}
+          onPress={() => navigation.navigate('Group')}>
+          <Text style={styles.textButton} > Grupos </Text>
+        </TouchableOpacity>
       </View>
 
       <View style={styles.container}>
-        <View style={styles.filterContainer}>
-          <TouchableOpacity>
-            <Text style={styles.filterText}>All</Text>
-          </TouchableOpacity>
-        </View>
 
         <ScrollView contentContainerStyle={styles.scrollViewContent}>
           {groupsData.map((group, index) => (
             <TouchableOpacity
+              style={[styles.groupWrapper, { backgroundColor: group.color }]}
               key={index}
               onPress={() => navigation.navigate('InfoGrupo', { userId: group.id })}>
               <View style={styles.groupContainer}>
@@ -80,52 +62,37 @@ const GroupsAll = ({ navigation }) => {
 
         </ScrollView>
 
-        <TouchableOpacity
-          style={styles.createGroupButton}
-          onPress={() => navigation.navigate('NewGroup')}>
-          <Text style={styles.createGroupButtonText}>+ CREATE NEW GROUP</Text>
-        </TouchableOpacity>
+
       </View>
+
+      <Button
+        mode="contained"
+        theme={{ colors: { primary: '#304999' } }}
+        style={styles.createGroupButton}
+        onPress={() => navigation.navigate('NewGroup')}>
+        Crear grupo nuevo
+      </Button>
+
     </View>
   );
 };
 const styles = StyleSheet.create({
   outerContainer: {
     flex: 1,
-    backgroundColor: 'white',
+    marginTop: 50,
   },
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: '#E2E1EC',
+    backgroundColor: '#C9C9C9',
     borderRadius: 20,
     margin: 20,
-  },
-  titleContainer: {
-    backgroundColor: '#304999',
-    borderRadius: 20,
-    overflow: 'hidden',
-    marginBottom: 16,
-    width: 160,
-    alignSelf: 'center',
-  },
-  filterContainer: {
-    flexDirection: 'row',
-    justifyContent: 'left',
-    marginTop: 8,
-  },
-  filterText: {
-    fontSize: 22,
-    padding: 8,
-    fontWeight: 'bold',
-  },
-  selectedFilter: {
-    color: '#304999',
+    marginBottom: 10,
   },
   groupWrapper: {
-    backgroundColor: '#CBCADC',
-    marginBottom: 16,
-    borderRadius: 20,
+    backgroundColor: '#C9C9C9',
+    marginBottom: 8,
+    borderRadius: 10,
     padding: 16,
   },
   groupContainer: {
@@ -138,33 +105,36 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   createGroupButton: {
-    backgroundColor: '#EF9009',
-    padding: 12,
+    margin: 20,
+    marginBottom: 10,
+    marginTop: 0,
     borderRadius: 20,
     alignItems: 'center',
-  },
-  createGroupButtonText: {
-    fontSize: 18,
-    color: 'white',
   },
   scrollViewContent: {
     paddingBottom: 10,
   },
-  titles: {
-    backgroundColor: '#304999',
-    borderRadius: 15,
-    margin: 5,
-  },
-  titleContainer: {
-    flex: 0.1,
-    justifyContent: 'center',
-    backgroundColor: '#ecf0f1',
+  buttonsContainer: {
     flexDirection: 'row',
+    justifyContent: 'center',
   },
-  text: {
-    textTransform: 'none',
-    fontSize: 18,
+  buttonFriends: {
+    backgroundColor: '#000000',
+    alignContent: 'center',
+    textAlign: 'center',
+    borderRadius: 5,
   },
+  buttonGroup: {
+    backgroundColor: '#EF9009',
+    alignContent: 'center',
+    textAlign: 'center',
+    borderRadius: 5,
+  },
+  textButton: {
+    textAlign: 'center',
+    margin: 10,
+    color: 'white'
+  }
 });
 
 export default GroupsAll;

@@ -10,6 +10,7 @@ import { Slider } from '@react-native-assets/slider';
 import { TextInput, Button, Divider } from 'react-native-paper';
 import { DateTimePicker } from '@hashiprobr/react-native-paper-datetimepicker';
 import { Avatar, Modal, Portal } from 'react-native-paper';
+import { TimePickerModal } from 'react-native-paper-dates';
 
 import snackIcon from '../../assets/snack-icon.png';
 
@@ -69,12 +70,12 @@ const SingUp = (props) => {
             theme={{ colors: { primary: '#EF9009' } }}
             onChangeText={(txt) => setMail(txt)}
           />
-          <DateTimePicker
-            style={styles.input}
-            type="date"
-            mode="outlined"
-            value={date}
-            onChangeDate={setDate}
+          <TimePickerModal
+            visible={visible}
+            onDismiss={onDismiss}
+            onConfirm={onConfirm}
+            hours={12}
+            minutes={14}
           />
           <TextInput
             style={styles.input}

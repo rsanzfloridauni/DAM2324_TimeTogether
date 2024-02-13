@@ -68,7 +68,7 @@ export default function Login(props) {
         <Button
           style={styles.button}
           mode="contained"
-          color="#304999"
+          theme={{ colors: { primary: "#304999" } }}
           labelStyle={styles.text}
           onPress={() => handleLogIn()}
         >
@@ -78,7 +78,7 @@ export default function Login(props) {
         <Button
           style={styles.button}
           mode="contained"
-          color="#304999"
+          theme={{ colors: { primary: "#304999" } }}
           labelStyle={styles.text}
           onPress={() => props.navigation.navigate("SingUp")}
         >
