@@ -9,7 +9,8 @@ import {
   IconButton,
   Card,
 } from 'react-native-paper';
-import Participants from './participants';
+
+import Participantes from '../../components/participantes.js';
 
 const CreateGroup = (props) => {
   const [groupName, setGroupName] = useState('');
@@ -90,9 +91,6 @@ const CreateGroup = (props) => {
     }
   };
 
-  const handleSearch = () => {
-    setSearching(true);
-  };
 
   const handleDeleteParticipant = (participantName) => {
     Alert.alert(
@@ -160,7 +158,7 @@ const CreateGroup = (props) => {
               </List.Subheader>
               <ScrollView>
               {names.map((name, index) => (
-                  <Participants
+                  <Participantes
                     key={index}
                     imageSource={require('../image/logo.png')}
                     name={name}
@@ -188,7 +186,6 @@ const CreateGroup = (props) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
   },
   form: {
     padding: 20,

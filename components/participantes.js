@@ -13,7 +13,6 @@ export default function Friend({ imageSource, name }) {
       <Text style={styles.friendText}>{name}</Text> 
       <IconButton
         size={30}
-        onPress={() => console.log('Pressed')}
       />
     </View>
   );

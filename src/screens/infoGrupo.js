@@ -9,7 +9,7 @@ import {
   IconButton,
   Card,
 } from 'react-native-paper';
-import Participantes from './participants';
+import Participantes from '../../components/participantes.js';
 
 const InfoGroup = ({route, navigation}) => {
   const userId = route.params.userId;
@@ -92,7 +92,6 @@ const InfoGroup = ({route, navigation}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
   },
   form: {
     padding: 20,

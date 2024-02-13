@@ -115,7 +115,6 @@ const InfoEvento = ({navigation}) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
     padding: 10,
   },
   card: {

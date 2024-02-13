@@ -8,9 +8,8 @@ import {
 } from 'react-native';
 import { Slider } from '@react-native-assets/slider';
 import { TextInput, Button, Divider } from 'react-native-paper';
-import { Avatar, Modal, Portal, IconButton } from 'react-native-paper';
+import { Avatar, IconButton } from 'react-native-paper';
 import { DatePickerInput } from 'react-native-paper-dates';
-import { SafeAreaProvider } from "react-native-safe-area-context";
 
 import snackIcon from '../../assets/snack-icon.png';
 
@@ -36,7 +35,6 @@ const SingUp = ({ navigation }) => {
   };
 
   return (
-    <Portal.Host>
       <ScrollView style={styles.container}>
         <IconButton
           icon="arrow-left"
@@ -193,21 +191,6 @@ const SingUp = ({ navigation }) => {
           </Button>
         </View>
       </ScrollView>
-
-      <Portal>
-        <Modal
-          visible={isVisible}
-          onDismiss={toggleVisibility}
-          contentContainerStyle={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <Avatar.Image style={styles.modalLogo} source={snackIcon} />
-            <Avatar.Image style={styles.modalLogo} source={snackIcon} />
-            <Avatar.Image style={styles.modalLogo} source={snackIcon} />
-            <Avatar.Image style={styles.modalLogo} source={snackIcon} />
-          </View>
-        </Modal>
-      </Portal>
-    </Portal.Host>
   );
 };
 
@@ -217,18 +200,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     padding: 15,
   },
-  modalContent: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(255, 255, 255, 0.9)',
-  },
-  modalContainer: {
-    backgroundColor: 'white',
-    padding: 20,
-    borderRadius: 10,
-    alignItems: 'center',
-  },
-
   logo: {
     alignSelf: 'center',
     marginBottom: 20,
