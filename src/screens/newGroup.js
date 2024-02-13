@@ -16,11 +16,43 @@ const CreateGroup = (props) => {
   const [groupDescription, setGroupDescription] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
   const [color, setColor] = useState('blue');
-  const [names, setNames] = React.useState(['Pepe', 'Juan']);
-  const [events, setEvents] = React.useState(['65c511317824b86e2101025c']);
+  const [names, setNames] = useState([]);
+  const [ids, setIds] = useState([]);
+  const [events, setEvents] = useState([]);
+  const [searching, setSearching] = useState(false);
+
+  const buscarAmigo = async () => {
+    try {
+      const response = await fetch(`http://44.194.67.133:8080/TimeTogether/userIdByEmail?email=${searchQuery}`, {
+        method: "GET",
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      setIds([...ids, data.id]);
+      setNames([...names, data.name]);
+
+      clearSearch();
+    } catch (error) {
+      console.error("Error fetching friend info:", error);
+      Alert.alert('Error', 'Algo salió mal al buscar amigos. Por favor, inténtalo de nuevo.');
+    }
+  };
+
+  const clearSearch = () => {
+    setSearchQuery('');
+  };
 
   const createGroup = async () => {
     try {
+      if (!groupName || !groupDescription || names.length === 0) {
+        Alert.alert('Error', 'Por favor, completa todos los campos antes de crear el grupo.');
+        return;
+      }
+
       const response = await fetch(
         'http://44.194.67.133:8080/TimeTogether/newGroup',
         {
@@ -31,7 +63,7 @@ const CreateGroup = (props) => {
           body: JSON.stringify({
             description: groupDescription,
             events: events,
-            members: names,
+            members: ids,
             name: groupName,
             color: color
           }),
@@ -42,15 +74,45 @@ const CreateGroup = (props) => {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      const json = await response.json();
-      console.log('Response from server:', json); // Agrega esta línea para imprimir la respuesta
-      setUserData(JSON.stringify(json));
-      props.navigation.navigate('Start');
+      if (response.status === 204) {
+        console.log('Group created successfully!');
+        Alert.alert('Éxito', 'El grupo se ha creado correctamente', [
+          { text: 'OK', onPress: () => props.navigation.navigate('Group') },
+        ]);
+      } else {
+        const json = await response.json();
+        console.log('Response from server:', json);
+        Alert.alert('Error', 'Algo salió mal al crear el grupo. Por favor, inténtalo de nuevo.');
+      }
     } catch (error) {
       console.error(error);
+      Alert.alert('Error', 'Algo salió mal al crear el grupo. Por favor, inténtalo de nuevo.');
     }
   };
 
+  const handleSearch = () => {
+    setSearching(true);
+  };
+
+  const handleDeleteParticipant = (participantName) => {
+    Alert.alert(
+      'Confirmar eliminación',
+      `¿Seguro que quieres eliminar a ${participantName} del grupo?`,
+      [
+        { text: 'Cancelar', style: 'cancel' },
+        {
+          text: 'Eliminar',
+          onPress: () => {
+            const updatedNames = names.filter((name) => name !== participantName);
+            const updatedIds = ids.filter((_, index) => names[index] !== participantName);
+
+            setNames(updatedNames);
+            setIds(updatedIds);
+          },
+        },
+      ]
+    );
+  };
   return (
     <ScrollView style={styles.container}>
       <View style={styles.form}>
@@ -84,9 +146,10 @@ const CreateGroup = (props) => {
         />
         <Divider style={styles.divider} />
         <Searchbar
-          placeholder="Busca un nombre"
+          placeholder="Busca un correo"
           onChangeText={setSearchQuery}
           value={searchQuery}
+          onSubmitEditing={buscarAmigo}
         />
         <Divider style={styles.divider} />
         <Card style={styles.card}>
@@ -96,11 +159,12 @@ const CreateGroup = (props) => {
                 Integrantes del grupo
               </List.Subheader>
               <ScrollView>
-                {names.map((name, index) => (
+              {names.map((name, index) => (
                   <Participants
                     key={index}
                     imageSource={require('../image/logo.png')}
                     name={name}
+                    onDelete={() => handleDeleteParticipant(name)}
                   />
                 ))}
               </ScrollView>

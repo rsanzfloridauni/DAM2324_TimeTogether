@@ -1,7 +1,7 @@
 import { View, StyleSheet, Text } from 'react-native';
 import { IconButton, Avatar } from 'react-native-paper';
 
-export default function Participant({ imageSource, name }) {
+export default function Participant({ imageSource, name, onDelete }) {
   return (
     <View style={styles.friend}>
       <Avatar.Image
@@ -12,7 +12,8 @@ export default function Participant({ imageSource, name }) {
       <Text style={styles.friendText}>{name}</Text> 
       <IconButton
         size={30}
-        onPress={() => console.log('Pressed')}
+        icon="delete"
+        onPress={onDelete}
       />
     </View>
   );
