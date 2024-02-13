@@ -8,10 +8,10 @@ import {
 } from 'react-native';
 import { Slider } from '@react-native-assets/slider';
 import { TextInput, Button, Divider } from 'react-native-paper';
-import { DateTimePicker } from '@hashiprobr/react-native-paper-datetimepicker';
 import { Avatar, Modal, Portal } from 'react-native-paper';
 import { TimePickerModal } from 'react-native-paper-dates';
-
+import { DatePickerInput } from 'react-native-paper-dates';
+import { SafeAreaProvider } from "react-native-safe-area-context";
 import snackIcon from "../../assets/snack-icon.png";
 
 const SingUp = (props) => {
@@ -28,6 +28,7 @@ const SingUp = (props) => {
   const [allergies, setAllergies] = useState("");
   const [hobbies, setHobbies] = useState("");
   const [confirmationCode, setConfirmationCode] = useState("");
+  const [inputDate, setInputDate] = React.useState(undefined)
 
   const [confirmationVisible, setConfirmationVisible] = useState(false);
 
@@ -63,7 +64,7 @@ const SingUp = (props) => {
             additional_information: "aaa", // Agrega un campo en tu UI o establece un valor predeterminado
             addres: address, // Usar el estado 'address' para la dirección
             alergies: allergies, // Usar el estado 'allergies' para las alergias
-            birthday: date.getFullYear() + "-" + (date.getMonth()+1)+ "-" + date.getDate(), // Formatear el estado 'date' para la fecha de nacimiento
+            birthday: date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate(), // Formatear el estado 'date' para la fecha de nacimiento
             favourite_color: color, // Usar el estado 'color' para el color favorito
             friends: [], // Ajustar para recoger este dato de tu UI o establecer valores predeterminados
             hobbies: hobbies, // Usar el estado 'hobbies' para las aficiones
@@ -83,7 +84,7 @@ const SingUp = (props) => {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       alert("Usuario creado con éxito");
-      console.log(date.getFullYear() + "-" + (date.getMonth()+1)+ "-" + date.getDate());
+      console.log(date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate());
     } catch (error) {
       //date.toISOString().split("T")[0]
       console.error("Error en la petición:", error);
@@ -158,12 +159,17 @@ const SingUp = (props) => {
             theme={{ colors: { primary: "#EF9009" } }}
             onChangeText={(txt) => setMail(txt)}
           />
-          <TimePickerModal
-            visible={visible}
-            onDismiss={onDismiss}
-            onConfirm={onConfirm}
-            hours={12}
-            minutes={14}
+          <DatePickerInput
+            //visible={visible}
+            locale="en"
+            label="Cumpleaños"
+            value={inputDate}
+            onChange={(d) => setInputDate(d)}
+            inputMode="start"
+            //onDismiss={onDismiss}
+            //onConfirm={onConfirm}
+            //hours={12}
+            //minutes={14}
           />
           <TextInput
             style={styles.input}
