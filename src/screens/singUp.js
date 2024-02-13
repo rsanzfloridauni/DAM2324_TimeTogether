@@ -5,20 +5,12 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-<<<<<<< HEAD
 } from 'react-native';
 import { Slider } from '@react-native-assets/slider';
 import { TextInput, Button, Divider } from 'react-native-paper';
 import { DateTimePicker } from '@hashiprobr/react-native-paper-datetimepicker';
 import { Avatar, Modal, Portal } from 'react-native-paper';
 import { TimePickerModal } from 'react-native-paper-dates';
-=======
-} from "react-native";
-import { Slider } from "@react-native-assets/slider";
-import { TextInput, Button, Divider } from "react-native-paper";
-import { DateTimePicker } from "@hashiprobr/react-native-paper-datetimepicker";
-import { Avatar, Modal, Portal } from "react-native-paper";
->>>>>>> 7644f4409f0f1405c881cdfb8eeec8abb44f2462
 
 import snackIcon from "../../assets/snack-icon.png";
 
