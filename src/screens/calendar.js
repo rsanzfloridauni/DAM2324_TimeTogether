@@ -6,7 +6,12 @@ import DateTimePicker from 'react-native-ui-datepicker';
 
 const Calendari = (props) => {
   const [date, setDate] = useState(dayjs());
-
+  const handleOnPress = (params) => {
+    console.log(params.date)
+    const selectedDate = params.date;
+    setDate(selectedDate);
+    props.navigation.navigate('DateInfo', { day: selectedDate.toISOString() });
+  }
   return (
     <View style={styles.outerContainer}>
       <View style={styles.titleContainer}></View>
@@ -24,7 +29,9 @@ const Calendari = (props) => {
         <DateTimePicker
           mode="single"
           date={date}
-          onChange={(params) => setDate(params.date)}
+          onChange={(params) => {
+            handleOnPress(params);
+          }}
           calendarTextStyle={null}
           headerTextStyle={null}
           styleP={styles.date}
@@ -32,8 +39,9 @@ const Calendari = (props) => {
           selectedItemColor="#304999"
           accessibilityLabel="Set Active Theme"
           headerButtonColor={'green'}
-          selectedTextStyle={{color: 'white'}}
-          onChange={() => props.navigation.navigate('DateInfo')}/>
+          selectedTextStyle={{ color: 'white' }}
+        />
+
       </View>
 
       <Button

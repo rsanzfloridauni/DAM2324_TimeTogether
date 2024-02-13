@@ -14,6 +14,7 @@ export default function Friend({ imageSource, name }) {
       <IconButton
         size={30}
         onPress={onDelete}
+
       />
     </View>
   );
