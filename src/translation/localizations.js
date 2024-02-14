@@ -53,7 +53,8 @@ const en = {
     logIn:'Log In',
     createAccount:'Create Account',
     searchEmail:'Search for an email',
-    createGroup: 'CREATE GROUP'
+    createGroup: 'CREATE GROUP',
+    events:'Events'
   };
   
   const es = {
@@ -111,7 +112,9 @@ const en = {
     logIn:'Iniciar sesión',
     createAccount:'Crear Cuenta',
     searchEmail:'Buscar un correo',
-    createGroup: 'CREAR GRUPO'
+    createGroup: 'CREAR GRUPO',
+    events:'Eventos'
+
   };
   
   export { en, es };

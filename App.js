@@ -18,22 +18,29 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import "react-native-gesture-handler";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { ScreensProvider } from "./src/screens/ScreenContext";
-
+import React, { useState, useContext, useEffect } from 'react';
+import i18n from 'i18n-js';
+import { en, es } from './src/translation/localizations';
+import ScreensContext from './src/screens/ScreenContext';
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
 const ScreenTab = () => {
+  const { language } = useContext(ScreensContext);
+  i18n.translations = { en, es };
+  i18n.locale = language;
+
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
 
-          if (route.name === "Friends") {
+          if (route.name === "Friends" || route.name === "Amigos") {
             iconName = focused ? "ios-person" : "ios-person-outline";
-          } else if (route.name === "Events") {
+          } else if (route.name === "Events" || route.name === "Eventos") {
             iconName = focused ? "ios-calendar" : "ios-calendar-outline";
-          } else if (route.name === "Ajustes") {
+          } else if (route.name === "Settings" || route.name === "Ajustes") {
             iconName = focused ? "ios-settings" : "ios-settings-outline";
           }
           return <Ionicons name={iconName} size={size} color={color} />;
@@ -45,17 +52,17 @@ const ScreenTab = () => {
       }}
     >
       <Tab.Screen
-        name="Friends"
+        name={i18n.t('friends')}
         component={FriendStack}
         options={{ headerShown: false }}
       />
       <Tab.Screen
-        name="Events"
+        name={i18n.t('events')}
         component={EventStack}
         options={{ headerShown: false }}
       />
       <Tab.Screen
-        name="Ajustes"
+        name={i18n.t('settings')}
         component={SettingsStack}
         options={{ headerShown: false }}
       />
