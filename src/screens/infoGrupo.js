@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useContext } from 'react';
 import { ScrollView, View, Text, StyleSheet, Image } from 'react-native';
 import {
   TextInput,
@@ -10,6 +10,9 @@ import {
   Card,
 } from 'react-native-paper';
 import Members from '../../components/miembros.js';
+import i18n from 'i18n-js';
+import { en, es } from '../translation/localizations';
+import ScreensContext from './ScreenContext';
 
 const InfoGroup = ({route, navigation}) => {
   const userId = route.params.userId;
@@ -17,6 +20,10 @@ const InfoGroup = ({route, navigation}) => {
   const [groupDescription, setGroupDescription] = useState();
   const [names, setNames] = useState([]);
   const [color, setColor] = useState();
+  const { language } = useContext(ScreensContext);
+
+  i18n.translations = { en, es };
+  i18n.locale = language;
 
   useEffect(() => {
     fetch(`http://44.194.67.133:8080/TimeTogether/group?id=${userId}`, {
@@ -45,12 +52,12 @@ const InfoGroup = ({route, navigation}) => {
              onPress={() => navigation.navigate("Group")}
           />
         </View>
-        <Text style={styles.label}>Información del grupo</Text>
+        <Text style={styles.label}>{i18n.t('groupInformation')}</Text>
         <TextInput
           style={styles.input}
           mode="outlined"
-          label="Nombre del grupo"
-          placeholder="Nombre del grupo"
+          label={i18n.t('groupName')}
+          placeholder={i18n.t('groupName')}
           value={groupName}
           theme={{ colors: { primary: '#EF9009' } }}
           onChangeText={(txt) => setGroupName(txt)}
@@ -59,8 +66,8 @@ const InfoGroup = ({route, navigation}) => {
         <TextInput
           style={styles.input}
           mode="outlined"
-          label="Descripción del grupo"
-          placeholder="Descripción del grupo"
+          label={i18n.t('groupDescription')}
+          placeholder={i18n.t('groupDescription')}
           value={groupDescription}
           theme={{ colors: { primary: '#EF9009' } }}
           onChangeText={(txt) => setGroupDescription(txt)}
@@ -71,7 +78,7 @@ const InfoGroup = ({route, navigation}) => {
           <Card.Content>
             <List.Section>
               <List.Subheader style={styles.label}>
-                Integrantes del grupo
+              {i18n.t('membersGroup')}
               </List.Subheader>
               <ScrollView>
                 {names.map((obj, index) => (

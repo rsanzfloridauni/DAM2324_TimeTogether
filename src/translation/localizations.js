@@ -45,7 +45,15 @@ const en = {
     cancelButton: 'Cancel',
     pickDateButton: 'Choose date',
     birthday:'Birthday',
-    enterEmail:'Enter the email of the friend you want to add:'
+    enterEmail:'Enter the email of the friend you want to add:',
+    groupInformation:'Group information',
+    groupName:'Group name',
+    groupDescription:'Group description',
+    membersGroup:'Group members',
+    logIn:'Log In',
+    createAccount:'Create Account',
+    searchEmail:'Search for an email',
+    createGroup: 'CREATE GROUP'
   };
   
   const es = {
@@ -95,7 +103,15 @@ const en = {
     cancelButton: 'Cancelar',
     pickDateButton: 'Elegir fecha',
     birthday:'Cumpleaños',
-    enterEmail:'Ingrese el email de el amigo que quieres agregar:'
+    enterEmail:'Ingrese el email de el amigo que quieres agregar:',
+    groupInformation:'Información del grupo',
+    groupName:'Nombre del grupo',
+    groupDescription:'Descripción del grupo',
+    membersGroup:'Integrantes del grupo',
+    logIn:'Iniciar sesión',
+    createAccount:'Crear Cuenta',
+    searchEmail:'Buscar un correo',
+    createGroup: 'CREAR GRUPO'
   };
   
   export { en, es };

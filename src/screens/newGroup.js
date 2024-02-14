@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect,useContext } from 'react';
 import { ScrollView, View, Text, StyleSheet, Image, Alert } from 'react-native';
 import {
   TextInput,
@@ -9,7 +9,9 @@ import {
   IconButton,
   Card,
 } from 'react-native-paper';
-
+import i18n from 'i18n-js';
+import { en, es } from '../translation/localizations';
+import ScreensContext from './ScreenContext';
 import Participantes from '../../components/participantes.js';
 
 const CreateGroup = (props) => {
@@ -21,6 +23,10 @@ const CreateGroup = (props) => {
   const [ids, setIds] = useState([]);
   const [events, setEvents] = useState([]);
   const [searching, setSearching] = useState(false);
+  const { language } = useContext(ScreensContext);
+
+  i18n.translations = { en, es };
+  i18n.locale = language;
 
   const buscarAmigo = async () => {
     try {
@@ -123,12 +129,12 @@ const CreateGroup = (props) => {
           />
           <Image style={styles.logo} source={require('../image/logo.png')} />
         </View>
-        <Text style={styles.label}>Información del grupo</Text>
+        <Text style={styles.label}>{i18n.t('groupInformation')}</Text>
         <TextInput
           style={styles.input}
           mode="outlined"
-          label="Nombre del grupo"
-          placeholder="Nombre del grupo"
+          label={i18n.t('groupName')}
+          placeholder={i18n.t('groupName')}
           value={groupName}
           theme={{ colors: { primary: '#EF9009' } }}
           onChangeText={(txt) => setGroupName(txt)}
@@ -136,15 +142,15 @@ const CreateGroup = (props) => {
         <TextInput
           style={styles.input}
           mode="outlined"
-          label="Descripción del grupo"
-          placeholder="Descripción del grupo"
+          label={i18n.t('groupDescription')}
+          placeholder={i18n.t('groupDescription')}
           value={groupDescription}
           theme={{ colors: { primary: '#EF9009' } }}
           onChangeText={(txt) => setGroupDescription(txt)}
         />
         <Divider style={styles.divider} />
         <Searchbar
-          placeholder="Busca un correo"
+          placeholder={i18n.t('searchEmail')}
           onChangeText={setSearchQuery}
           value={searchQuery}
           onSubmitEditing={buscarAmigo}
@@ -154,7 +160,7 @@ const CreateGroup = (props) => {
           <Card.Content>
             <List.Section>
               <List.Subheader style={styles.label}>
-                Integrantes del grupo
+              {i18n.t('membersGroup')}
               </List.Subheader>
               <ScrollView>
               {names.map((name, index) => (
@@ -176,7 +182,7 @@ const CreateGroup = (props) => {
           style={styles.button}
           labelStyle={styles.buttonLabel}
           theme={{ colors: { primary: '#EF9009' } }}>
-          Crear Grupo
+          {i18n.t('createGroup')}
         </Button>
       </View>
     </ScrollView>

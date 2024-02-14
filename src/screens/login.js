@@ -1,6 +1,8 @@
 import { View, StyleSheet, Image, Text, ScrollView } from "react-native";
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext,useEffect } from 'react';
 import { Button, TextInput, IconButton } from "react-native-paper";
+import i18n from 'i18n-js';
+import { en, es } from '../translation/localizations';
 import ScreensContext from './ScreenContext';
 
 export default function Login(props) {
@@ -8,6 +10,12 @@ export default function Login(props) {
   const [password, setPassword] = React.useState("");
   const [viewPassword, setViewPassword] = React.useState(true);
   const { userData, setUserData } = useContext(ScreensContext); 
+  const { language } = useContext(ScreensContext);
+
+  i18n.translations = { en, es };
+  i18n.locale = language;
+
+
   const handleLogIn = async () => {
     try {
       const response = await fetch(
@@ -43,7 +51,7 @@ export default function Login(props) {
         <TextInput
           style={styles.input}
           mode="outlined"
-          label="Email"
+          label={i18n.t('email')}
           value={mail}
           theme={{ colors: { primary: "#EF9009" } }}
           onChangeText={(mail) => setMail(mail)}
@@ -53,7 +61,7 @@ export default function Login(props) {
           style={styles.input}
           mode="outlined"
           secureTextEntry={viewPassword}
-          label="Password"
+          label={i18n.t('password')}
           value={password}
           right={
             <TextInput.Icon
@@ -72,7 +80,7 @@ export default function Login(props) {
           labelStyle={styles.text}
           onPress={() => handleLogIn()}
         >
-          Iniciar Sesion
+          {i18n.t('logIn')}
         </Button>
 
         <Button
@@ -82,7 +90,7 @@ export default function Login(props) {
           labelStyle={styles.text}
           onPress={() => props.navigation.navigate("SingUp")}
         >
-          Crear cuenta
+          {i18n.t('createAccount')}
         </Button>
       </ScrollView>
     </View>

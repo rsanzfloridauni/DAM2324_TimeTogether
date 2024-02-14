@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect,useContext } from "react";
 import {
   ScrollView,
   View,
@@ -13,6 +13,9 @@ import { TimePickerModal } from 'react-native-paper-dates';
 import { DatePickerInput } from 'react-native-paper-dates';
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import snackIcon from "../../assets/snack-icon.png";
+import i18n from 'i18n-js';
+import { en, es } from '../translation/localizations';
+import ScreensContext from './ScreenContext';
 
 const SingUp = (props) => {
   const [date, setDate] = useState(new Date());
@@ -29,8 +32,12 @@ const SingUp = (props) => {
   const [hobbies, setHobbies] = useState("");
   const [confirmationCode, setConfirmationCode] = useState("");
   const [inputDate, setInputDate] = React.useState(undefined)
+  const { language } = useContext(ScreensContext);
 
   const [confirmationVisible, setConfirmationVisible] = useState(false);
+
+  i18n.translations = { en, es };
+  i18n.locale = language;
 
   const toggleConfirmationVisibility = () => {
     setConfirmationVisible(!confirmationVisible);
@@ -144,8 +151,8 @@ const SingUp = (props) => {
           <TextInput
             style={styles.input}
             mode="outlined"
-            label="Nombre"
-            placeholder="Nombre"
+            label={i18n.t('name')}
+            placeholder={i18n.t('name')}
             value={name}
             theme={{ colors: { primary: "#EF9009" } }}
             onChangeText={(txt) => setName(txt)}
@@ -153,8 +160,8 @@ const SingUp = (props) => {
           <TextInput
             style={styles.input}
             mode="outlined"
-            label="Email"
-            placeholder="Email"
+            label={i18n.t('email')}
+            placeholder={i18n.t('email')}
             value={mail}
             theme={{ colors: { primary: "#EF9009" } }}
             onChangeText={(txt) => setMail(txt)}
@@ -162,7 +169,7 @@ const SingUp = (props) => {
           <DatePickerInput
             //visible={visible}
             locale="en"
-            label="Cumpleaños"
+            label={i18n.t('birthday')}
             value={inputDate}
             onChange={(d) => setInputDate(d)}
             inputMode="start"
@@ -174,8 +181,8 @@ const SingUp = (props) => {
           <TextInput
             style={styles.input}
             mode="outlined"
-            label="Contraseña"
-            placeholder="Contraseña"
+            label={i18n.t('password')}
+            placeholder={i18n.t('password')}
             value={pass1}
             theme={{ colors: { primary: "#EF9009" } }}
             onChangeText={(txt) => setPass1(txt)}
@@ -183,8 +190,8 @@ const SingUp = (props) => {
           <TextInput
             style={styles.input}
             mode="outlined"
-            label="Repite Contraseña"
-            placeholder="Repite Contraseña"
+            label={i18n.t('repeatPassword')}
+            placeholder={i18n.t('repeatPassword')}
             value={pass2}
             theme={{ colors: { primary: "#EF9009" } }}
             onChangeText={(txt) => setPass2(txt)}
@@ -192,17 +199,17 @@ const SingUp = (props) => {
           <TextInput
             style={styles.input}
             mode="outlined"
-            label="Color Favorito"
-            placeholder="Color Favorito"
+            label={i18n.t('favoriteColor')}
+            placeholder={i18n.t('favoriteColor')}
             value={color}
             theme={{ colors: { primary: "#EF9009" } }}
             onChangeText={(txt) => setColor(txt)}
           />
           <Divider style={styles.divider} />
-          <Text style={styles.label}>Tallas</Text>
+          <Text style={styles.label}>{i18n.t('sizes')}</Text>
           <View style={styles.sizeSection}>
             <Text style={styles.sizeLabel}>
-              Camisetas: {shirtSize.toFixed(0)}
+            {i18n.t('tShirts')}: {shirtSize.toFixed(0)}
             </Text>
             <Slider
               style={styles.slider}
@@ -219,7 +226,7 @@ const SingUp = (props) => {
 
           <View style={styles.sizeSection}>
             <Text style={styles.sizeLabel}>
-              Pantalones: {pantsSize.toFixed(0)}
+            {i18n.t('pants')}: {pantsSize.toFixed(0)}
             </Text>
             <Slider
               style={styles.slider}
@@ -235,7 +242,7 @@ const SingUp = (props) => {
           </View>
 
           <View style={styles.sizeSection}>
-            <Text style={styles.sizeLabel}>Calzado: {shoeSize.toFixed(0)}</Text>
+            <Text style={styles.sizeLabel}>{i18n.t('shoes')}: {shoeSize.toFixed(0)}</Text>
             <Slider
               style={styles.slider}
               minimumValue={30}
@@ -252,8 +259,8 @@ const SingUp = (props) => {
           <TextInput
             style={styles.input}
             mode="outlined"
-            label="Dirección"
-            placeholder="Dirección"
+            label={i18n.t('address')}
+            placeholder={i18n.t('address')}
             value={address}
             theme={{ colors: { primary: "#EF9009" } }}
             onChangeText={(txt) => setAddress(txt)}
@@ -261,8 +268,8 @@ const SingUp = (props) => {
           <TextInput
             style={styles.input}
             mode="outlined"
-            label="Alergias"
-            placeholder="Alergias"
+            label={i18n.t('allergies')}
+            placeholder={i18n.t('allergies')}
             value={allergies}
             theme={{ colors: { primary: "#EF9009" } }}
             onChangeText={(txt) => setAllergies(txt)}
@@ -270,8 +277,8 @@ const SingUp = (props) => {
           <TextInput
             style={styles.input}
             mode="outlined"
-            label="Aficiones"
-            placeholder="Aficiones"
+            label={i18n.t('hobbies')}
+            placeholder={i18n.t('hobbies')}
             value={hobbies}
             theme={{ colors: { primary: "#EF9009" } }}
             onChangeText={(txt) => setHobbies(txt)}
@@ -285,7 +292,7 @@ const SingUp = (props) => {
               handleSubmit();
             }}
           >
-            Aceptar
+            {i18n.t('accept')}
           </Button>
         </View>
       </ScrollView>
