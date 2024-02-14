@@ -2,9 +2,13 @@ import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, TouchableOpacity, Image, StyleSheet, ScrollView } from 'react-native';
 import { Button } from 'react-native-paper';
 import ScreenContext from "./ScreenContext"; // Adjust the path based on the actual location of ScreenContext
+import i18n from 'i18n-js';
+import { en, es } from '../translation/localizations';
+
+i18n.translations = { en, es };
 
 const GroupsAll = ({ navigation }) => {
-  const { userData } = useContext(ScreenContext);
+  const { userData,language  } = useContext(ScreenContext);
   const [groupsData, setGroupsData] = useState([]);
 
   useEffect(() => {
@@ -30,19 +34,23 @@ const GroupsAll = ({ navigation }) => {
     }
   }, [userData]);
 
+  useEffect(() => {
+    i18n.locale = language;
+  }, [language]);
+
   return (
     <View style={styles.outerContainer}>
       <View style={styles.buttonsContainer}>
         <TouchableOpacity
           style={styles.buttonFriends}
           onPress={() => navigation.navigate('FriendsList')}>
-          <Text style={styles.textButton} > Amigos </Text>
+          <Text style={styles.textButton} > {i18n.t('friends')} </Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           style={styles.buttonGroup}
           onPress={() => navigation.navigate('Group')}>
-          <Text style={styles.textButton} > Grupos </Text>
+          <Text style={styles.textButton} > {i18n.t('groups')} </Text>
         </TouchableOpacity>
       </View>
 
@@ -70,7 +78,7 @@ const GroupsAll = ({ navigation }) => {
         theme={{ colors: { primary: '#304999' } }}
         style={styles.createGroupButton}
         onPress={() => navigation.navigate('NewGroup')}>
-        Crear grupo nuevo
+        {i18n.t('createNewGroup')}
       </Button>
 
     </View>

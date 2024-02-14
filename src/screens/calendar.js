@@ -1,11 +1,19 @@
-import { useState } from 'react';
+import React, { useState,useContext  } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Divider, Button } from 'react-native-paper';
 import dayjs from 'dayjs';
 import DateTimePicker from 'react-native-ui-datepicker';
+import i18n from 'i18n-js';
+import { en, es } from '../translation/localizations';
+import ScreensContext from './ScreenContext';
 
 const Calendari = (props) => {
   const [date, setDate] = useState(dayjs());
+  const { language } = useContext(ScreensContext);
+
+  i18n.translations = { en, es };
+  i18n.locale = language;
+
   const handleOnPress = (params) => {
     console.log(params.date)
     const selectedDate = params.date;
@@ -49,7 +57,7 @@ const Calendari = (props) => {
         mode="contained"
         theme={{ colors: { primary: '#304999' } }}
         onPress={() => props.navigation.navigate('NewEvent')}>
-        Añadir nuevo evento
+        {i18n.t('addEvent')}
       </Button>
     </View>
   );

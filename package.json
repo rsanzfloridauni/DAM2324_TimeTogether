@@ -9,13 +9,15 @@
     "web": "expo start --web"
   },
   "dependencies": {
-    "@hashiprobr/react-native-paper-datetimepicker": "^1.2.0",
     "@react-native-assets/slider": "^7.1.1",
     "@react-navigation/bottom-tabs": "^6.5.12",
     "@react-navigation/stack": "^6.3.21",
     "expo": "~49.0.0",
     "expo-status-bar": "~1.11.1",
+    "i18n-js": "^3.9.2",
+    "i18next": "^23.8.2",
     "react": "18.2.0",
+    "react-i18next": "^14.0.5",
     "react-native": "0.73.4",
     "react-native-paper": "^5.12.3",
     "react-native-paper-dates": "^0.21.9",

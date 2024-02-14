@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState,useContext, useEffect  } from 'react';
 import {
   View,
   Text,
@@ -7,17 +7,37 @@ import {
   TouchableOpacity,
   Image,
 } from 'react-native';
+import i18n from 'i18n-js';
+import { en, es } from '../translation/localizations';
+import ScreensContext from './ScreenContext';
+
+i18n.translations = {
+  en,
+  es,
+};
 
 const Settings = (props) => {
   const [darkMode, setDarkMode] = useState(false);
-  const [language, setLanguage] = useState(false);
+  const { language, setLanguage } = useContext(ScreensContext);
 
+  useEffect(() => {
+    i18n.locale = language;
+  }, [language]);
+
+  const toggleLanguage = (lang) => {
+    if (language !== lang) {
+      setLanguage((prevLanguage) => {
+        i18n.locale = lang;
+        return lang;
+      });
+    }
+  };
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Settings</Text>
+      <Text style={styles.title}>{i18n.t('settings')}</Text>
 
       <View style={[styles.sectionContainer, styles.containerBackground]}>
-        <Text style={styles.sectionTitle}>Modify user data</Text>
+        <Text style={styles.sectionTitle}>{i18n.t('modifyUserData')}</Text>
         <TouchableOpacity
           style={styles.buttonContainer}
           onPress={() => props.navigation.navigate('ModificarDatos')}>
@@ -26,7 +46,7 @@ const Settings = (props) => {
       </View>
 
       <View style={[styles.sectionContainer, styles.containerBackground]}>
-        <Text style={styles.sectionTitle}>Screen</Text>
+        <Text style={styles.sectionTitle}>{i18n.t('screen')}</Text>
 
         <View style={styles.switchContainer}>
           <TouchableOpacity onPress={() => setDarkMode(true)}>
@@ -51,24 +71,24 @@ const Settings = (props) => {
       </View>
 
       <View style={[styles.sectionContainer, styles.containerBackground]}>
-        <Text style={styles.sectionTitle}>Language</Text>
+        <Text style={styles.sectionTitle}>{i18n.t('language')}</Text>
 
         <View style={styles.switchContainer}>
-          <TouchableOpacity onPress={() => setLanguage(false)}>
+          <TouchableOpacity onPress={() => toggleLanguage('es')}>
             <Image
               style={[
                 styles.imageLanguage,
-                !language ? styles.selectedLanguage : null,
+                !language  === 'es' ?  styles.selectedLanguage : null,
               ]}
               source={require('../image/espanyol.png')}
             />
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => setLanguage(true)}>
+          <TouchableOpacity onPress={() => toggleLanguage('en')}>
             <Image
               style={[
                 styles.imageLanguage,
-                language ? styles.selectedLanguage : null,
+                language === 'en' ? styles.selectedLanguage : null,
               ]}
               source={require('../image/ingles.png')}
             />

@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback,useContext  } from "react";
 import {
   View,
   Text,
@@ -12,6 +12,9 @@ import { TimePickerModal } from "react-native-paper-dates";
 import { DatePickerModal } from "react-native-paper-dates";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import Group from "../../components/group";
+import ScreensContext from './ScreenContext';
+import i18n from 'i18n-js';
+import { en, es } from '../translation/localizations';
 
 export default function App(props) {
   const [visible, setVisible] = useState(false);
@@ -20,6 +23,9 @@ export default function App(props) {
   const [info, setInfo] = useState("");
   const [selectedGroup, setSelectedGroup] = useState(["grupos"], ["grupo2"]);
   const [formattedDate, setFormattedDate] = useState("");
+  const { language } = useContext(ScreensContext);
+  i18n.translations = { en, es };
+  i18n.locale = language;
 
   const onDismiss = useCallback(() => {
     setVisible(false);
@@ -43,7 +49,7 @@ export default function App(props) {
     <SafeAreaProvider>
       <View style={styles.container}>
         <View style={styles.participantsContainer}>
-          <Text style={styles.label}>Participantes del evento:</Text>
+          <Text style={styles.label}>{i18n.t('participantsLabel')}</Text>
           <View style={styles.panel}>
             <ScrollView>
               {selectedGroup.map((selectedGroup, index) => (
@@ -54,12 +60,12 @@ export default function App(props) {
         </View>
 
         <View style={styles.dateContainer}>
-          <Text style={styles.label}>Seleccionar la fecha del evento:</Text>
+          <Text style={styles.label}>{i18n.t('selectDateLabel')}</Text>
           <TouchableOpacity
             style={styles.touchableOpacityButton}
             onPress={() => setVisibleDate(true)}
           >
-            <Text style={styles.buttonText}>Elegir fecha</Text>
+            <Text style={styles.buttonText}>{i18n.t('pickDateButton')}</Text>
           </TouchableOpacity>
           <DatePickerModal
             mode="single"
@@ -72,12 +78,12 @@ export default function App(props) {
           
 
         <View style={styles.timeContainer}>
-          <Text style={styles.label}>Seleccionar la hora:</Text>
+          <Text style={styles.label}>{i18n.t('selectTimeLabel')}</Text>
           <TouchableOpacity
             style={styles.touchableOpacityButton}
             onPress={() => setVisible(true)}
           >
-            <Text style={styles.buttonText}>Pick time</Text>
+            <Text style={styles.buttonText}>{i18n.t('pickTimeButton')}</Text>
           </TouchableOpacity>
           <TimePickerModal
             visible={visible}
@@ -89,12 +95,12 @@ export default function App(props) {
         </View>
 
         <View style={styles.descriptionContainer}>
-          <Text style={styles.label}>Descripción:</Text>
+          <Text style={styles.label}>{i18n.t('descriptionLabel')}</Text>
           <TextInput
             style={styles.input}
             mode="outlined"
-            label="Descripción de la quedada"
-            placeholder="Descripción de la quedada"
+            label={i18n.t('descriptionInputLabel')}
+            placeholder={i18n.t('descriptionInputLabel')}
             value={info}
             theme={{ colors: { primary: "#EF9009" } }}
             onChangeText={(texto) => setInfo(texto)}
@@ -105,13 +111,13 @@ export default function App(props) {
             style={styles.roundedButton}
             onPress={() => props.navigation.navigate("Calendar")}
           >
-            <Text style={{ color: "white", fontSize: 20 }}>Agregar</Text>
+            <Text style={{ color: "white", fontSize: 20 }}>{i18n.t('addButton')}</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.roundedButton}
             onPress={() => props.navigation.navigate("Calendar")}
           >
-            <Text style={{ color: "white", fontSize: 20 }}>Cancelar</Text>
+            <Text style={{ color: "white", fontSize: 20 }}>{i18n.t('cancelButton')}</Text>
           </TouchableOpacity>
         </View>
       </View>

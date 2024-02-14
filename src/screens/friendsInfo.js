@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useContext  } from "react";
 import { ScrollView, View, Text, StyleSheet, Image } from "react-native";
 import { Slider } from "@react-native-assets/slider";
 import {
@@ -8,11 +8,19 @@ import {
   IconButton,
   Avatar,
 } from "react-native-paper";
-import { DateTimePicker } from "@hashiprobr/react-native-paper-datetimepicker";
+import { DatePickerInput } from 'react-native-paper-dates';
+import i18n from 'i18n-js';
+import { en, es } from '../translation/localizations';
+import ScreensContext from './ScreenContext';
+
+i18n.translations = {
+  en,
+  es,
+};
 
 const InfoAmigo = ({ route, navigation }) => {
   const userId = route.params.userId;
-
+  const { language } = useContext(ScreensContext);
   const [name, setName] = useState("");
   const [mail, setMail] = useState("");
   const [favouriteColor, setFavouriteColor] = useState("");
@@ -23,8 +31,10 @@ const InfoAmigo = ({ route, navigation }) => {
   const [hobbies, setHobbies] = useState("");
   const [allergies, setAllergies] = useState("");
   const [date, setDate] = useState(new Date());
+  const [inputDate, setInputDate] = React.useState(undefined)
 
   useEffect(() => {
+    i18n.locale = language;
     fetch(`http://44.194.67.133:8080/TimeTogether/friendInfo?id=${userId}`, {
       method: "GET",
     })
@@ -44,7 +54,7 @@ const InfoAmigo = ({ route, navigation }) => {
       .catch((error) => {
         console.error("Error fetching friend info:", error);
       });
-  }, [userId]);
+  }, [userId,, language]);
 
   return (
     <ScrollView style={styles.container}>
@@ -66,8 +76,8 @@ const InfoAmigo = ({ route, navigation }) => {
           disabled="true"
           style={styles.input}
           mode="outlined"
-          label="Nombre"
-          placeholder="Nombre"
+          label={i18n.t('name')}
+          placeholder={i18n.t('name')}
           value={name}
           theme={{ colors: { primary: "#EF9009" } }}
         />
@@ -75,8 +85,8 @@ const InfoAmigo = ({ route, navigation }) => {
           disabled="true"
           style={styles.input}
           mode="outlined"
-          label="Email"
-          placeholder="Email"
+          label={i18n.t('email')}
+          placeholder={i18n.t('email')}
           value={mail}
           theme={{ colors: { primary: "#EF9009" } }}
         />
@@ -86,15 +96,18 @@ const InfoAmigo = ({ route, navigation }) => {
             disabled={true}
             style={{ flex: 1, marginRight: 5, ...styles.input }}
             mode="outlined"
-            label="Color Favorito"
-            placeholder="Color Favorito"
+            label={i18n.t('favoriteColor')}
+            placeholder={i18n.t('favoriteColor')}
             value={favouriteColor}
             theme={{ colors: { primary: "#EF9009" } }}
           />
-          <DateTimePicker
+          <DatePickerInput
             style={{ flex: 1, marginLeft: 5, ...styles.input }}
-            type="date"
-            value={date}
+            locale="en"
+            label={i18n.t('birthday')}
+            value={inputDate}
+            onChange={(d) => setInputDate(d)}
+            inputMode="start"
             disabled={true}
           />
         </View>
@@ -102,16 +115,16 @@ const InfoAmigo = ({ route, navigation }) => {
           disabled
           style={styles.input}
           mode="outlined"
-          label="Dirección"
-          placeholder="Dirección"
+          label={i18n.t('address')}
+          placeholder={i18n.t('address')}
           value={address}
           theme={{ colors: { primary: "#EF9009" } }}
         />
         <Divider style={styles.divider} />
-        <Text style={styles.label}>Tallas</Text>
+        <Text style={styles.label}>{i18n.t('sizes')}</Text>
         <View style={styles.sizeSection}>
           <Text style={styles.sizeLabel}>
-            Camisetas: {shirtSize.toFixed(0)}
+          {i18n.t('tShirts')}: {shirtSize.toFixed(0)}
           </Text>
           <Slider
             style={styles.slider}
@@ -128,7 +141,7 @@ const InfoAmigo = ({ route, navigation }) => {
 
         <View style={styles.sizeSection}>
           <Text style={styles.sizeLabel}>
-            Pantalones: {pantsSize.toFixed(0)}
+          {i18n.t('pants')}: {pantsSize.toFixed(0)}
           </Text>
           <Slider
             style={styles.slider}
@@ -144,7 +157,7 @@ const InfoAmigo = ({ route, navigation }) => {
         </View>
 
         <View style={styles.sizeSection}>
-          <Text style={styles.sizeLabel}>Calzado: {shoeSize.toFixed(0)}</Text>
+          <Text style={styles.sizeLabel}>{i18n.t('shoes')}: {shoeSize.toFixed(0)}</Text>
           <Slider
             style={styles.slider}
             minimumValue={30}
@@ -158,9 +171,9 @@ const InfoAmigo = ({ route, navigation }) => {
           />
         </View>
         <Divider style={styles.divider} />
-        <Text style={styles.label}>Aficiones</Text>
+        <Text style={styles.label}>{i18n.t('hobbies')}</Text>
         <Text style={styles.text}>{hobbies}</Text>
-        <Text style={styles.label}>Alergias</Text>
+        <Text style={styles.label}>{i18n.t('allergies')}</Text>
         <Text style={styles.text}>{allergies}</Text>
       </View>
     </ScrollView>

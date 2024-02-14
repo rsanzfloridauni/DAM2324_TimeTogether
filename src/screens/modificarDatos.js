@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useContext  } from 'react';
 import {
   ScrollView,
   View,
@@ -10,10 +10,13 @@ import { Slider } from '@react-native-assets/slider';
 import { TextInput, Button, Divider } from 'react-native-paper';
 import { Avatar, IconButton } from 'react-native-paper';
 import { DatePickerInput } from 'react-native-paper-dates';
-
+import i18n from 'i18n-js';
+import ScreensContext from './ScreenContext';
+import { en, es } from '../translation/localizations';
 import snackIcon from '../../assets/snack-icon.png';
 
 const SingUp = ({ navigation }) => {
+  const { language } = useContext(ScreensContext);
   const [date, setDate] = useState(new Date());
   const [shirtSize, setShirtSize] = useState(0);
   const [pantsSize, setPantsSize] = useState(38);
@@ -33,6 +36,12 @@ const SingUp = ({ navigation }) => {
   const toggleVisibility = () => {
     setIsVisible(!isVisible);
   };
+  i18n.translations = {
+    en,
+    es,
+  };
+
+  i18n.locale = language;
 
   return (
       <ScrollView style={styles.container}>
@@ -53,8 +62,8 @@ const SingUp = ({ navigation }) => {
           <TextInput
             style={styles.input}
             mode="outlined"
-            label="Nombre"
-            placeholder="Nombre"
+            label={i18n.t('name')}
+            placeholder={i18n.t('name')}
             value={name}
             theme={{ colors: { primary: '#EF9009' } }}
             onChangeText={(txt) => setName(txt)}
@@ -62,8 +71,8 @@ const SingUp = ({ navigation }) => {
           <TextInput
             style={styles.input}
             mode="outlined"
-            label="Email"
-            placeholder="Email"
+            label={i18n.t('email')}
+            placeholder={i18n.t('email')}
             value={mail}
             theme={{ colors: { primary: '#EF9009' } }}
             onChangeText={(txt) => setMail(txt)}
@@ -71,7 +80,7 @@ const SingUp = ({ navigation }) => {
           <DatePickerInput
             style={{ flex: 1 }}
             locale="en"
-            label="Cumpleaños"
+            label={i18n.t('birthday')}
             value={inputDate}
             onChange={(d) => setInputDate(d)}
             inputMode="start"
@@ -79,8 +88,8 @@ const SingUp = ({ navigation }) => {
           <TextInput
             style={styles.input}
             mode="outlined"
-            label="Contraseña"
-            placeholder="Contraseña"
+            label={i18n.t('password')}
+            placeholder={i18n.t('password')}
             value={pass1}
             theme={{ colors: { primary: '#EF9009' } }}
             onChangeText={(txt) => setPass1(txt)}
@@ -88,8 +97,8 @@ const SingUp = ({ navigation }) => {
           <TextInput
             style={styles.input}
             mode="outlined"
-            label="Repite Contraseña"
-            placeholder="Repite Contraseña"
+            label={i18n.t('repeatPassword')}
+            placeholder={i18n.t('repeatPassword')}
             value={pass2}
             theme={{ colors: { primary: '#EF9009' } }}
             onChangeText={(txt) => setPass2(txt)}
@@ -97,17 +106,17 @@ const SingUp = ({ navigation }) => {
           <TextInput
             style={styles.input}
             mode="outlined"
-            label="Color Favorito"
-            placeholder="Color Favorito"
+            label={i18n.t('favoriteColor')}
+            placeholder={i18n.t('favoriteColor')}
             value={color}
             theme={{ colors: { primary: '#EF9009' } }}
             onChangeText={(txt) => setColor(txt)}
           />
           <Divider style={styles.divider} />
-          <Text style={styles.label}>Tallas</Text>
+          <Text style={styles.label}>{i18n.t('sizes')}</Text>
           <View style={styles.sizeSection}>
             <Text style={styles.sizeLabel}>
-              Camisetas: {shirtSize.toFixed(0)}
+            {i18n.t('tShirts')}: {shirtSize.toFixed(0)}
             </Text>
             <Slider
               style={styles.slider}
@@ -124,7 +133,7 @@ const SingUp = ({ navigation }) => {
 
           <View style={styles.sizeSection}>
             <Text style={styles.sizeLabel}>
-              Pantalones: {pantsSize.toFixed(0)}
+            {i18n.t('pants')}: {pantsSize.toFixed(0)}
             </Text>
             <Slider
               style={styles.slider}
@@ -140,7 +149,7 @@ const SingUp = ({ navigation }) => {
           </View>
 
           <View style={styles.sizeSection}>
-            <Text style={styles.sizeLabel}>Calzado: {shoeSize.toFixed(0)}</Text>
+            <Text style={styles.sizeLabel}>{i18n.t('shoes')}: {shoeSize.toFixed(0)}</Text>
             <Slider
               style={styles.slider}
               minimumValue={30}
@@ -157,8 +166,8 @@ const SingUp = ({ navigation }) => {
           <TextInput
             style={styles.input}
             mode="outlined"
-            label="Dirección"
-            placeholder="Dirección"
+            label={i18n.t('address')}
+            placeholder={i18n.t('address')}
             value={address}
             theme={{ colors: { primary: '#EF9009' } }}
             onChangeText={(txt) => setAddress(txt)}
@@ -166,8 +175,8 @@ const SingUp = ({ navigation }) => {
           <TextInput
             style={styles.input}
             mode="outlined"
-            label="Alergias"
-            placeholder="Alergias"
+            label={i18n.t('allergies')}
+            placeholder={i18n.t('allergies')}
             value={allergies}
             theme={{ colors: { primary: '#EF9009' } }}
             onChangeText={(txt) => setAllergies(txt)}
@@ -175,8 +184,8 @@ const SingUp = ({ navigation }) => {
           <TextInput
             style={styles.input}
             mode="outlined"
-            label="Aficiones"
-            placeholder="Aficiones"
+            label={i18n.t('hobbies')}
+            placeholder={i18n.t('hobbies')}
             value={hobbies}
             theme={{ colors: { primary: '#EF9009' } }}
             onChangeText={(txt) => setHobbies(txt)}
@@ -187,7 +196,7 @@ const SingUp = ({ navigation }) => {
             labelStyle={styles.buttonLabel}
             theme={{ colors: { primary: '#EF9009' } }}
             onPress={() => navigation.navigate('Settings')}>
-            Aceptar
+            {i18n.t('accept')}
           </Button>
         </View>
       </ScrollView>

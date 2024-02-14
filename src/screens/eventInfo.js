@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { ScrollView, View, Text, StyleSheet } from 'react-native';
 import {
   Card,
@@ -9,8 +9,17 @@ import {
   IconButton,
 } from 'react-native-paper';
 import Participantes from '../../components/participantes';
+import i18n from 'i18n-js';
+import { en, es } from '../translation/localizations';
+import ScreensContext from './ScreenContext';
+
+i18n.translations = {
+  en,
+  es,
+};
 
 const InfoEvento = ({navigation}) => {
+  const { language } = useContext(ScreensContext);
   const [event, setEvent] = useState('Aniversario Eva');
   const [group, setGroup] = useState('1º TSMR');
   const [description, setDescription] = useState(
@@ -23,6 +32,9 @@ const InfoEvento = ({navigation}) => {
   const [names, setNames] = React.useState(['Pepe', 'Juan','Carlos','Hugo']);
 
   const onToggleSwitch = () => setIsSwitchOn(!isSwitchOn);
+  useEffect(() => {
+    i18n.locale = language;
+  }, [language]);
 
   return (
     <ScrollView style={styles.container}>
@@ -38,18 +50,18 @@ const InfoEvento = ({navigation}) => {
 
           <Divider style={styles.divider} />
 
-          <Text style={styles.titulo}>Descripción</Text>
+          <Text style={styles.titulo}>{i18n.t('description')}</Text>
           <Text style={styles.input}>{description}</Text>
 
           <Divider style={styles.divider} />
 
           <View style={{ flexDirection: 'row' }}>
-            <Text style={styles.inputLabel}>Date:</Text>
+            <Text style={styles.inputLabel}>{i18n.t('date')}:</Text>
             <Text style={styles.input}>{date}</Text>
           </View>
 
           <View style={{ flexDirection: 'row' }}>
-            <Text style={styles.inputLabel}>Lloc:</Text>
+            <Text style={styles.inputLabel}>{i18n.t('place')}:</Text>
             <Text style={styles.input}>{place}</Text>
           </View>
 
@@ -59,7 +71,7 @@ const InfoEvento = ({navigation}) => {
             <Card.Content>
               <List.Section>
                 <List.Subheader style={styles.label}>
-                  Participantes
+                {i18n.t('participants')}
                 </List.Subheader>
                 <ScrollView>
                   {names.map((name, index) => (
@@ -77,7 +89,7 @@ const InfoEvento = ({navigation}) => {
           <Divider style={styles.divider} />
 
           <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
-            <Text style={{ marginTop: 5, marginRight: 5 }}>Notificar</Text>
+            <Text style={{ marginTop: 5, marginRight: 5 }}>{i18n.t('notify')}</Text>
             <Switch value={isSwitchOn} onValueChange={onToggleSwitch} />
           </View>
 
@@ -93,7 +105,7 @@ const InfoEvento = ({navigation}) => {
               }}
               labelStyle={{ ...styles.buttonLabel, color: '#304999' }}
               theme={{ colors: { primary: '#C9C9C9' } }}>
-              Rechazar
+              {i18n.t('reject')}
             </Button>
 
             <Button
@@ -102,8 +114,7 @@ const InfoEvento = ({navigation}) => {
               style={styles.button}
               labelStyle={styles.buttonLabel}
               theme={{ colors: { primary: '#304999' } }}>
-              {' '}
-              Aceptar
+              {i18n.t('accept')}
             </Button>
           </View>
         </Card.Content>

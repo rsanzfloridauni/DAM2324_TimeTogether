@@ -3,10 +3,12 @@ import { View, StyleSheet, ScrollView, TouchableOpacity, Text } from "react-nati
 import { Button, TextInput, Modal, Portal } from 'react-native-paper';
 import Friend from "../../components/friend";
 import ScreenContext from "./ScreenContext"; // Ajusta la ruta según la ubicación real de ScreenContext
-
+import i18n from 'i18n-js';
+import { en, es } from '../translation/localizations';
+i18n.translations = { en, es };
 
 export default function Friends({ navigation }) {
-  const { userData, setUserData } = useContext(ScreenContext);
+  const { userData, setUserData,language  } = useContext(ScreenContext);
   const [addFriend, setAddFriend] = useState(true);
   const [mail, setMail] = useState("");
   const [friendList, setFriendList] = useState([]);
@@ -18,6 +20,9 @@ export default function Friends({ navigation }) {
       setConfirmationVisible(false);
     }
   };
+  useEffect(() => {
+    i18n.locale = language;
+  }, [language]);
 
   const toggleConfirmationVisibility = () => {
     setConfirmationVisible(!confirmationVisible);
@@ -55,13 +60,13 @@ export default function Friends({ navigation }) {
           <TouchableOpacity
             style={styles.buttonFriends}
             onPress={() => navigation.navigate('Friends')}>
-            <Text style={styles.textButton} > Amigos </Text>
+            <Text style={styles.textButton} > {i18n.t('friends')} </Text>
           </TouchableOpacity>
 
           <TouchableOpacity
             style={styles.buttonGroup}
             onPress={() => navigation.navigate('Group')}>
-            <Text style={styles.textButton} > Grupos </Text>
+            <Text style={styles.textButton} > {i18n.t('groups')} </Text>
           </TouchableOpacity>
         </View>
 
@@ -86,7 +91,7 @@ export default function Friends({ navigation }) {
           theme={{ colors: { primary: "#304999" } }}
           style={styles.button}
           onPress={toggleConfirmationVisibility}>
-          Agregar amigo
+          {i18n.t('addFriend')}
         </Button>
       </View>
 
@@ -96,12 +101,12 @@ export default function Friends({ navigation }) {
           onDismiss={toggleConfirmationVisibility}
           contentContainerStyle={[styles.modalContainer]}>
           <View style={styles.modalContent}>
-            <Text>Ingrese el email de el amigo que quieres agregar:</Text>
+            <Text>{i18n.t('enterEmail')}</Text>
             <TextInput
               style={styles.input}
               mode="outlined"
-              label="Email"
-              placeholder="Ingrese el email"
+              label={i18n.t('email')}
+              placeholder={i18n.t('email')}
               theme={{ colors: { primary: '#EF9009' } }}
             />
             <Button
@@ -110,7 +115,7 @@ export default function Friends({ navigation }) {
               labelStyle={styles.buttonLabel}
               theme={{ colors: { primary: '#304999' } }}
               onPress={() => navigation.navigate('Login')}>
-              Enviar
+              {i18n.t('send')}
             </Button>
           </View>
         </Modal>
