@@ -66,7 +66,7 @@ const FriendStack = () => {
   return (
     <Stack.Navigator>
       <Stack.Screen
-        name="Friends"
+        name="FriendsList"
         component={FriendsList}
         options={{ headerShown: false }}
       />

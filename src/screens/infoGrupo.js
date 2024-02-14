@@ -9,7 +9,7 @@ import {
   IconButton,
   Card,
 } from 'react-native-paper';
-import Participantes from '../../components/participantes.js';
+import Members from '../../components/miembros.js';
 
 const InfoGroup = ({route, navigation}) => {
   const userId = route.params.userId;
@@ -75,7 +75,7 @@ const InfoGroup = ({route, navigation}) => {
               </List.Subheader>
               <ScrollView>
                 {names.map((obj, index) => (
-                  <Participantes
+                  <Members
                     key={index}
                     name={obj.name}
                   />

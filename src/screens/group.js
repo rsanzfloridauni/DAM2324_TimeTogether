@@ -35,7 +35,7 @@ const GroupsAll = ({ navigation }) => {
       <View style={styles.buttonsContainer}>
         <TouchableOpacity
           style={styles.buttonFriends}
-          onPress={() => navigation.navigate('Friends')}>
+          onPress={() => navigation.navigate('FriendsList')}>
           <Text style={styles.textButton} > Amigos </Text>
         </TouchableOpacity>
 

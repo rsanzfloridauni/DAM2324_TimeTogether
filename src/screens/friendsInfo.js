@@ -54,7 +54,7 @@ const InfoAmigo = ({ route, navigation }) => {
             icon="arrow-left"
             size={20}
             style={{ marginTop: 30 }}
-            onPress={() => navigation.navigate("Friends")}
+            onPress={() => navigation.navigate("FriendsList")}
           />
         </View>
         <Avatar.Image
