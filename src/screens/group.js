@@ -12,15 +12,16 @@ const GroupsAll = ({ navigation }) => {
   const [groupsData, setGroupsData] = useState([]);
 
   useEffect(() => {
-    try {
-      const parsedUserData = JSON.parse(userData);
-      if (parsedUserData && parsedUserData.id) {
-        fetch(`http://44.194.67.133:8080/TimeTogether/userGroups?userId=${parsedUserData.id}`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        })
+    const fetchGroups = () => {
+      try {
+        const parsedUserData = JSON.parse(userData);
+        if (parsedUserData && parsedUserData.id) {
+          fetch(`http://44.194.67.133:8080/TimeTogether/userGroups?userId=${parsedUserData.id}`, {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          })
           .then((response) => response.json())
           .then((data) => {
             setGroupsData(data.groups);
@@ -28,11 +29,20 @@ const GroupsAll = ({ navigation }) => {
           .catch((error) => {
             console.error("Error:", error);
           });
+        }
+      } catch (error) {
+        console.error("Error parsing userData:", error);
       }
-    } catch (error) {
-      console.error("Error parsing userData:", error);
-    }
-  }, [userData]);
+    };
+
+    const focusListener = navigation.addListener('focus', () => {
+      fetchGroups();
+    });
+
+    fetchGroups();
+
+    return () => focusListener.remove();
+  }, [navigation, userData]);
 
   useEffect(() => {
     i18n.locale = language;

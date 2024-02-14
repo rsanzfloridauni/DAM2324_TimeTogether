@@ -1,4 +1,4 @@
-import React, { useState, useEffect,useContext } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { ScrollView, View, Text, StyleSheet, Image, Alert } from 'react-native';
 import {
   TextInput,
@@ -18,7 +18,7 @@ const CreateGroup = (props) => {
   const [groupName, setGroupName] = useState('');
   const [groupDescription, setGroupDescription] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
-  const [color, setColor] = useState('blue');
+  const [colors, setColors] = useState(['lightblue', '#EC7063', '#82E0AA', '#F7DC6F', '#F8C471', 'lightpink', '#C39BD3', '#45B39D']);
   const [names, setNames] = useState([]);
   const [ids, setIds] = useState([]);
   const [events, setEvents] = useState([]);
@@ -54,6 +54,7 @@ const CreateGroup = (props) => {
   };
 
   const createGroup = async () => {
+    const randomNumber = Math.floor(Math.random() * 8);
     try {
       if (!groupName || !groupDescription || names.length === 0) {
         Alert.alert('Error', 'Por favor, completa todos los campos antes de crear el grupo.');
@@ -72,7 +73,7 @@ const CreateGroup = (props) => {
             events: events,
             members: ids,
             name: groupName,
-            color: color
+            color: colors[randomNumber],
           }),
         }
       );
@@ -160,10 +161,10 @@ const CreateGroup = (props) => {
           <Card.Content>
             <List.Section>
               <List.Subheader style={styles.label}>
-              {i18n.t('membersGroup')}
+                {i18n.t('membersGroup')}
               </List.Subheader>
               <ScrollView>
-              {names.map((name, index) => (
+                {names.map((name, index) => (
                   <Participantes
                     key={index}
                     imageSource={require('../image/logo.png')}

@@ -4,7 +4,6 @@ import {
   Card,
   Divider,
   List,
-  Switch,
   Button,
   IconButton,
 } from 'react-native-paper';
@@ -18,23 +17,38 @@ i18n.translations = {
   es,
 };
 
-const InfoEvento = ({navigation}) => {
+const InfoEvento = ({ route, navigation }) => {
   const { language } = useContext(ScreensContext);
-  const [event, setEvent] = useState('Aniversario Eva');
-  const [group, setGroup] = useState('1º TSMR');
-  const [description, setDescription] = useState(
-    'Hem pensat en celebrar el aniversari de Eva en el cine i despres anirem a sopar al McDonalds tots junts. \nHabiem pensat en regalarlo entre tots una sudadera.'
-  );
-  const [date, setDate] = useState('16/05/24');
-  const [place, setPlace] = useState('Kinepolis');
-  const [participantes, setParticipantes] = useState(['pepe', 'Eva', 'Luis']);
-  const [isSwitchOn, setIsSwitchOn] = React.useState(false);
-  const [names, setNames] = React.useState(['Pepe', 'Juan','Carlos','Hugo']);
+  const [eventId, setEventId] = useState(route.params.eventId);
+  const [eventColor, setEventColor] = useState(route.params.color);
+  const [event, setEvent] = useState("");
+  const [group, setGroup] = useState("");
+  const [description, setDescription] = useState("");
+  const [date, setDate] = useState("");
+  const [place, setPlace] = useState("");
+  const [participants, setParticipants] = useState([]);
 
-  const onToggleSwitch = () => setIsSwitchOn(!isSwitchOn);
   useEffect(() => {
     i18n.locale = language;
   }, [language]);
+
+  useEffect(() => {
+    fetch(`http://44.194.67.133:8080/TimeTogether/event?id=${eventId}`, {
+      method: "GET",
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setDate(data.date);
+        setParticipants(data.members);
+        setEvent(data.name);
+        setDescription(data.description);
+        setPlace(data.location);
+        console.log(eventColor);
+      })
+      .catch((error) => {
+        console.error("Error fetching friend info:", error);
+      });
+  }, [eventId]);
 
   return (
     <ScrollView style={styles.container}>
@@ -43,7 +57,7 @@ const InfoEvento = ({navigation}) => {
           <IconButton
             icon="arrow-left"
             size={20}
-           onPress={() => navigation.navigate("DateInfo")}
+            onPress={() => navigation.navigate("DateInfo")}
           />
           <Text style={styles.label}>{event}</Text>
           <Text style={styles.label2}>{group}</Text>
@@ -71,7 +85,7 @@ const InfoEvento = ({navigation}) => {
             <Card.Content>
               <List.Section>
                 <List.Subheader style={styles.label}>
-                {i18n.t('participants')}
+                  {i18n.t('participants')}
                 </List.Subheader>
                 <ScrollView>
                   {names.map((name, index) => (
@@ -87,11 +101,6 @@ const InfoEvento = ({navigation}) => {
           </Card>
 
           <Divider style={styles.divider} />
-
-          <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
-            <Text style={{ marginTop: 5, marginRight: 5 }}>{i18n.t('notify')}</Text>
-            <Switch value={isSwitchOn} onValueChange={onToggleSwitch} />
-          </View>
 
           <View style={{ flexDirection: 'row', justifyContent: 'center' }}>
             <Button

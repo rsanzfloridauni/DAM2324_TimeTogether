@@ -85,6 +85,7 @@ const InfoGroup = ({route, navigation}) => {
                   <Members
                     key={index}
                     name={obj.name}
+                    imageSource={''}
                   />
                 ))}
               </ScrollView>

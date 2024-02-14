@@ -2,16 +2,17 @@ import React from 'react';
 import { View, StyleSheet, Text } from 'react-native';
 import { IconButton, Avatar } from 'react-native-paper';
 
-export default function Friend({ imageSource, name }) {
+export default function Friend({ imageSource, name, onDelete }) {
   return (
     <View style={styles.friend}>
       <Avatar.Image
         size={50}
         color="white"
-        source={imageSource} 
+        source={imageSource}
       />
-      <Text style={styles.friendText}>{name}</Text> 
+      <Text style={styles.friendText}>{name}</Text>
       <IconButton
+        icon="delete"
         size={30}
         onPress={onDelete}
 
