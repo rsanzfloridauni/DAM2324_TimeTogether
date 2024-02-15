@@ -29,6 +29,7 @@ const InfoAmigo = ({ route, navigation }) => {
   const [shoeSize, setShoeSize] = useState(0);
   const [hobbies, setHobbies] = useState("");
   const [allergies, setAllergies] = useState("");
+  const [birthday, setBirthday] = useState("");
   const [date, setDate] = useState(new Date());
   const [inputDate, setInputDate] = React.useState(undefined)
 
@@ -44,6 +45,7 @@ const InfoAmigo = ({ route, navigation }) => {
         setFavouriteColor(data.favourite_color);
         setAddress(data.addres);
         //Falta meter el cumpleaños
+        setBirthday(data.birthday);
         setShirtSize(parseInt(data.sizes.shirt, 10));
         setPantsSize(parseInt(data.sizes.trousers, 10));
         setShoeSize(parseInt(data.sizes.shoes, 10));
@@ -100,14 +102,14 @@ const InfoAmigo = ({ route, navigation }) => {
             value={favouriteColor}
             theme={{ colors: { primary: "#EF9009" } }}
           />
-          <DatePickerInput
-            style={{ flex: 1, marginLeft: 5, ...styles.input }}
-            locale="en"
-            label={i18n.t('birthday')}
-            value={inputDate}
-            onChange={(d) => setInputDate(d)}
-            inputMode="start"
+          <TextInput
             disabled={true}
+            style={{ flex: 1, marginRight: 5, ...styles.input }}
+            mode="outlined"
+            label={i18n.t('birthday')}
+            placeholder={i18n.t('birthday')}
+            value={birthday}
+            theme={{ colors: { primary: "#EF9009" } }}
           />
         </View>
         <TextInput
