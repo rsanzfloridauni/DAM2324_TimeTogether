@@ -90,12 +90,12 @@ const SingUp = (props) => {
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-      alert("Usuario creado con éxito");
+      alert(i18n.t('codeSuccessfully'));
       console.log(date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate());
     } catch (error) {
       //date.toISOString().split("T")[0]
       console.error("Error en la petición:", error);
-      alert("Error al enviar los datos al servidor");
+      alert(i18n.t('codeIncorrect'));
     }
     toggleConfirmationVisibility();
   };
@@ -319,12 +319,12 @@ const SingUp = (props) => {
           contentContainerStyle={[styles.modalContainer]}
         >
           <View style={styles.modalContent}>
-            <Text>Ingrese el código de confirmación:</Text>
+            <Text>{i18n.t('enterConfirmationCode')}:</Text>
             <TextInput
               style={styles.inputCode}
               mode="outlined"
-              label="Código de confirmación"
-              placeholder="Ingrese el código de confirmación"
+              label={i18n.t('confirmationCode')}
+              placeholder={i18n.t('enterConfirmationCode')}
               keyboardType="numeric"
               theme={{ colors: { primary: "#EF9009" } }}
               onChangeText={(text) => setConfirmationCode(text)}
@@ -336,7 +336,7 @@ const SingUp = (props) => {
               theme={{ colors: { primary: "#EF9009" } }}
               onPress={() => handleConfirmation()}
             >
-              Enviar
+              {i18n.t('send')}
             </Button>
           </View>
         </Modal>
