@@ -58,7 +58,11 @@ const en = {
     eventDay:'Event day',
     selectTheDateOfTheEvent:'Select the date of the event',
     eventDescription:'Event description',
-    eventParticipants:'Event participants'
+    eventParticipants:'Event participants',
+    errorLogIn:'Email or password are not valid',
+    codeSuccessfully:'Code successfully verified',
+    codeIncorrect:'The verification code is incorrect or an error has occurred.'
+
   };
   
   const es = {
@@ -121,7 +125,11 @@ const en = {
     eventDay:'Dia del evento',
     selectTheDateOfTheEvent:'Selecciona el dia del evento',
     eventDescription:'Descriccion del evento',
-    eventParticipants:'Participantes del evento'
+    eventParticipants:'Participantes del evento',
+    errorLogIn:'Email o contraseña no son validos',
+    codeSuccessfully:'Código verificado con éxito',
+    codeIncorrect:'El código de verificación es incorrecto o ha ocurrido un error'
+
     };
   
   export { en, es };

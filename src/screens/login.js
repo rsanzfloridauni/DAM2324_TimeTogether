@@ -101,14 +101,14 @@ export default function Login(props) {
           visible={modalVisible}
           contentContainerStyle={[styles.modalContainer]}>
           <View style={styles.modalContent}>
-            <Text>Email o contraseña no son validos</Text>
+            <Text>{i18n.t('errorLogIn')}</Text>
             <Button
               mode="contained"
               style={styles.button}
               labelStyle={styles.buttonLabel}
               theme={{ colors: { primary: "#EF9009" } }}
               onPress={() => handleConfirmation()}>
-              {i18n.t('Aceptar')}
+              {i18n.t('accept')}
             </Button>
           </View>
         </Modal>
