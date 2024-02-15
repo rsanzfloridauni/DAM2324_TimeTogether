@@ -1,10 +1,9 @@
 import React, { useState, useEffect,useContext  } from "react";
-import { ScrollView, View, Text, StyleSheet, Image } from "react-native";
+import { ScrollView, View, Text, StyleSheet} from "react-native";
 import { Slider } from "@react-native-assets/slider";
 import {
   TextInput,
   Divider,
-  List,
   IconButton,
   Avatar,
 } from "react-native-paper";

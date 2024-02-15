@@ -2,24 +2,18 @@ import React, { useState, useEffect, useContext } from "react";
 import { View, StyleSheet, ScrollView, TouchableOpacity, Text } from "react-native";
 import { Button, TextInput, Modal, Portal } from 'react-native-paper';
 import Friend from "../../components/friend";
-import ScreenContext from "./ScreenContext"; // Ajusta la ruta según la ubicación real de ScreenContext
+import ScreenContext from "./ScreenContext";
 import i18n from 'i18n-js';
 import { en, es } from '../translation/localizations';
 i18n.translations = { en, es };
 
 export default function Friends({ navigation }) {
-  const { userData, setUserData,language  } = useContext(ScreenContext);
-  const [addFriend, setAddFriend] = useState(true);
+  const { userData, setUserData, language } = useContext(ScreenContext);
   const [mail, setMail] = useState("");
   const [friendList, setFriendList] = useState([]);
   const [confirmationVisible, setConfirmationVisible] = useState(false);
+  const parsedUserData = JSON.parse(userData);
 
-  const handleAddPress = () => {
-    setAddFriend(!addFriend);
-    if (!addFriend) {
-      setConfirmationVisible(false);
-    }
-  };
   useEffect(() => {
     i18n.locale = language;
   }, [language]);
@@ -30,8 +24,6 @@ export default function Friends({ navigation }) {
 
   useEffect(() => {
     try {
-      // Intenta parsear userData como JSON
-      const parsedUserData = JSON.parse(userData);
       if (parsedUserData && parsedUserData.id) {
         fetch(`http://44.194.67.133:8080/TimeTogether/friends?id=${parsedUserData.id}`, {
           method: "GET",
@@ -41,17 +33,76 @@ export default function Friends({ navigation }) {
         })
           .then((response) => response.json())
           .then((data) => {
-            setFriendList(data.friends); // Actualiza el estado con los amigos recibidos.
+            setFriendList(data.friends);
           })
           .catch((error) => {
             console.error("Error:", error);
           });
       }
     } catch (error) {
-      // Maneja el error si el parseo falla
       console.error("Error parsing userData:", error);
     }
-  }, [userData]);
+  }, [userData, confirmationVisible]);
+
+  const addFriend = async () => {
+
+    try {
+      const response = await fetch('http://44.194.67.133:8080/TimeTogether/addFriend', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userId: parsedUserData.id,
+          friendMail: mail,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${ response.status }`);
+      }
+
+      const text = await response.text();
+      if (text) {
+        const json = JSON.parse(text);
+      } else {
+        toggleConfirmationVisibility();
+      }
+    } catch (error) {
+      alert("No se ha encontrado a el usuario")
+    }
+  };
+
+  const removeFriend = async (param) => {
+
+    try {
+      const response = await fetch('http://44.194.67.133:8080/TimeTogether/removeFriend', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userId: parsedUserData.id,
+          friendId: param,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${ response.status }`);
+      }
+
+      const text = await response.text();
+      if (text) {
+        const json = JSON.parse(text);
+      } else {
+        alert("Usuario eliminado correctamente")
+        setConfirmationVisible(true);
+        setConfirmationVisible(false);      
+      }
+    } catch (error) {
+      alert("No se ha encontrado a el usuario")
+    }
+  };
 
   return (
     <Portal.Host>
@@ -80,6 +131,7 @@ export default function Friends({ navigation }) {
                 <Friend
                   imageSource={{ uri: friend.profile_picture }}
                   name={friend.name}
+                  onDelete={() => removeFriend(friend.id)}
                 />
               </TouchableOpacity>
             ))}
@@ -108,13 +160,14 @@ export default function Friends({ navigation }) {
               label={i18n.t('email')}
               placeholder={i18n.t('email')}
               theme={{ colors: { primary: '#EF9009' } }}
+              onChangeText={(txt) => setMail(txt)}
             />
             <Button
               mode="contained"
               style={styles.button}
               labelStyle={styles.buttonLabel}
               theme={{ colors: { primary: '#304999' } }}
-              onPress={() => navigation.navigate('Login')}>
+              onPress={() => addFriend(mail)}>
               {i18n.t('send')}
             </Button>
           </View>

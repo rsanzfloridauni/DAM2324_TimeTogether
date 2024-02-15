@@ -59,7 +59,7 @@ export default function DateInfo({ route, navigation }) {
         <Text style={styles.text}>{formatDate(date)}</Text>
         <ScrollView>
           {events.map((event, index) => (
-            <TouchableOpacity onPress={() => navigation.navigate("EventInfo", {eventId : event.id, color: event.groupColor})}>
+            <TouchableOpacity key={event.id} onPress={() => navigation.navigate("EventInfo", {eventId : event.id, color: event.groupColor})}>
               <Event
                 key={index}
                 name={event.name}
@@ -80,7 +80,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#ecf0f1",
     padding: 20,
     alignItems: "center",
-    marginTop: 20
   },
   panel: {
     backgroundColor: "#C9C9C9",

@@ -80,6 +80,7 @@ const SingUp = (props) => {
 
     }
 
+    if(checked){
     try {
       const response = await fetch(
         "http://44.194.67.133:8080/TimeTogether/newUser",
@@ -89,24 +90,23 @@ const SingUp = (props) => {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            mail: mail, // Usar el estado 'mail' para el correo electrónico
-            password: encryptMD5(pass1), // Usar el estado 'pass1' para la contraseña
-            name: name, // Usar el estado 'name' para el nombre
-            surname: "aaa", // Debes agregar un campo en tu UI para recoger este dato, o ajustar el modelo de datos según tus necesidades
-            additional_information: "aaa", // Agrega un campo en tu UI o establece un valor predeterminado
-            addres: address, // Usar el estado 'address' para la dirección
-            alergies: allergies, // Usar el estado 'allergies' para las alergias
-            birthday: date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate(), // Formatear el estado 'date' para la fecha de nacimiento
-            favourite_color: color, // Usar el estado 'color' para el color favorito
-            friends: [], // Ajustar para recoger este dato de tu UI o establecer valores predeterminados
-            hobbies: hobbies, // Usar el estado 'hobbies' para las aficiones
+            mail: mail,
+            password: encryptMD5(pass1),
+            name: name,
+            surname: "aaa",
+            additional_information: "aaa",
+            addres: address,
+            alergies: allergies,
+            birthday: date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate(),
+            favourite_color: color,
+            friends: [],
+            hobbies: hobbies,
             sizes: {
-              // Usar los estados para las tallas
               shirt: shirtSize,
               trousers: pantsSize,
               shoes: shoeSize,
             },
-            groups: [], // Ajustar para recoger este dato de tu UI o establecer valores predeterminados
+            groups: [],
             profile_picture: "aaa"
           }),
         }
@@ -118,17 +118,18 @@ const SingUp = (props) => {
       alert(i18n.t('codeSuccessfully'));
       console.log(date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate());
     } catch (error) {
-      //date.toISOString().split("T")[0]
       console.error("Error en la petición:", error);
       alert(i18n.t('codeIncorrect'));
     }
     toggleConfirmationVisibility();
+  }
+  else alert("Debes aceptar las condiciones de privacidad para crear una cuenta.");
   };
 
   const handleConfirmation = async () => {
     const verificationData = {
-      code: parseInt(confirmationCode, 10), // Asegúrate de enviar un entero
-      email: mail, // Asumiendo que 'mail' es el estado donde guardaste el correo electrónico del usuario
+      code: parseInt(confirmationCode, 10),
+      email: mail,
     };
 
     try {
@@ -143,16 +144,12 @@ const SingUp = (props) => {
         }
       );
 
-      const isValid = await response.json(); // Suponiendo que la respuesta es un booleano directamente
+      const isValid = await response.json();
 
       if (isValid) {
-        // Manejar la verificación exitosa
         alert("Código verificado con éxito");
         props.navigation.navigate("Login");
-        // Aquí podrías, por ejemplo, redirigir al usuario a la pantalla de inicio de sesión o principal
-        // props.navigation.navigate('Login'); o cualquier otra pantalla
       } else {
-        // Manejar el fallo en la verificación
         alert("El código de verificación es incorrecto o ha ocurrido un error");
       }
     } catch (error) {
@@ -192,16 +189,11 @@ const SingUp = (props) => {
             onChangeText={(txt) => setMail(txt)}
           />
           <DatePickerInput
-            //visible={visible}
             locale="en"
             label={i18n.t('birthday')}
             value={inputDate}
             onChange={(d) => setInputDate(d)}
             inputMode="start"
-          //onDismiss={onDismiss}
-          //onConfirm={onConfirm}
-          //hours={12}
-          //minutes={14}
           />
           <TextInput
             style={styles.input}

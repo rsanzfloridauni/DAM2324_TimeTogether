@@ -7,7 +7,7 @@ import {
   Button,
   IconButton,
 } from 'react-native-paper';
-import Participantes from '../../components/participantes';
+import Members from '../../components/miembros';
 import i18n from 'i18n-js';
 import { en, es } from '../translation/localizations';
 import ScreensContext from './ScreenContext';
@@ -57,7 +57,7 @@ const InfoEvento = ({ route, navigation }) => {
           <IconButton
             icon="arrow-left"
             size={20}
-            onPress={() => navigation.navigate("DateInfo")}
+            onPress={() => navigation.navigate("Calendar")}
           />
           <Text style={styles.label}>{event}</Text>
           <Text style={styles.label2}>{group}</Text>
@@ -88,11 +88,11 @@ const InfoEvento = ({ route, navigation }) => {
                   {i18n.t('participants')}
                 </List.Subheader>
                 <ScrollView>
-                  {names.map((name, index) => (
-                    <Participantes
+                  {participants.map((obj, index) => (
+                    <Members
                       key={index}
                       imageSource={require('../image/logo.png')}
-                      name={name}
+                      name={obj.name}
                     />
                   ))}
                 </ScrollView>

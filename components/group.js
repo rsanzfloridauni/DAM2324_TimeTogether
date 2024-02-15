@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, StyleSheet, Text } from 'react-native';
-import { IconButton, Avatar } from 'react-native-paper';
+import { IconButton} from 'react-native-paper';
 
 export default function Group({ name }) {
   return (

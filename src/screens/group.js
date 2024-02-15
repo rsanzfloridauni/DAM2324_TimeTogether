@@ -1,14 +1,14 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { View, Text, TouchableOpacity, Image, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 import { Button } from 'react-native-paper';
-import ScreenContext from "./ScreenContext"; // Adjust the path based on the actual location of ScreenContext
+import ScreenContext from "./ScreenContext";
 import i18n from 'i18n-js';
 import { en, es } from '../translation/localizations';
 
 i18n.translations = { en, es };
 
 const GroupsAll = ({ navigation }) => {
-  const { userData,language  } = useContext(ScreenContext);
+  const { userData, language  } = useContext(ScreenContext);
   const [groupsData, setGroupsData] = useState([]);
 
   useEffect(() => {
