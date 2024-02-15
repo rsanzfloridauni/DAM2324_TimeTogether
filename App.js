@@ -45,27 +45,19 @@ const ScreenTab = () => {
           }
           return <Ionicons name={iconName} size={size} color={color} />;
         },
-      })}
-      tabBarOptions={{
-        tabBarActiveTintColor: "#666666",
-        tabBarInactiveTintColor: "rgba(128, 128, 128, 0.5)",
-      }}
-    >
+      })}>
       <Tab.Screen
         name={i18n.t('friends')}
         component={FriendStack}
-        options={{ headerShown: false }}
-      />
+        options={{ headerShown: false }} />
       <Tab.Screen
         name={i18n.t('events')}
         component={EventStack}
-        options={{ headerShown: false }}
-      />
+        options={{ headerShown: false }} />
       <Tab.Screen
         name={i18n.t('settings')}
         component={SettingsStack}
-        options={{ headerShown: false }}
-      />
+        options={{ headerShown: false }} />
     </Tab.Navigator>
   );
 };
@@ -75,28 +67,23 @@ const FriendStack = () => {
       <Stack.Screen
         name="FriendsList"
         component={FriendsList}
-        options={{ headerShown: false }}
-      />
+        options={{ headerShown: false }} />
       <Stack.Screen
         name="Group"
         component={Group}
-        options={{ headerShown: false }}
-      />
+        options={{ headerShown: false }} />
       <Stack.Screen
         name="FriendsInfo"
         component={FriendsInfo}
-        options={{ headerShown: false }}
-      />
+        options={{ headerShown: false }} />
       <Stack.Screen
         name="NewGroup"
         component={NewGroup}
-        options={{ headerShown: false }}
-      />
+        options={{ headerShown: false }} />
       <Stack.Screen
         name="InfoGrupo"
         component={InfoGrupo}
-        options={{ headerShown: false }}
-      />
+        options={{ headerShown: false }} />
     </Stack.Navigator>
   );
 };
@@ -106,23 +93,19 @@ const EventStack = () => {
       <Stack.Screen
         name="Calendar"
         component={Calendar}
-        options={{ headerShown: false }}
-      />
+        options={{ headerShown: false }} />
       <Stack.Screen
         name="EventInfo"
         component={EventInfo}
-        options={{ headerShown: false }}
-      />
+        options={{ headerShown: false }}/>
       <Stack.Screen
         name="NewEvent"
         component={NewEvent}
-        options={{ headerShown: false }}
-      />
+        options={{ headerShown: false }}/>
       <Stack.Screen
         name="DateInfo"
         component={DateInfo}
-        options={{ headerShown: false }}
-      />
+        options={{ headerShown: false }}/>
     </Stack.Navigator>
   );
 };
@@ -133,13 +116,11 @@ const SettingsStack = () => {
       <Stack.Screen
         name="Settings"
         component={Settings}
-        options={{ headerShown: false }}
-      />
+        options={{ headerShown: false }}/>
       <Stack.Screen
         name="ModificarDatos"
         component={ModificarDatos}
-        options={{ headerShown: false }}
-      />
+        options={{ headerShown: false }}/>
     </Stack.Navigator>
   );
 };
@@ -152,24 +133,20 @@ export default function App() {
           <Stack.Screen
             name="Login"
             component={Login}
-            options={{ headerShown: false }}
-          />
+            options={{ headerShown: false }}/>
           <Stack.Screen
             name="Start"
             component={Start}
-            options={{ headerShown: false }}
-          />
+            options={{ headerShown: false }}/>
 
           <Stack.Screen
             name="SingUp"
             component={SignUP}
-            options={{ headerShown: false }}
-          />
+            options={{ headerShown: false }}/>
           <Stack.Screen
             name="ScreenTab"
             component={ScreenTab}
-            options={{ headerShown: false }}
-          />
+            options={{ headerShown: false }}/>
         </Stack.Navigator>
       </NavigationContainer>
     </ScreensProvider>

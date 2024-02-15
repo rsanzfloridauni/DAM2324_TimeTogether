@@ -1,55 +1,37 @@
-import React, { useState, useCallback,useContext  } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import {
   View,
   Text,
   StyleSheet,
   ScrollView,
-  Button,
   TouchableOpacity,
 } from "react-native";
-import { TextInput } from "react-native-paper";
-import { TimePickerModal } from "react-native-paper-dates";
-import { DatePickerModal } from "react-native-paper-dates";
-import { SafeAreaProvider } from "react-native-safe-area-context";
-import Group from "../../components/group";
-import ScreensContext from './ScreenContext';
+import { TextInput, Button } from "react-native-paper";
+import dayjs from 'dayjs';
 import i18n from 'i18n-js';
-import { en, es } from '../translation/localizations';
+import DateTimePicker from 'react-native-ui-datepicker';
+import Group from "../../components/group";
 
 export default function App(props) {
-  const [visible, setVisible] = useState(false);
-  const [visibleDate, setVisibleDate] = useState(false);
-  const [date, setDate] = useState(new Date());
   const [info, setInfo] = useState("");
   const [selectedGroup, setSelectedGroup] = useState(["grupos"], ["grupo2"]);
-  const [formattedDate, setFormattedDate] = useState("");
-  const { language } = useContext(ScreensContext);
-  i18n.translations = { en, es };
-  i18n.locale = language;
 
-  const onDismiss = useCallback(() => {
-    setVisible(false);
-  }, []);
+  const [date, setDate] = useState(dayjs());
+  const handleOnPress = (params) => {
+    console.log(params.date)
+    const selectedDate = params.date;
+    setDate(selectedDate);
+    setFormattedDate(selectedDate.format("DD/MM/YYYY")); 
+    console.log(selectedDate);
+  }
 
-  const onConfirm = useCallback(({ hours, minutes }) => {
-    setVisible(false);
-    console.log({ hours, minutes });
-  }, []);
-  const onDismissDatePicker = useCallback(() => {
-    setVisibleDate(false);
-  }, []);
-
-  const onConfirmDatePicker = useCallback((params) => {
-    setVisibleDate(false);
-    setDate(params.date);
-    alert(date.getFullYear()+"-"+(date.getUTCDate()+1)+"-"+date.getDay());  
-  }, []);
+  const [formattedDate, setFormattedDate] = useState(dayjs().format("DD/MM/YYYY"));
 
   return (
-    <SafeAreaProvider>
+    <ScrollView>
       <View style={styles.container}>
         <View style={styles.participantsContainer}>
-          <Text style={styles.label}>{i18n.t('participantsLabel')}</Text>
+          <Text style={styles.label}>{i18n.t('eventParticipants')}</Text>
           <View style={styles.panel}>
             <ScrollView>
               {selectedGroup.map((selectedGroup, index) => (
@@ -58,79 +40,68 @@ export default function App(props) {
             </ScrollView>
           </View>
         </View>
-
         <View style={styles.dateContainer}>
-          <Text style={styles.label}>{i18n.t('selectDateLabel')}</Text>
-          <TouchableOpacity
-            style={styles.touchableOpacityButton}
-            onPress={() => setVisibleDate(true)}
-          >
-            <Text style={styles.buttonText}>{i18n.t('pickDateButton')}</Text>
-          </TouchableOpacity>
-          <DatePickerModal
-            mode="single"
-            visible={visibleDate}
-            onDismiss={onDismissDatePicker}
-            date={date}
-            onConfirm={onConfirmDatePicker}
-          />
-        </View>
-          
+          <Text style={styles.label}>{i18n.t('selectTheDateOfTheEvent')}</Text>
 
-        <View style={styles.timeContainer}>
-          <Text style={styles.label}>{i18n.t('selectTimeLabel')}</Text>
-          <TouchableOpacity
-            style={styles.touchableOpacityButton}
-            onPress={() => setVisible(true)}
-          >
-            <Text style={styles.buttonText}>{i18n.t('pickTimeButton')}</Text>
-          </TouchableOpacity>
-          <TimePickerModal
-            visible={visible}
-            onDismiss={onDismiss}
-            onConfirm={onConfirm}
-            hours={12}
-            minutes={14}
-          />
+            <TextInput
+              style={styles.input}
+              mode="outlined"
+              label={i18n.t('eventDay')}
+              disabled={true}
+              value={formattedDate}
+              theme={{ colors: { primary: "#EF9009" } }}
+              onChangeText={(texto) => setInfo(texto)} />
+
+          <DateTimePicker
+            mode="single"
+            date={date}
+            onChange={(params) => {
+              handleOnPress(params);
+            }}
+            calendarTextStyle={null}
+            headerTextStyle={null}
+            styleP={styles.date}
+            accessibilityRole="button"
+            selectedItemColor="#304999"
+            accessibilityLabel="Set Active Theme"
+            headerButtonColor={'green'}
+            selectedTextStyle={{ color: 'white' }} />
         </View>
 
         <View style={styles.descriptionContainer}>
-          <Text style={styles.label}>{i18n.t('descriptionLabel')}</Text>
+          <Text style={styles.label}>{i18n.t('description')}</Text>
           <TextInput
             style={styles.input}
             mode="outlined"
-            label={i18n.t('descriptionInputLabel')}
-            placeholder={i18n.t('descriptionInputLabel')}
+            label={i18n.t('eventDescription')}
             value={info}
             theme={{ colors: { primary: "#EF9009" } }}
-            onChangeText={(texto) => setInfo(texto)}
-          />
+            onChangeText={(texto) => setInfo(texto)} />
         </View>
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={styles.roundedButton}
-            onPress={() => props.navigation.navigate("Calendar")}
-          >
+            onPress={() => props.navigation.navigate("Calendar")}>
             <Text style={{ color: "white", fontSize: 20 }}>{i18n.t('addButton')}</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.roundedButton}
-            onPress={() => props.navigation.navigate("Calendar")}
-          >
+            onPress={() => props.navigation.navigate("Calendar")}>
             <Text style={{ color: "white", fontSize: 20 }}>{i18n.t('cancelButton')}</Text>
           </TouchableOpacity>
         </View>
       </View>
-    </SafeAreaProvider>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  touchableOpacityButton: {
-    backgroundColor: "orange",
-    borderRadius: 10,
-    padding: 10,
-    margin: 10,
+  container: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "flex-start",
+    marginTop: 20,
+    padding: 20,
   },
   buttonText: {
     color: "white",
@@ -138,20 +109,12 @@ const styles = StyleSheet.create({
   },
   roundedButton: {
     borderRadius: 15,
-    backgroundColor: "orange",
+    backgroundColor: "#304999",
     color: "white",
     padding: 10,
-    textAlign: "center",
-  },
-
-  container: {
-    flex: 1,
     alignItems: "center",
-    justifyContent: "flex-start",
-    marginTop: 80,
-    padding: 20,
+    width: 100
   },
-
   label: {
     color: "black",
     marginBottom: 10,

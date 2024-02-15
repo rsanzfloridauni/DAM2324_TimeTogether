@@ -80,6 +80,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#ecf0f1",
     padding: 20,
     alignItems: "center",
+    marginTop: 20
   },
   panel: {
     backgroundColor: "#C9C9C9",

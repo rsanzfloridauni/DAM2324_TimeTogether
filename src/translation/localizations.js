@@ -54,7 +54,11 @@ const en = {
     createAccount:'Create Account',
     searchEmail:'Search for an email',
     createGroup: 'CREATE GROUP',
-    events:'Events'
+    events:'Events',
+    eventDay:'Event day',
+    selectTheDateOfTheEvent:'Select the date of the event',
+    eventDescription:'Event description',
+    eventParticipants:'Event participants'
   };
   
   const es = {
@@ -113,9 +117,12 @@ const en = {
     createAccount:'Crear Cuenta',
     searchEmail:'Buscar un correo',
     createGroup: 'CREAR GRUPO',
-    events:'Eventos'
-
-  };
+    events:'Eventos',
+    eventDay:'Dia del evento',
+    selectTheDateOfTheEvent:'Selecciona el dia del evento',
+    eventDescription:'Descriccion del evento',
+    eventParticipants:'Participantes del evento'
+    };
   
   export { en, es };
   

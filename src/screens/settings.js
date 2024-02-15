@@ -1,8 +1,7 @@
-import { useState,useContext, useEffect  } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import {
   View,
   Text,
-  Switch,
   StyleSheet,
   TouchableOpacity,
   Image,
@@ -55,8 +54,7 @@ const Settings = (props) => {
                 styles.imageScreen,
                 darkMode ? styles.selectedScreen : null,
               ]}
-              source={require('../image/luna.png')}
-            />
+              source={require('../image/luna.png')} />
           </TouchableOpacity>
           <TouchableOpacity onPress={() => setDarkMode(false)}>
             <Image
@@ -64,8 +62,7 @@ const Settings = (props) => {
                 styles.imageScreen,
                 !darkMode ? styles.selectedScreen : null,
               ]}
-              source={require('../image/sol.png')}
-            />
+              source={require('../image/sol.png')} />
           </TouchableOpacity>
         </View>
       </View>
@@ -78,10 +75,9 @@ const Settings = (props) => {
             <Image
               style={[
                 styles.imageLanguage,
-                !language  === 'es' ?  styles.selectedLanguage : null,
+                language === 'es' ? styles.selectedLanguage : null,
               ]}
-              source={require('../image/espanyol.png')}
-            />
+              source={require('../image/espanyol.png')} />
           </TouchableOpacity>
 
           <TouchableOpacity onPress={() => toggleLanguage('en')}>
@@ -90,8 +86,7 @@ const Settings = (props) => {
                 styles.imageLanguage,
                 language === 'en' ? styles.selectedLanguage : null,
               ]}
-              source={require('../image/ingles.png')}
-            />
+              source={require('../image/ingles.png')} />
           </TouchableOpacity>
         </View>
       </View>
@@ -168,10 +163,10 @@ const styles = StyleSheet.create({
     height: 110,
     width: 110,
   },
-    selectedLanguage: {
+  selectedLanguage: {
     height: 100,
     width: 100,
-     borderWidth: 4,
+    borderWidth: 4,
   },
 });
 
