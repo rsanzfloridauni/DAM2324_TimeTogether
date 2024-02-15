@@ -1,4 +1,4 @@
-import React, { useState,useEffect,useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   ScrollView,
   View,
@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { Slider } from '@react-native-assets/slider';
-import { TextInput, Button, Divider } from 'react-native-paper';
+import { TextInput, Button, Divider, Checkbox } from 'react-native-paper';
 import { Avatar, Modal, Portal } from 'react-native-paper';
 import { TimePickerModal } from 'react-native-paper-dates';
 import { DatePickerInput } from 'react-native-paper-dates';
@@ -33,11 +33,13 @@ const SingUp = (props) => {
   const [confirmationCode, setConfirmationCode] = useState("");
   const [inputDate, setInputDate] = React.useState(undefined)
   const { language } = useContext(ScreensContext);
+  const [checked, setChecked] = React.useState(false);
+  const [privacity, setPrivacity] = useState(false);
 
   const [confirmationVisible, setConfirmationVisible] = useState(false);
-  const CryptoJS=require("crypto-js");
+  const CryptoJS = require("crypto-js");
 
-  function encryptMD5(pass1){
+  function encryptMD5(pass1) {
     return CryptoJS.MD5(pass1).toString();
   }
 
@@ -56,10 +58,26 @@ const SingUp = (props) => {
     setIsVisible(!isVisible);
   };
 
+  const togglePrivacity = () => {
+    setPrivacity(!privacity);
+  };
+  const handlePrivacity = () => {
+    if (privacity == true) {
+      setPrivacity(false);
+    } else {
+      setPrivacity(true);
+    }
+  }
+
   const handleSubmit = async () => {
     if (pass1 !== pass2) {
       alert(i18n.t('notMatchPasswords'));
       return;
+    }
+     if(checked == false){
+      alert(i18n.t('acceptPrivacity'));
+      return;
+
     }
 
     try {
@@ -180,10 +198,10 @@ const SingUp = (props) => {
             value={inputDate}
             onChange={(d) => setInputDate(d)}
             inputMode="start"
-            //onDismiss={onDismiss}
-            //onConfirm={onConfirm}
-            //hours={12}
-            //minutes={14}
+          //onDismiss={onDismiss}
+          //onConfirm={onConfirm}
+          //hours={12}
+          //minutes={14}
           />
           <TextInput
             style={styles.input}
@@ -216,7 +234,7 @@ const SingUp = (props) => {
           <Text style={styles.label}>{i18n.t('sizes')}</Text>
           <View style={styles.sizeSection}>
             <Text style={styles.sizeLabel}>
-            {i18n.t('tShirts')}: {shirtSize.toFixed(0)}
+              {i18n.t('tShirts')}: {shirtSize.toFixed(0)}
             </Text>
             <Slider
               style={styles.slider}
@@ -233,7 +251,7 @@ const SingUp = (props) => {
 
           <View style={styles.sizeSection}>
             <Text style={styles.sizeLabel}>
-            {i18n.t('pants')}: {pantsSize.toFixed(0)}
+              {i18n.t('pants')}: {pantsSize.toFixed(0)}
             </Text>
             <Slider
               style={styles.slider}
@@ -290,6 +308,33 @@ const SingUp = (props) => {
             theme={{ colors: { primary: "#EF9009" } }}
             onChangeText={(txt) => setHobbies(txt)}
           />
+          <View style={{ flexDirection: 'row' }}>
+            <Checkbox status={checked ? 'checked' : 'unchecked'}
+              onPress={() => {
+                setChecked(!checked);
+              }}
+            />
+            
+            <TouchableOpacity style={{ top: 4 }}
+              onPress={handlePrivacity}
+            >
+              <Text>{i18n.t('acceptCondicions')}</Text>
+            </TouchableOpacity>
+          </View>
+          <View>
+            <Portal>
+            <Modal
+              visible={privacity}
+              onDismiss={togglePrivacity}
+              contentContainerStyle={styles.modalContainer}
+            >
+              <View style={styles.modalContent}>
+               <Text>{i18n.t('privacity')}</Text>
+              </View>
+            </Modal>
+          </Portal>
+          
+          </View>
           <Button
             mode="contained"
             style={styles.button}

@@ -62,7 +62,11 @@ const en = {
     errorLogIn:'Email or password are not valid',
     codeSuccessfully:'Code successfully verified',
     codeIncorrect:'The verification code is incorrect or an error has occurred.',
-    notMatchPasswords:'Passwords do not match'
+    notMatchPasswords:'Passwords do not match',
+    acceptCondicions:"I agree to TimeTogether's Terms of Service and Privacy Policy",
+    privacity:"Terms and Services \n By using TimeTogether, you agree to be bound by our terms and conditions, which include, but are not limited to: \nGroup Creation: You can create groups to connect with friends, family or people with similar interests. \nEvents: Organize and participate in in-app events, from social gatherings to group activities. \nAdd Friends: Expand your social network by connecting with friends and meeting new people. \nPrivacy and Security: We are committed to protecting your data and ensuring a secure environment for all users.\nBy clicking 'CheckBox', you confirm that you have read and understood our terms and conditions as well as our privacy policy. You also agree that you will comply with these regulations while using our application.\nNote: If you have any questions about our terms and conditions, please feel free to contact us at any time.\nThank you for trusting TimeTogether! We hope you enjoy your experience with us.",
+    acceptPrivacity:'You must accept the terms and services'
+
   };
   
   const es = {
@@ -129,8 +133,12 @@ const en = {
     errorLogIn:'Email o contraseña no son validos',
     codeSuccessfully:'Código verificado con éxito',
     codeIncorrect:'El código de verificación es incorrecto o ha ocurrido un error',
-    notMatchPasswords:'Las contraseñas no coinciden'
+    notMatchPasswords:'Las contraseñas no coinciden',
+    acceptCondicions:"Acepto las Condiciones de servicio y la Política de privacidad de TimeTogether",
+    privacity: "Términos y Servicios \n Al utilizar TimeTogether, usted acepta estar sujeto a nuestros términos y condiciones, que incluyen, pero no se limitan a: \n Creación de Grupos: Puedes crear grupos para conectar con amigos, familiares o personas con intereses similares. \Eventos: Organiza y participa en eventos dentro de la aplicación, desde reuniones sociales hasta actividades en grupo. \Añadir amigos: Amplía tu red social conectándote con amigos y conociendo gente nueva. \Privacidad y seguridad: Nos comprometemos a proteger tus datos y a garantizar un entorno seguro para todos los usuarios.\n Al hacer clic en 'CheckBox', confirmas que has leído y entendido nuestros términos y condiciones, así como nuestra política de privacidad. También aceptas que cumplirás estas normas mientras utilices nuestra aplicación.\n Nota: Si tienes alguna pregunta sobre nuestros términos y condiciones, no dudes en ponerte en contacto con nosotros en cualquier momento.\n ¡Gracias por confiar en TimeTogether! Esperamos que disfrutes de tu experiencia con nosotros.",
+    acceptPrivacity:'Tiene que aceptar los términos y servicios'
 
+    
 
     };
   
