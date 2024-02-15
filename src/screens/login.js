@@ -11,6 +11,12 @@ export default function Login(props) {
   const { userData, setUserData } = useContext(ScreensContext);
   const [modalVisible, setModalVisible] = useState(false);
 
+  const CryptoJS=require("crypto-js");
+
+  function encryptMD5(password){
+    return CryptoJS.MD5(password).toString();
+  }
+
   const handleConfirmation = () => {
     setModalVisible(false);
   };
@@ -26,7 +32,7 @@ export default function Login(props) {
           },
           body: JSON.stringify({
             mail: mail,
-            password: password,
+            password: encryptMD5(password),
           }),
         }
       );

@@ -35,6 +35,13 @@ const SingUp = (props) => {
   const { language } = useContext(ScreensContext);
 
   const [confirmationVisible, setConfirmationVisible] = useState(false);
+  const CryptoJS=require("crypto-js");
+
+  function encryptMD5(pass1){
+    return CryptoJS.MD5(pass1).toString();
+  }
+
+
 
   i18n.translations = { en, es };
   i18n.locale = language;
@@ -51,7 +58,7 @@ const SingUp = (props) => {
 
   const handleSubmit = async () => {
     if (pass1 !== pass2) {
-      alert("Las contraseñas no coinciden");
+      alert(i18n.t('notMatchPasswords'));
       return;
     }
 
@@ -65,7 +72,7 @@ const SingUp = (props) => {
           },
           body: JSON.stringify({
             mail: mail, // Usar el estado 'mail' para el correo electrónico
-            password: pass1, // Usar el estado 'pass1' para la contraseña
+            password: encryptMD5(pass1), // Usar el estado 'pass1' para la contraseña
             name: name, // Usar el estado 'name' para el nombre
             surname: "aaa", // Debes agregar un campo en tu UI para recoger este dato, o ajustar el modelo de datos según tus necesidades
             additional_information: "aaa", // Agrega un campo en tu UI o establece un valor predeterminado

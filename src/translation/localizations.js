@@ -61,8 +61,8 @@ const en = {
     eventParticipants:'Event participants',
     errorLogIn:'Email or password are not valid',
     codeSuccessfully:'Code successfully verified',
-    codeIncorrect:'The verification code is incorrect or an error has occurred.'
-
+    codeIncorrect:'The verification code is incorrect or an error has occurred.',
+    notMatchPasswords:'Passwords do not match'
   };
   
   const es = {
@@ -128,7 +128,9 @@ const en = {
     eventParticipants:'Participantes del evento',
     errorLogIn:'Email o contraseña no son validos',
     codeSuccessfully:'Código verificado con éxito',
-    codeIncorrect:'El código de verificación es incorrecto o ha ocurrido un error'
+    codeIncorrect:'El código de verificación es incorrecto o ha ocurrido un error',
+    notMatchPasswords:'Las contraseñas no coinciden'
+
 
     };
   
