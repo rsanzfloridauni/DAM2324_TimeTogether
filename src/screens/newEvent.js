@@ -118,7 +118,7 @@ export default function App(props) {
     <ScrollView>
       <View style={styles.container}>
         <View style={styles.descriptionContainer}>
-          <Text style={styles.label}>{i18n.t('Nombre del Evento')}</Text>
+          <Text style={styles.label}>{i18n.t('eventName')}</Text>
           <TextInput
             style={styles.input}
             mode="outlined"
@@ -134,11 +134,11 @@ export default function App(props) {
             value={description}
             theme={{ colors: { primary: "#EF9009" } }}
             onChangeText={(texto) => setDescription(texto)} />
-          <Text style={styles.label}>{i18n.t('Ubicación del Evento')}</Text>
+          <Text style={styles.label}>{i18n.t('localEvent')}</Text>
           <TextInput
             style={styles.input}
             mode="outlined"
-            label={i18n.t('location')}
+            label={i18n.t('localEvent')}
             value={location}
             theme={{ colors: { primary: "#EF9009" } }}
             onChangeText={(texto) => setLocation(texto)} />
