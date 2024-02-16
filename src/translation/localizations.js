@@ -82,7 +82,9 @@ const en = {
   errorCode:'Error verifying the code:',
   errorProcessing:'Error processing verification',
   errorLookingFriends:'The group has not been found',
-  errorCreatingGroup:'Error creating group'
+  errorCreatingGroup:'Error creating group',
+  eventName:'Name of the event',
+  localEvent:'Location of the event',
 
 };
 
@@ -171,7 +173,9 @@ const es = {
   errorProcessing:'Error al procesar la verificación',
   errorLookingFriends:'No se han encontrado el grupo',
   errorCreatingGroup:'Error al crear el grupo',
-  
+  eventName:'Nombre del evento',
+  localEvent:'Ubicación del evento',
+
   };
 
 export { en, es };

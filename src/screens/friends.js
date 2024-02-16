@@ -226,7 +226,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   buttonGroup: {
-    backgroundColor: '#000000',
+    backgroundColor: '#5C6361',
     alignContent: 'center',
     textAlign: 'center',
     borderRadius: 5,
