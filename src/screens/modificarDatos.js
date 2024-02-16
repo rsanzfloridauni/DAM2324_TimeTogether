@@ -31,11 +31,28 @@ const SingUp = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
+  const [modalComprovation, setModalComprovation] = useState(false);
 
   const hasErrors = () => {
     return !mail.includes('@');
   };
 
+  const checkFieldsNotEmpty = () => {
+    if (
+      !name.trim() ||
+      !mail.trim() ||
+      !birthday.trim() ||
+      !color.trim() ||
+      !address.trim() ||
+      !allergies.trim() ||
+      !hobbies.trim()
+    ) {
+      return false;
+    }
+    return true; 
+  };
+
+  
   const formatDate = () => {
     const day = date.getDate();
     const month = date.getMonth() + 1;
@@ -43,7 +60,6 @@ const SingUp = ({ navigation }) => {
     return `${day}/${month}/${year}`;
   };
   const handleOnPress = (params) => {
-    console.log(params.date)
     const selectedDate = new Date(params.date);
     setDate(selectedDate);
   }
@@ -63,51 +79,53 @@ const SingUp = ({ navigation }) => {
   };
 
   const updateUser = async () => {
-    console.log(date.toISOString());
-    try {
-      const response = await fetch(
-        `http://44.194.67.133:8080/TimeTogether/updateUser/${parsedUserData.id}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            additional_information: "",
-            addres: address,
-            alergies: allergies,
-            birthday: birthday,
-            favourite_color: color,
-            hobbies: hobbies,
-            mail: mail,
-            name: name,
-            profile_picture: "URL de la imagen de perfil del usuario",
-            sizes: {
-              shirt: shirtSize,
-              trousers: pantsSize,
-              shoes: shoeSize,
-            },
-            surname: "",
-          }),
-        }
-      );
-
-      const resultText = await response.text();
-
-      if (!response.ok) {
-        alert(`Error al actualizar el usuario: ${resultText}`);
-      } else {
-        alert(i18n.t("updateUser"));
-        console.log("Success Response:", resultText);
-        updateData();
-        navigation.navigate("Settings");
-      }
-    } catch (error) {
-      console.error("Error en la solicitud:", error);
-      alert(`Error en la solicitud: ${error.message}`);
+    if (hasErrors() || !checkFieldsNotEmpty()) {
+      setModalComprovation(true);
     }
-  };
+    else {
+      try {
+        const response = await fetch(
+          `http://44.194.67.133:8080/TimeTogether/updateUser/${parsedUserData.id}`,
+          {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              additional_information: "",
+              addres: address,
+              alergies: allergies,
+              birthday: birthday,
+              favourite_color: color,
+              hobbies: hobbies,
+              mail: mail,
+              name: name,
+              profile_picture: "URL de la imagen de perfil del usuario",
+              sizes: {
+                shirt: shirtSize,
+                trousers: pantsSize,
+                shoes: shoeSize,
+              },
+              surname: "",
+            }),
+          }
+        );
 
+        const resultText = await response.text();
+
+        if (!response.ok) {
+          alert(`Error al actualizar el usuario: ${resultText}`);
+        } else {
+          alert(i18n.t("updateUser"));
+          updateData();
+          navigation.navigate("Settings");
+        }
+      } catch (error) {
+        console.error("Error en la solicitud:", error);
+        alert(`Error en la solicitud: ${error.message}`);
+      }
+    };
+  }
   const updateData = async () => {
     try {
       const response = await fetch(
@@ -141,15 +159,13 @@ const SingUp = ({ navigation }) => {
         <IconButton
           icon="arrow-left"
           size={20}
-          onPress={() => navigation.navigate("Settings")}
-        />
+          onPress={() => navigation.navigate("Settings")} />
         <View style={styles.form}>
           <TouchableOpacity onPress={toggleVisibility}>
             <Avatar.Image
               style={styles.logo}
               source={require("../image/logo.png")}
-              onPress={() => console.log("Button Pressed")}
-            />
+              onPress={() => console.log("Button Pressed")} />
           </TouchableOpacity>
 
           <TextInput
@@ -159,8 +175,7 @@ const SingUp = ({ navigation }) => {
             placeholder={i18n.t("name")}
             value={name}
             theme={{ colors: { primary: "#EF9009" } }}
-            onChangeText={(txt) => setName(txt)}
-          />
+            onChangeText={(txt) => setName(txt)} />
           <TextInput
             style={styles.input}
             mode="outlined"
@@ -170,8 +185,7 @@ const SingUp = ({ navigation }) => {
             theme={{ colors: { primary: "#EF9009" } }}
             onChangeText={(txt) => setMail(txt)}
             onFocus={() => setIsFocused(true)}
-            onBlur={() => setIsFocused(false)}
-          />
+            onBlur={() => setIsFocused(false)} />
           <HelperText type="error" visible={hasErrors()}>
             {i18n.t('helperText')}
           </HelperText>
@@ -187,8 +201,7 @@ const SingUp = ({ navigation }) => {
             placeholder={i18n.t("favoriteColor")}
             value={color}
             theme={{ colors: { primary: "#EF9009" } }}
-            onChangeText={(txt) => setColor(txt)}
-          />
+            onChangeText={(txt) => setColor(txt)} />
           <Divider style={styles.divider} />
           <Text style={styles.label}>{i18n.t("sizes")}</Text>
           <View style={styles.sizeSection}>
@@ -221,8 +234,7 @@ const SingUp = ({ navigation }) => {
               value={pantsSize}
               minimumTrackTintColor="#EF9009"
               maximumTrackTintColor="#000000"
-              thumbTintColor="#304999"
-            />
+              thumbTintColor="#304999" />
           </View>
 
           <View style={styles.sizeSection}>
@@ -238,8 +250,7 @@ const SingUp = ({ navigation }) => {
               value={shoeSize}
               minimumTrackTintColor="#EF9009"
               maximumTrackTintColor="#000000"
-              thumbTintColor="#304999"
-            />
+              thumbTintColor="#304999" />
           </View>
           <Divider style={styles.divider} />
           <TextInput
@@ -249,8 +260,7 @@ const SingUp = ({ navigation }) => {
             placeholder={i18n.t("address")}
             value={address}
             theme={{ colors: { primary: "#EF9009" } }}
-            onChangeText={(txt) => setAddress(txt)}
-          />
+            onChangeText={(txt) => setAddress(txt)} />
           <TextInput
             style={styles.input}
             mode="outlined"
@@ -258,8 +268,7 @@ const SingUp = ({ navigation }) => {
             placeholder={i18n.t("allergies")}
             value={allergies}
             theme={{ colors: { primary: "#EF9009" } }}
-            onChangeText={(txt) => setAllergies(txt)}
-          />
+            onChangeText={(txt) => setAllergies(txt)} />
           <TextInput
             style={styles.input}
             mode="outlined"
@@ -267,8 +276,7 @@ const SingUp = ({ navigation }) => {
             placeholder={i18n.t("hobbies")}
             value={hobbies}
             theme={{ colors: { primary: "#EF9009" } }}
-            onChangeText={(txt) => setHobbies(txt)}
-          />
+            onChangeText={(txt) => setHobbies(txt)} />
           <Button
             mode="contained"
             style={styles.button}
@@ -297,7 +305,7 @@ const SingUp = ({ navigation }) => {
               }}
               accessibilityRole="button"
               selectedItemColor="#304999" />
-            <View style = {{flexDirection: 'row'}}>
+            <View style={{ flexDirection: 'row' }}>
               <Button
                 mode="contained"
                 style={styles.button}
@@ -316,6 +324,26 @@ const SingUp = ({ navigation }) => {
                 {i18n.t("reject")}
               </Button>
             </View>
+          </View>
+        </Modal>
+      </Portal>
+
+
+      <Portal>
+        <Modal
+          visible={modalComprovation}
+          contentContainerStyle={[styles.modalContainer]}>
+          <View style={styles.modalContent}>
+            <Text style={{textAlign:'center', fontSize: 18}}> Comprueba que ningun campo de texto este vacio o que el correo sea existente</Text>
+            <Button
+              mode="contained"
+              style={styles.button}
+              labelStyle={styles.buttonLabel}
+              theme={{ colors: { primary: "#EF9009" } }}
+              onPress={() => setModalComprovation(false)}>
+              {i18n.t("accept")}
+            </Button>
+
           </View>
         </Modal>
       </Portal>
