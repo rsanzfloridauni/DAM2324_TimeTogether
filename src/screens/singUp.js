@@ -33,6 +33,11 @@ const SingUp = (props) => {
   const { language } = useContext(ScreensContext);
   const [checked, setChecked] = React.useState(false);
   const [privacity, setPrivacity] = useState(false);
+  const [isVisible, setIsVisible] = React.useState(false);
+  const [confirmationVisible, setConfirmationVisible] = useState(false);
+  const [modalComprovation, setModalComprovation] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
+  const CryptoJS = require("crypto-js");
   const [selectedImage, setSelectedImage] = useState(require('../image/FotoHombre1.png'));
   const nombresImagenes = [
     require("../image/FotoHombre1.png"),
@@ -47,12 +52,6 @@ const SingUp = (props) => {
     require("../image/FotoMujer5.png"),
   ];
 
-
-  const [isVisible, setIsVisible] = React.useState(false);
-  const [confirmationVisible, setConfirmationVisible] = useState(false);
-  const [modalComprovation, setModalComprovation] = useState(false);
-  const [isFocused, setIsFocused] = useState(false);
-  const CryptoJS = require("crypto-js");
 
   function encryptMD5(pass1) {
     return CryptoJS.MD5(pass1).toString();
@@ -72,7 +71,7 @@ const SingUp = (props) => {
     if (
       !name.trim() ||
       !mail.trim() ||
-      !birthday.trim() ||
+      !date ||
       !color.trim() ||
       !address.trim() ||
       !allergies.trim() ||
@@ -99,15 +98,6 @@ const SingUp = (props) => {
   }
 
   const handleSubmit = async () => {
-    if (pass1 !== pass2) {
-      alert(i18n.t('notMatchPasswords'));
-      return;
-    }
-    if (checked == false) {
-      alert(i18n.t('acceptPrivacity'));
-      return;
-
-    }
     if (!checkFieldsNotEmpty()) {
       setModalComprovation(true);
     }
@@ -121,37 +111,6 @@ const SingUp = (props) => {
         return;
       }
 
-    if (checked) {
-      try {
-        const response = await fetch(
-          "http://44.194.67.133:8080/TimeTogether/newUser",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              mail: mail,
-              password: encryptMD5(pass1),
-              name: name,
-              surname: "aaa",
-              additional_information: "aaa",
-              addres: address,
-              alergies: allergies,
-              birthday: date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate(),
-              favourite_color: color,
-              friends: [],
-              hobbies: hobbies,
-              sizes: {
-                shirt: shirtSize,
-                trousers: pantsSize,
-                shoes: shoeSize,
-              },
-              groups: [],
-              profile_picture: selectedImage.toString()
-            }),
-          }
-        );
       if (checked) {
         try {
           const response = await fetch(
@@ -179,23 +138,11 @@ const SingUp = (props) => {
                   shoes: shoeSize,
                 },
                 groups: [],
-                profile_picture: "aaa"
+                profile_picture: selectedImage.toString()
               }),
             }
           );
 
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        alert(i18n.t('codeSuccessfully'));
-        console.log(date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate());
-      } catch (error) {
-        console.error("Error en la petición:", error);
-        alert(i18n.t('codeIncorrect'));
-      }
-      toggleConfirmationVisibility();
-    }
-    else alert(i18n.t('acceptPrivacity'));
           if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
           }
@@ -280,8 +227,8 @@ const SingUp = (props) => {
           <DatePickerInput
             locale="en"
             label={i18n.t('birthday')}
-            value={inputDate}
-            onChange={(d) => setInputDate(d)}
+            value={date}
+            onChange={(d) => setDate(d)}
             inputMode="start"
           />
           <TextInput
@@ -396,7 +343,6 @@ const SingUp = (props) => {
               }}
             />
 
-
             <TouchableOpacity style={{ top: 4 }}
               onPress={handlePrivacity}
             >
@@ -405,17 +351,6 @@ const SingUp = (props) => {
           </View>
           <View>
             <Portal>
-              <Modal
-                visible={privacity}
-                onDismiss={togglePrivacity}
-                contentContainerStyle={styles.modalContainer}
-              >
-                <View style={styles.modalContent}>
-                  <Text>{i18n.t('privacity')}</Text>
-                </View>
-              </Modal>
-            </Portal>
-
               <Modal
                 visible={privacity}
                 onDismiss={togglePrivacity}
