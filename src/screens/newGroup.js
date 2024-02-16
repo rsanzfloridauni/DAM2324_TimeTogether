@@ -45,7 +45,7 @@ const CreateGroup = (props) => {
       clearSearch();
     } catch (error) {
       console.error("Error fetching friend info:", error);
-      Alert.alert('Error', 'Algo salió mal al buscar amigos. Por favor, inténtalo de nuevo.');
+      Alert.alert('Error', i18n.t('errorLookingFriends'));
     }
   };
 
@@ -57,7 +57,7 @@ const CreateGroup = (props) => {
     const randomNumber = Math.floor(Math.random() * 8);
     try {
       if (!groupName || !groupDescription || names.length === 0) {
-        Alert.alert('Error', 'Por favor, completa todos los campos antes de crear el grupo.');
+        Alert.alert('Error', i18n.t('errorCreatingGroup'));
         return;
       }
 
@@ -83,30 +83,30 @@ const CreateGroup = (props) => {
       }
 
       if (response.status === 204) {
-        console.log('Group created successfully!');
-        Alert.alert('Éxito', 'El grupo se ha creado correctamente', [
+        console.log(i18n.t('groupSuccessFullyCreated'));
+        Alert.alert(i18n.t('success'), i18n.t('groupSuccessFullyCreated'), [
           { text: 'OK', onPress: () => props.navigation.navigate('Group') },
         ]);
       } else {
         const json = await response.json();
         console.log('Response from server:', json);
-        Alert.alert('Error', 'Algo salió mal al crear el grupo. Por favor, inténtalo de nuevo.');
+        Alert.alert('Error', i18n.t('groupWrongCreated'));
       }
     } catch (error) {
       console.error(error);
-      Alert.alert('Error', 'Algo salió mal al crear el grupo. Por favor, inténtalo de nuevo.');
+      Alert.alert('Error', i18n.t('groupWrongCreated'));
     }
   };
 
 
   const handleDeleteParticipant = (participantName) => {
     Alert.alert(
-      'Confirmar eliminación',
-      `¿Seguro que quieres eliminar a ${participantName} del grupo?`,
+      i18n.t('confirmDeletion'),
+      `${i18n.t('askConfirm1')} ${participantName} ${i18n.t('askConfirm2')}`,
       [
-        { text: 'Cancelar', style: 'cancel' },
+        { text: i18n.t('cancelButton'), style: 'cancel' },
         {
-          text: 'Eliminar',
+          text: i18n.t('delete'),
           onPress: () => {
             const updatedNames = names.filter((name) => name !== participantName);
             const updatedIds = ids.filter((_, index) => names[index] !== participantName);

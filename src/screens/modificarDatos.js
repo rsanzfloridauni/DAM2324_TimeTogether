@@ -92,7 +92,7 @@ const SingUp = ({ navigation }) => {
       if (!response.ok) {
         alert(`Error al actualizar el usuario: ${resultText}`);
       } else {
-        alert("Usuario actualizado con éxito");
+        alert(i18n.t("updateUser"));
         console.log("Success Response:", resultText);
         updateData();
         navigation.navigate("Settings");
