@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { Slider } from "@react-native-assets/slider";
-import { TextInput, Button, Divider } from "react-native-paper";
+import { TextInput, Button, Divider, HelperText } from "react-native-paper";
 import { Avatar, IconButton, Portal, Modal } from "react-native-paper";
 import DateTimePicker from 'react-native-ui-datepicker';
 import i18n from "i18n-js";
@@ -30,6 +30,11 @@ const SingUp = ({ navigation }) => {
   const [hobbies, setHobbies] = useState(parsedUserData.hobbies);
   const [modalVisible, setModalVisible] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
+
+  const hasErrors = () => {
+    return !mail.includes('@');
+  };
 
   const formatDate = () => {
     const day = date.getDate();
@@ -164,9 +169,16 @@ const SingUp = ({ navigation }) => {
             value={mail}
             theme={{ colors: { primary: "#EF9009" } }}
             onChangeText={(txt) => setMail(txt)}
+            onFocus={() => setIsFocused(true)}
+            onBlur={() => setIsFocused(false)}
           />
-          <Text style={styles.label}>{i18n.t("birthday")} : {birthday}</Text>
-          <Button onPress={() => setModalVisible(true)}>Cambiar cumpleaños</Button>
+          <HelperText type="error" visible={hasErrors()}>
+            {i18n.t('helperText')}
+          </HelperText>
+
+          <TouchableOpacity onPress={() => setModalVisible(true)}>
+            <Text style={styles.label}>{i18n.t("birthday")} : {birthday}</Text>
+          </TouchableOpacity>
 
           <TextInput
             style={styles.input}
@@ -264,7 +276,6 @@ const SingUp = ({ navigation }) => {
             theme={{ colors: { primary: "#EF9009" } }}
             onPress={() => {
               updateUser();
-              
             }}>
             {i18n.t("accept")}
           </Button>
@@ -286,22 +297,25 @@ const SingUp = ({ navigation }) => {
               }}
               accessibilityRole="button"
               selectedItemColor="#304999" />
-            <Button
-              mode="contained"
-              style={styles.button}
-              labelStyle={styles.buttonLabel}
-              theme={{ colors: { primary: "#EF9009" } }}
-              onPress={() => handleConfirmation()}>
-              {i18n.t("accept")}
-            </Button>
-            <Button
-              mode="contained"
-              style={styles.button}
-              labelStyle={styles.buttonLabel}
-              theme={{ colors: { primary: "#EF9009" } }}
-              onPress={() => setModalVisible(false)}>
-              {i18n.t("reject")}
-            </Button>
+            <View style = {{flexDirection: 'row'}}>
+              <Button
+                mode="contained"
+                style={styles.button}
+                labelStyle={styles.buttonLabel}
+                theme={{ colors: { primary: "#EF9009" } }}
+                onPress={() => handleConfirmation()}>
+                {i18n.t("accept")}
+              </Button>
+
+              <Button
+                mode="contained"
+                style={styles.button}
+                labelStyle={styles.buttonLabel}
+                theme={{ colors: { primary: "#EF9009" } }}
+                onPress={() => setModalVisible(false)}>
+                {i18n.t("reject")}
+              </Button>
+            </View>
           </View>
         </Modal>
       </Portal>

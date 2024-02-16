@@ -76,6 +76,7 @@ const en = {
   askConfirm1:'Are you sure you want to remove ',
   askConfirm2:' from the group?',
   delete:'Delete',
+  helperText: 'Email address is invalid!',
 
 };
 
@@ -157,6 +158,7 @@ const es = {
   askConfirm1:'¿Seguro que quieres eliminar a ',
   askConfirm2:' del grupo?',
   delete:'Eliminar',
+  helperText: 'La direccion de Email no es valida!',
 
 
   };

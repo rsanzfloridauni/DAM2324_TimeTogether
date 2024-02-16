@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import {
   View,
   Text,
@@ -11,46 +11,168 @@ import dayjs from 'dayjs';
 import i18n from 'i18n-js';
 import DateTimePicker from 'react-native-ui-datepicker';
 import Group from "../../components/group";
+import ScreenContext from "./ScreenContext"; // Adjust the path based on the actual location of ScreenContext
+
 
 export default function App(props) {
   const [info, setInfo] = useState("");
-  const [selectedGroup, setSelectedGroup] = useState(["grupos"], ["grupo2"]);
+  const [date, setDate] = useState(new Date());
+  const [name, setName] = useState('');
+  const [location, setLocation] = useState('');
+  const [description, setDescription] = useState('');
+  const [ids, setIds] = useState([]);
+  const { userData, language } = useContext(ScreenContext);
+  const [selectedGroup, setSelectedGroup] = useState('');
 
-  const [date, setDate] = useState(dayjs());
+  useEffect(() => {
+    const fetchGroups = () => {
+      try {
+        const parsedUserData = JSON.parse(userData);
+        if (parsedUserData && parsedUserData.id) {
+          fetch(`http://44.194.67.133:8080/TimeTogether/userGroups?userId=${parsedUserData.id}`, {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              setIds(data.groups);
+            })
+            .catch((error) => {
+              console.error("Error:", error);
+            });
+        }
+      } catch (error) {
+        console.error("Error parsing userData:", error);
+      }
+    };
+    fetchGroups();
+  }, []);
+
+
   const handleOnPress = (params) => {
     console.log(params.date)
     const selectedDate = params.date;
     setDate(selectedDate);
-    setFormattedDate(selectedDate.format("DD/MM/YYYY")); 
+    setFormattedDate(formatDate());
     console.log(selectedDate);
-  }
+  };
 
-  const [formattedDate, setFormattedDate] = useState(dayjs().format("DD/MM/YYYY"));
+  const formatDate = () => {
+    const day = date.getDate();
+    const month = date.getMonth() + 1;
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+  };
+
+  const createEvent = async () => {
+    const randomNumber = Math.floor(Math.random() * 8);
+    try {
+      const response = await fetch(
+        'http://44.194.67.133:8080/TimeTogether/newEvent',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            description: description,
+            groupId: selectedGroup,
+            location: location,
+            name: name,
+            date: formattedDate
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      if (response.status === 204) {
+        console.log('Group created successfully!');
+        alert('Éxito', 'El grupo se ha creado correctamente', [
+          { text: 'OK', onPress: () => props.navigation.navigate('Group') },
+        ]);
+        props.navigation.navigate("Calendar");
+      } else {
+        const json = await response.json();
+        console.log('Response from server:', json);
+        alert('Error', 'Algo salió mal al crear el grupo. Por favor, inténtalo de nuevo.');
+      }
+    } catch (error) {
+      console.error(error);
+      alert('Error', 'Algo salió mal al crear el grupo. Por favor, inténtalo de nuevo.');
+    }
+  };
+
+
+  const [formattedDate, setFormattedDate] = useState('');
 
   return (
     <ScrollView>
       <View style={styles.container}>
+        <View style={styles.descriptionContainer}>
+          <Text style={styles.label}>{i18n.t('Nombre del Evento')}</Text>
+          <TextInput
+            style={styles.input}
+            mode="outlined"
+            label={i18n.t('eventName')}
+            value={name}
+            theme={{ colors: { primary: "#EF9009" } }}
+            onChangeText={(texto) => setName(texto)} />
+          <Text style={styles.label}>{i18n.t('description')}</Text>
+          <TextInput
+            style={styles.input}
+            mode="outlined"
+            label={i18n.t('eventDescription')}
+            value={description}
+            theme={{ colors: { primary: "#EF9009" } }}
+            onChangeText={(texto) => setDescription(texto)} />
+          <Text style={styles.label}>{i18n.t('Ubicación del Evento')}</Text>
+          <TextInput
+            style={styles.input}
+            mode="outlined"
+            label={i18n.t('location')}
+            value={location}
+            theme={{ colors: { primary: "#EF9009" } }}
+            onChangeText={(texto) => setLocation(texto)} />
+        </View>
         <View style={styles.participantsContainer}>
           <Text style={styles.label}>{i18n.t('eventParticipants')}</Text>
           <View style={styles.panel}>
-            <ScrollView>
-              {selectedGroup.map((selectedGroup, index) => (
-                <Group key={index} name={selectedGroup} />
+            <ScrollView contentContainerStyle={styles.scrollViewContent}>
+              {ids.map((group, index) => (
+                <TouchableOpacity
+                  style={[
+                    styles.groupWrapper,
+                    {
+                      backgroundColor: group.id === selectedGroup ? "#304999" : group.color,
+                    },
+                  ]}
+                  onPress={() => setSelectedGroup(group.id)}
+                  key={index} >
+                  <View style={styles.groupContainer}>
+                    <Text style={styles.groupName}>{group.name}</Text>
+                  </View>
+                </TouchableOpacity>
               ))}
+
             </ScrollView>
           </View>
         </View>
         <View style={styles.dateContainer}>
           <Text style={styles.label}>{i18n.t('selectTheDateOfTheEvent')}</Text>
 
-            <TextInput
-              style={styles.input}
-              mode="outlined"
-              label={i18n.t('eventDay')}
-              disabled={true}
-              value={formattedDate}
-              theme={{ colors: { primary: "#EF9009" } }}
-              onChangeText={(texto) => setInfo(texto)} />
+          <TextInput
+            style={styles.input}
+            mode="outlined"
+            label={i18n.t('eventDay')}
+            disabled={true}
+            value={formattedDate}
+            theme={{ colors: { primary: "#EF9009" } }}
+            onChangeText={(texto) => setInfo(texto)} />
 
           <DateTimePicker
             mode="single"
@@ -68,20 +190,10 @@ export default function App(props) {
             selectedTextStyle={{ color: 'white' }} />
         </View>
 
-        <View style={styles.descriptionContainer}>
-          <Text style={styles.label}>{i18n.t('description')}</Text>
-          <TextInput
-            style={styles.input}
-            mode="outlined"
-            label={i18n.t('eventDescription')}
-            value={info}
-            theme={{ colors: { primary: "#EF9009" } }}
-            onChangeText={(texto) => setInfo(texto)} />
-        </View>
         <View style={styles.buttonContainer}>
           <TouchableOpacity
             style={styles.roundedButton}
-            onPress={() => props.navigation.navigate("Calendar")}>
+            onPress={() => createEvent()}>
             <Text style={{ color: "white", fontSize: 20 }}>{i18n.t('addButton')}</Text>
           </TouchableOpacity>
           <TouchableOpacity
@@ -153,5 +265,30 @@ const styles = StyleSheet.create({
   input: {
     marginBottom: 20,
     width: "100%",
+  },
+  groupWrapper: {
+    backgroundColor: '#C9C9C9',
+    marginBottom: 8,
+    borderRadius: 10,
+    padding: 16,
+  },
+  groupContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  groupName: {
+    fontSize: 16,
+    marginRight: 10,
+    fontWeight: 'bold',
+  },
+  scrollViewContent: {
+    paddingBottom: 10,
+  },
+
+  buttonGroup: {
+    backgroundColor: '#EF9009',
+    alignContent: 'center',
+    textAlign: 'center',
+    borderRadius: 5,
   },
 });

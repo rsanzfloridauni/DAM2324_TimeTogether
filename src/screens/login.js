@@ -1,6 +1,6 @@
 import { View, StyleSheet, Image, Text, ScrollView } from "react-native";
 import React, { useState, useContext } from 'react';
-import { Button, TextInput, Portal, Modal } from "react-native-paper";
+import { Button, TextInput, Portal, Modal, HelperText } from "react-native-paper";
 import ScreensContext from './ScreenContext';
 import i18n from 'i18n-js';
 
@@ -10,10 +10,15 @@ export default function Login(props) {
   const [viewPassword, setViewPassword] = React.useState(true);
   const { userData, setUserData } = useContext(ScreensContext);
   const [modalVisible, setModalVisible] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
 
-  const CryptoJS=require("crypto-js");
+  const CryptoJS = require("crypto-js");
 
-  function encryptMD5(password){
+  const hasErrors = () => {
+    return !mail.includes('@');
+  };
+
+  function encryptMD5(password) {
     return CryptoJS.MD5(password).toString();
   }
 
@@ -58,14 +63,20 @@ export default function Login(props) {
       <View style={styles.container}>
         <Image style={styles.logo} source={require("../image/logo.png")} />
         <ScrollView style={styles.scroll}>
-        <View style={[{ marginBottom: 100 }]}>
+          <View style={[{ marginBottom: 100 }]}>
             <TextInput
               style={styles.input}
               mode="outlined"
               label="Email"
               value={mail}
               theme={{ colors: { primary: "#EF9009" } }}
-              onChangeText={(mail) => setMail(mail)}/>
+              onChangeText={(mail) => setMail(mail)}
+              onFocus={() => setIsFocused(true)}
+              onBlur={() => setIsFocused(false)}
+            />
+            <HelperText type="error" visible={hasErrors()}>
+              {i18n.t('helperText')}
+            </HelperText>
 
             <TextInput
               style={styles.input}
