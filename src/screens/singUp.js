@@ -128,7 +128,7 @@ const SingUp = (props) => {
                 additional_information: "aaa",
                 addres: address,
                 alergies: allergies,
-                birthday: date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate(),
+                birthday: date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear(),
                 favourite_color: color,
                 friends: [],
                 hobbies: hobbies,
