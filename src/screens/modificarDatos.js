@@ -63,10 +63,10 @@ const SingUp = ({ navigation }) => {
     ) {
       return false;
     }
-    return true; 
+    return true;
   };
 
-  
+
   const formatDate = () => {
     const day = date.getDate();
     const month = date.getMonth() + 1;
@@ -175,7 +175,7 @@ const SingUp = ({ navigation }) => {
           size={20}
           onPress={() => navigation.navigate("Settings")} />
         <View style={styles.form}>
-          <TouchableOpacity onPress={toggleVisibility}>
+          <TouchableOpacity key={index} onPress={() => { setSelectedImage(ruta); toggleVisibility(); }}>
             <Avatar.Image
               style={styles.logo}
               source={selectedImage}
@@ -347,7 +347,7 @@ const SingUp = ({ navigation }) => {
           visible={modalComprovation}
           contentContainerStyle={[styles.modalContainer]}>
           <View style={styles.modalContent}>
-            <Text style={{textAlign:'center', fontSize: 18}}> {i18n.t("comprovation")}</Text>
+            <Text style={{ textAlign: 'center', fontSize: 18 }}> {i18n.t("comprovation")}</Text>
             <Button
               mode="contained"
               style={styles.button}
@@ -368,7 +368,7 @@ const SingUp = ({ navigation }) => {
           <View style={styles.modalContent}>
             {nombresImagenes.map((ruta, index) => (
               <TouchableOpacity onPress={() => { setSelectedImage(ruta); toggleVisibility(); }}>
-                <Avatar.Image key={index} style={styles.modalLogo} source={ruta}/>
+                <Avatar.Image key={index} style={styles.modalLogo} source={ruta} />
               </TouchableOpacity>
 
             ))}
@@ -427,6 +427,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "rgba(255, 255, 255, 0.9)",
+    flexWrap: 'wrap',
+    flexDirection: 'row',
   },
   modalContainer: {
     backgroundColor: "white",

@@ -194,7 +194,7 @@ const SingUp = (props) => {
     <Portal.Host>
       <ScrollView style={styles.container}>
         <View style={styles.form}>
-          <TouchableOpacity onPress={toggleVisibility}>
+          <TouchableOpacity key={index} onPress={() => { setSelectedImage(ruta); toggleVisibility(); }}>
             <Avatar.Image
               style={styles.logo}
               source={selectedImage}
@@ -219,7 +219,7 @@ const SingUp = (props) => {
             value={mail}
             theme={{ colors: { primary: "#EF9009" } }}
             onChangeText={(txt) => setMail(txt)}
-            onFocus={() => setIsFocused(true)}/>
+            onFocus={() => setIsFocused(true)} />
           <HelperText type="error" visible={hasErrors()}>
             {i18n.t('helperText')}
           </HelperText>
@@ -386,7 +386,7 @@ const SingUp = (props) => {
           <View style={styles.modalContent}>
             {nombresImagenes.map((ruta, index) => (
               <TouchableOpacity onPress={() => { setSelectedImage(ruta); toggleVisibility(); }}>
-                <Avatar.Image key={index} style={styles.modalLogo} source={ruta}/>
+                <Avatar.Image key={index} style={styles.modalLogo} source={ruta} />
               </TouchableOpacity>
 
             ))}
@@ -454,6 +454,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "rgba(255, 255, 255, 0.9)",
+    flexWrap: 'wrap',
+    flexDirection: 'row',
   },
   modalContainer: {
     backgroundColor: "white",
