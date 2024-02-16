@@ -77,6 +77,12 @@ const en = {
   askConfirm2:' from the group?',
   delete:'Delete',
   helperText: 'Email address is invalid!',
+  userNotFound:'User not found',
+  userDeleted:'User successfully deleted',
+  errorCode:'Error verifying the code:',
+  errorProcessing:'Error processing verification',
+  errorLookingFriends:'The group has not been found',
+  errorCreatingGroup:'Error creating group'
 
 };
 
@@ -159,8 +165,13 @@ const es = {
   askConfirm2:' del grupo?',
   delete:'Eliminar',
   helperText: 'La direccion de Email no es valida!',
-
-
+  userNotFound:'No se ha encontrado a el usuario',
+  userDeleted:'Usuario eliminado correctamente',
+  errorCode:'Error al verificar el código:',
+  errorProcessing:'Error al procesar la verificación',
+  errorLookingFriends:'No se han encontrado el grupo',
+  errorCreatingGroup:'Error al crear el grupo',
+  
   };
 
 export { en, es };

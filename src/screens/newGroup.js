@@ -117,6 +117,7 @@ const CreateGroup = (props) => {
         },
       ]
     );
+    
   };
   return (
     <ScrollView style={styles.container}>

@@ -67,6 +67,10 @@ export default function App(props) {
   };
 
   const createEvent = async () => {
+    if (!name || !description || !location || !formattedDate || !selectedGroup) {
+      Alert.alert('Error', i18n.t('errorCreatingGroup'));
+      return;
+    }
     const randomNumber = Math.floor(Math.random() * 8);
     try {
       const response = await fetch(
@@ -91,19 +95,19 @@ export default function App(props) {
       }
 
       if (response.status === 204) {
-        console.log('Group created successfully!');
-        alert('Éxito', 'El grupo se ha creado correctamente', [
+        console.log(i18n.t('groupSuccessFullyCreated'));
+        alert(i18n.t('success'), i18n.t('groupSuccessFullyCreated'), [
           { text: 'OK', onPress: () => props.navigation.navigate('Group') },
         ]);
         props.navigation.navigate("Calendar");
       } else {
         const json = await response.json();
         console.log('Response from server:', json);
-        alert('Error', 'Algo salió mal al crear el grupo. Por favor, inténtalo de nuevo.');
+        alert('Error', i18n.t('groupWrongCreated'));
       }
     } catch (error) {
       console.error(error);
-      alert('Error', 'Algo salió mal al crear el grupo. Por favor, inténtalo de nuevo.');
+      alert('Error',  i18n.t('groupWrongCreated'));
     }
   };
 

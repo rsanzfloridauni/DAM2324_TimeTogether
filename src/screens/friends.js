@@ -69,7 +69,7 @@ export default function Friends({ navigation }) {
         toggleConfirmationVisibility();
       }
     } catch (error) {
-      alert("No se ha encontrado a el usuario")
+      alert(i18n.t('userNotFound'))
     }
   };
 
@@ -95,12 +95,12 @@ export default function Friends({ navigation }) {
       if (text) {
         const json = JSON.parse(text);
       } else {
-        alert("Usuario eliminado correctamente")
+        alert(i18n.t('userDeleted'))
         setConfirmationVisible(true);
         setConfirmationVisible(false);      
       }
     } catch (error) {
-      alert("No se ha encontrado a el usuario")
+      alert(i18n.t('userNotFound'))
     }
   };
 

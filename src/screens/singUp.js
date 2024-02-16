@@ -123,7 +123,7 @@ const SingUp = (props) => {
     }
     toggleConfirmationVisibility();
   }
-  else alert("Debes aceptar las condiciones de privacidad para crear una cuenta.");
+  else alert(i18n.t('acceptPrivacity'));
   };
 
   const handleConfirmation = async () => {
@@ -147,14 +147,14 @@ const SingUp = (props) => {
       const isValid = await response.json();
 
       if (isValid) {
-        alert("Código verificado con éxito");
+        alert(i18n.t('codeSuccessfully'));
         props.navigation.navigate("Login");
       } else {
-        alert("El código de verificación es incorrecto o ha ocurrido un error");
+        alert(i18n.t('codeIncorrect'));
       }
     } catch (error) {
-      console.error("Error al verificar el código:", error);
-      alert("Error al procesar la verificación");
+      console.error(i18n.t('errorCode'), error);
+      alert(i18n.t('errorProcessing'));
     }
   };
 
