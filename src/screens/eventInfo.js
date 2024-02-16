@@ -7,7 +7,7 @@ import {
   Button,
   IconButton,
 } from 'react-native-paper';
-import Participantes from '../../components/participantes';
+import Participantes from '../../components/miembros';
 import i18n from 'i18n-js';
 import { en, es } from '../translation/localizations';
 import ScreensContext from './ScreenContext';
