@@ -85,6 +85,7 @@ const en = {
   errorCreatingGroup:'Error creating group',
   eventName:'Name of the event',
   localEvent:'Location of the event',
+  comprovation:'Check that no text fields are empty or the email exists'
 
 };
 
@@ -175,7 +176,7 @@ const es = {
   errorCreatingGroup:'Error al crear el grupo',
   eventName:'Nombre del evento',
   localEvent:'Ubicación del evento',
-
+  comprovation:'Comprueba que ningun campo de texto este vacio o que el correo sea existente'
   };
 
 export { en, es };

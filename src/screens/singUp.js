@@ -7,11 +7,9 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { Slider } from '@react-native-assets/slider';
-import { TextInput, Button, Divider, Checkbox } from 'react-native-paper';
+import { TextInput, Button, Divider, Checkbox, HelperText } from 'react-native-paper';
 import { Avatar, Modal, Portal } from 'react-native-paper';
-import { TimePickerModal } from 'react-native-paper-dates';
 import { DatePickerInput } from 'react-native-paper-dates';
-import { SafeAreaProvider } from "react-native-safe-area-context";
 import snackIcon from "../../assets/snack-icon.png";
 import i18n from 'i18n-js';
 import { en, es } from '../translation/localizations';
@@ -50,15 +48,15 @@ const SingUp = (props) => {
   ];
 
 
+  const [isVisible, setIsVisible] = React.useState(false);
   const [confirmationVisible, setConfirmationVisible] = useState(false);
+  const [modalComprovation, setModalComprovation] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
   const CryptoJS = require("crypto-js");
 
   function encryptMD5(pass1) {
     return CryptoJS.MD5(pass1).toString();
   }
-
-
-
   i18n.translations = { en, es };
   i18n.locale = language;
 
@@ -66,8 +64,25 @@ const SingUp = (props) => {
     setConfirmationVisible(!confirmationVisible);
   };
 
-  const [isVisible, setIsVisible] = React.useState(false);
+  const hasErrors = () => {
+    return isFocused && !mail.includes('@');
+  };
 
+  const checkFieldsNotEmpty = () => {
+    if (
+      !name.trim() ||
+      !mail.trim() ||
+      !birthday.trim() ||
+      !color.trim() ||
+      !address.trim() ||
+      !allergies.trim() ||
+      !hobbies.trim() ||
+      !mail.includes('@')
+    ) {
+      return false;
+    }
+    return true;
+  };
   const toggleVisibility = () => {
     setIsVisible(!isVisible);
   };
@@ -93,6 +108,18 @@ const SingUp = (props) => {
       return;
 
     }
+    if (!checkFieldsNotEmpty()) {
+      setModalComprovation(true);
+    }
+    else {
+      if (pass1 !== pass2) {
+        alert(i18n.t('notMatchPasswords'));
+        return;
+      }
+      if (checked == false) {
+        alert(i18n.t('acceptPrivacity'));
+        return;
+      }
 
     if (checked) {
       try {
@@ -125,6 +152,37 @@ const SingUp = (props) => {
             }),
           }
         );
+      if (checked) {
+        try {
+          const response = await fetch(
+            "http://44.194.67.133:8080/TimeTogether/newUser",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                mail: mail,
+                password: encryptMD5(pass1),
+                name: name,
+                surname: "aaa",
+                additional_information: "aaa",
+                addres: address,
+                alergies: allergies,
+                birthday: date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate(),
+                favourite_color: color,
+                friends: [],
+                hobbies: hobbies,
+                sizes: {
+                  shirt: shirtSize,
+                  trousers: pantsSize,
+                  shoes: shoeSize,
+                },
+                groups: [],
+                profile_picture: "aaa"
+              }),
+            }
+          );
 
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
@@ -138,6 +196,19 @@ const SingUp = (props) => {
       toggleConfirmationVisibility();
     }
     else alert(i18n.t('acceptPrivacity'));
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          alert(i18n.t('codeSuccessfully'));
+          console.log(date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate());
+        } catch (error) {
+          console.error("Error en la petición:", error);
+          alert(i18n.t('codeIncorrect'));
+        }
+        toggleConfirmationVisibility();
+      }
+      else alert(i18n.t('acceptPrivacity'));
+    }
   };
 
   const handleConfirmation = async () => {
@@ -201,7 +272,11 @@ const SingUp = (props) => {
             value={mail}
             theme={{ colors: { primary: "#EF9009" } }}
             onChangeText={(txt) => setMail(txt)}
-          />
+            onFocus={() => setIsFocused(true)}/>
+          <HelperText type="error" visible={hasErrors()}>
+            {i18n.t('helperText')}
+          </HelperText>
+
           <DatePickerInput
             locale="en"
             label={i18n.t('birthday')}
@@ -321,6 +396,7 @@ const SingUp = (props) => {
               }}
             />
 
+
             <TouchableOpacity style={{ top: 4 }}
               onPress={handlePrivacity}
             >
@@ -329,6 +405,17 @@ const SingUp = (props) => {
           </View>
           <View>
             <Portal>
+              <Modal
+                visible={privacity}
+                onDismiss={togglePrivacity}
+                contentContainerStyle={styles.modalContainer}
+              >
+                <View style={styles.modalContent}>
+                  <Text>{i18n.t('privacity')}</Text>
+                </View>
+              </Modal>
+            </Portal>
+
               <Modal
                 visible={privacity}
                 onDismiss={togglePrivacity}
@@ -397,6 +484,24 @@ const SingUp = (props) => {
               onPress={() => handleConfirmation()}
             >
               {i18n.t('send')}
+            </Button>
+          </View>
+        </Modal>
+      </Portal>
+
+      <Portal>
+        <Modal
+          visible={modalComprovation}
+          contentContainerStyle={[styles.modalContainer]}>
+          <View style={styles.modalContent}>
+            <Text style={{ textAlign: 'center', fontSize: 18 }}> {i18n.t("comprovation")}</Text>
+            <Button
+              mode="contained"
+              style={styles.button}
+              labelStyle={styles.buttonLabel}
+              theme={{ colors: { primary: "#EF9009" } }}
+              onPress={() => setModalComprovation(false)}>
+              {i18n.t("accept")}
             </Button>
           </View>
         </Modal>
