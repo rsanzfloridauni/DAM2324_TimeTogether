@@ -5,6 +5,7 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
+  Alert
 } from "react-native";
 import { TextInput, Button } from "react-native-paper";
 import dayjs from 'dayjs';
@@ -68,7 +69,7 @@ export default function App(props) {
 
   const createEvent = async () => {
     if (!name || !description || !location || !formattedDate || !selectedGroup) {
-      Alert.alert('Error', i18n.t('errorCreatingGroup'));
+      Alert.alert('Falta rellenar algunos datos');
       return;
     }
     const randomNumber = Math.floor(Math.random() * 8);

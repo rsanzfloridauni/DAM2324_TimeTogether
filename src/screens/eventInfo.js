@@ -57,7 +57,7 @@ const InfoEvento = ({ route, navigation }) => {
           <IconButton
             icon="arrow-left"
             size={20}
-            onPress={() => navigation.navigate("DateInfo")}
+            onPress={() => navigation.navigate("Calendar")}
           />
           <Text style={styles.label}>{event}</Text>
           <Text style={styles.label2}>{group}</Text>
