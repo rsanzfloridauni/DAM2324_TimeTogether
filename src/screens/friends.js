@@ -129,7 +129,7 @@ export default function Friends({ navigation }) {
                 key={index}
                 onPress={() => navigation.navigate('FriendsInfo', { userId: friend.id })}>
                 <Friend
-                  imageSource={{ uri: friend.profile_picture }}
+                  imageSource={friend.profile_picture}
                   name={friend.name}
                   onDelete={() => removeFriend(friend.id)}
                 />

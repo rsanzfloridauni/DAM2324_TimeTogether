@@ -32,6 +32,20 @@ const SingUp = ({ navigation }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
   const [modalComprovation, setModalComprovation] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(parsedUserData.profile_picture);
+  const nombresImagenes = [
+    require("../image/FotoHombre1.png"),
+    require("../image/FotoHombre2.png"),
+    require("../image/FotoHombre3.png"),
+    require("../image/FotoHombre4.png"),
+    require("../image/FotoHombre5.png"),
+    require("../image/FotoMujer1.png"),
+    require("../image/FotoMujer2.png"),
+    require("../image/FotoMujer3.png"),
+    require("../image/FotoMujer4.png"),
+    require("../image/FotoMujer5.png"),
+  ];
+
 
   const hasErrors = () => {
     return !mail.includes('@');
@@ -100,7 +114,7 @@ const SingUp = ({ navigation }) => {
               hobbies: hobbies,
               mail: mail,
               name: name,
-              profile_picture: "URL de la imagen de perfil del usuario",
+              profile_picture: selectedImage.toString(),
               sizes: {
                 shirt: shirtSize,
                 trousers: pantsSize,
@@ -164,7 +178,7 @@ const SingUp = ({ navigation }) => {
           <TouchableOpacity onPress={toggleVisibility}>
             <Avatar.Image
               style={styles.logo}
-              source={require("../image/logo.png")}
+              source={selectedImage}
               onPress={() => console.log("Button Pressed")} />
           </TouchableOpacity>
 
@@ -344,6 +358,22 @@ const SingUp = ({ navigation }) => {
               {i18n.t("accept")}
             </Button>
 
+          </View>
+        </Modal>
+      </Portal>
+      <Portal>
+        <Modal
+          visible={isVisible}
+          onDismiss={toggleVisibility}
+          contentContainerStyle={styles.modalContainer}
+        >
+          <View style={styles.modalContent}>
+            {nombresImagenes.map((ruta, index) => (
+              <TouchableOpacity onPress={() => { setSelectedImage(ruta); toggleVisibility(); }}>
+                <Avatar.Image key={index} style={styles.modalLogo} source={ruta}/>
+              </TouchableOpacity>
+
+            ))}
           </View>
         </Modal>
       </Portal>

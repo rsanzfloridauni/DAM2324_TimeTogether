@@ -30,6 +30,7 @@ const InfoAmigo = ({ route, navigation }) => {
   const [hobbies, setHobbies] = useState("");
   const [allergies, setAllergies] = useState("");
   const [birthday, setBirthday] = useState("");
+  const [imgPerfil, setImgPerfil] = useState();
   const [date, setDate] = useState(new Date());
   const [inputDate, setInputDate] = React.useState(undefined)
 
@@ -44,7 +45,7 @@ const InfoAmigo = ({ route, navigation }) => {
         setMail(data.mail);
         setFavouriteColor(data.favourite_color);
         setAddress(data.addres);
-        //Falta meter el cumpleaños
+        setImgPerfil(data.profile_picture);
         setBirthday(data.birthday);
         setShirtSize(parseInt(data.sizes.shirt, 10));
         setPantsSize(parseInt(data.sizes.trousers, 10));
@@ -70,7 +71,7 @@ const InfoAmigo = ({ route, navigation }) => {
         </View>
         <Avatar.Image
           style={styles.logo}
-          source={require("../image/logo.png")}
+          source={imgPerfil}
           onPress={() => console.log("Button Pressed")}
         />
         <TextInput

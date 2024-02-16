@@ -35,6 +35,20 @@ const SingUp = (props) => {
   const { language } = useContext(ScreensContext);
   const [checked, setChecked] = React.useState(false);
   const [privacity, setPrivacity] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(require('../image/FotoHombre1.png'));
+  const nombresImagenes = [
+    require("../image/FotoHombre1.png"),
+    require("../image/FotoHombre2.png"),
+    require("../image/FotoHombre3.png"),
+    require("../image/FotoHombre4.png"),
+    require("../image/FotoHombre5.png"),
+    require("../image/FotoMujer1.png"),
+    require("../image/FotoMujer2.png"),
+    require("../image/FotoMujer3.png"),
+    require("../image/FotoMujer4.png"),
+    require("../image/FotoMujer5.png"),
+  ];
+
 
   const [confirmationVisible, setConfirmationVisible] = useState(false);
   const CryptoJS = require("crypto-js");
@@ -74,56 +88,56 @@ const SingUp = (props) => {
       alert(i18n.t('notMatchPasswords'));
       return;
     }
-     if(checked == false){
+    if (checked == false) {
       alert(i18n.t('acceptPrivacity'));
       return;
 
     }
 
-    if(checked){
-    try {
-      const response = await fetch(
-        "http://44.194.67.133:8080/TimeTogether/newUser",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            mail: mail,
-            password: encryptMD5(pass1),
-            name: name,
-            surname: "aaa",
-            additional_information: "aaa",
-            addres: address,
-            alergies: allergies,
-            birthday: date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate(),
-            favourite_color: color,
-            friends: [],
-            hobbies: hobbies,
-            sizes: {
-              shirt: shirtSize,
-              trousers: pantsSize,
-              shoes: shoeSize,
+    if (checked) {
+      try {
+        const response = await fetch(
+          "http://44.194.67.133:8080/TimeTogether/newUser",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
             },
-            groups: [],
-            profile_picture: "aaa"
-          }),
-        }
-      );
+            body: JSON.stringify({
+              mail: mail,
+              password: encryptMD5(pass1),
+              name: name,
+              surname: "aaa",
+              additional_information: "aaa",
+              addres: address,
+              alergies: allergies,
+              birthday: date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate(),
+              favourite_color: color,
+              friends: [],
+              hobbies: hobbies,
+              sizes: {
+                shirt: shirtSize,
+                trousers: pantsSize,
+                shoes: shoeSize,
+              },
+              groups: [],
+              profile_picture: selectedImage.toString()
+            }),
+          }
+        );
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        alert(i18n.t('codeSuccessfully'));
+        console.log(date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate());
+      } catch (error) {
+        console.error("Error en la petición:", error);
+        alert(i18n.t('codeIncorrect'));
       }
-      alert(i18n.t('codeSuccessfully'));
-      console.log(date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate());
-    } catch (error) {
-      console.error("Error en la petición:", error);
-      alert(i18n.t('codeIncorrect'));
+      toggleConfirmationVisibility();
     }
-    toggleConfirmationVisibility();
-  }
-  else alert(i18n.t('acceptPrivacity'));
+    else alert(i18n.t('acceptPrivacity'));
   };
 
   const handleConfirmation = async () => {
@@ -165,7 +179,7 @@ const SingUp = (props) => {
           <TouchableOpacity onPress={toggleVisibility}>
             <Avatar.Image
               style={styles.logo}
-              source={require("../image/logo.png")}
+              source={selectedImage}
               onPress={() => console.log("Button Pressed")}
             />
           </TouchableOpacity>
@@ -306,7 +320,7 @@ const SingUp = (props) => {
                 setChecked(!checked);
               }}
             />
-            
+
             <TouchableOpacity style={{ top: 4 }}
               onPress={handlePrivacity}
             >
@@ -315,17 +329,17 @@ const SingUp = (props) => {
           </View>
           <View>
             <Portal>
-            <Modal
-              visible={privacity}
-              onDismiss={togglePrivacity}
-              contentContainerStyle={styles.modalContainer}
-            >
-              <View style={styles.modalContent}>
-               <Text>{i18n.t('privacity')}</Text>
-              </View>
-            </Modal>
-          </Portal>
-          
+              <Modal
+                visible={privacity}
+                onDismiss={togglePrivacity}
+                contentContainerStyle={styles.modalContainer}
+              >
+                <View style={styles.modalContent}>
+                  <Text>{i18n.t('privacity')}</Text>
+                </View>
+              </Modal>
+            </Portal>
+
           </View>
           <Button
             mode="contained"
@@ -348,10 +362,12 @@ const SingUp = (props) => {
           contentContainerStyle={styles.modalContainer}
         >
           <View style={styles.modalContent}>
-            <Avatar.Image style={styles.modalLogo} source={snackIcon} />
-            <Avatar.Image style={styles.modalLogo} source={snackIcon} />
-            <Avatar.Image style={styles.modalLogo} source={snackIcon} />
-            <Avatar.Image style={styles.modalLogo} source={snackIcon} />
+            {nombresImagenes.map((ruta, index) => (
+              <TouchableOpacity onPress={() => { setSelectedImage(ruta); toggleVisibility(); }}>
+                <Avatar.Image key={index} style={styles.modalLogo} source={ruta}/>
+              </TouchableOpacity>
+
+            ))}
           </View>
         </Modal>
       </Portal>
