@@ -184,8 +184,7 @@ const SingUp = ({ navigation }) => {
             value={mail}
             theme={{ colors: { primary: "#EF9009" } }}
             onChangeText={(txt) => setMail(txt)}
-            onFocus={() => setIsFocused(true)}
-            onBlur={() => setIsFocused(false)} />
+            onFocus={() => setIsFocused(true)} />
           <HelperText type="error" visible={hasErrors()}>
             {i18n.t('helperText')}
           </HelperText>
@@ -334,7 +333,7 @@ const SingUp = ({ navigation }) => {
           visible={modalComprovation}
           contentContainerStyle={[styles.modalContainer]}>
           <View style={styles.modalContent}>
-            <Text style={{textAlign:'center', fontSize: 18}}> Comprueba que ningun campo de texto este vacio o que el correo sea existente</Text>
+            <Text style={{textAlign:'center', fontSize: 18}}> {i18n.t("comprovation")}</Text>
             <Button
               mode="contained"
               style={styles.button}
@@ -343,7 +342,6 @@ const SingUp = ({ navigation }) => {
               onPress={() => setModalComprovation(false)}>
               {i18n.t("accept")}
             </Button>
-
           </View>
         </Modal>
       </Portal>

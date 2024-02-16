@@ -15,7 +15,7 @@ export default function Login(props) {
   const CryptoJS = require("crypto-js");
 
   const hasErrors = () => {
-    return !mail.includes('@');
+    return isFocused && !mail.includes('@');
   };
 
   function encryptMD5(password) {
@@ -71,9 +71,7 @@ export default function Login(props) {
               value={mail}
               theme={{ colors: { primary: "#EF9009" } }}
               onChangeText={(mail) => setMail(mail)}
-              onFocus={() => setIsFocused(true)}
-              onBlur={() => setIsFocused(false)}
-            />
+              onFocus={() => setIsFocused(true)} />
             <HelperText type="error" visible={hasErrors()}>
               {i18n.t('helperText')}
             </HelperText>
