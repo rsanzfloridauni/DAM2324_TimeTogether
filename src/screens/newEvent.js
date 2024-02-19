@@ -15,13 +15,7 @@ import Group from "../../components/group";
 import ScreenContext from "./ScreenContext"; // Adjust the path based on the actual location of ScreenContext
 
 
-/**
- * React component for creating a new event.
- * @param {Object} props - Component properties.
- * @returns {JSX.Element} JSX Element representing the new event creation screen.
- */
 export default function App(props) {
-  // State variables
   const [info, setInfo] = useState("");
   const [date, setDate] = useState(new Date());
   const [name, setName] = useState('');
@@ -30,10 +24,7 @@ export default function App(props) {
   const [ids, setIds] = useState([]);
   const { userData, language } = useContext(ScreenContext);
   const [selectedGroup, setSelectedGroup] = useState('');
-  const [formattedDate, setFormattedDate] = useState('');
 
-
-  // Fetch user groups on component mount
   useEffect(() => {
     const fetchGroups = () => {
       try {
@@ -60,42 +51,29 @@ export default function App(props) {
     fetchGroups();
   }, []);
 
-  /**
-   * Handle the onPress event for selecting a date.
-   * @param {Object} params - Date parameters.
-   */
+
   const handleOnPress = (params) => {
-    const selectedDate = new Date(params.date);
     const selectedDate = new Date(params.date);
     setDate(selectedDate);
     const formatted = formatDate(selectedDate);
     setInfo(formatted);
   };
-
-  /**
-   * Format the selected date to a string.
-   * @returns {string} - Formatted date string.
-   */
-  const formatDate = () => {
+  
+  const formatDate = (date) => {
     const day = date.getDate();
     const month = date.getMonth() + 1;
     const year = date.getFullYear();
     return `${day}/${month}/${year}`;
   };
+  
 
-  /**
-   * Create a new event and send a POST request to the server.
-   */
   const createEvent = async () => {
-    // Validation check for required fields
-    if (!name || !description || !location || !formattedDate || !selectedGroup) {
+    if (!name || !description || !location || !info || !selectedGroup) {
       Alert.alert('Falta rellenar algunos datos');
       return;
     }
-
-    // Generate a random number
+    else{
     const randomNumber = Math.floor(Math.random() * 8);
-
     try {
       const response = await fetch(
         'http://44.194.67.133:8080/TimeTogether/newEvent',
@@ -109,12 +87,11 @@ export default function App(props) {
             groupId: selectedGroup,
             location: location,
             name: name,
-            date: formattedDate
+            date: info
           }),
         }
       );
 
-      // Handle server response
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -134,7 +111,10 @@ export default function App(props) {
       console.error(error);
       alert('Error',  i18n.t('groupWrongCreated'));
     }
+  }
   };
+
+
 
   return (
     <ScrollView>
