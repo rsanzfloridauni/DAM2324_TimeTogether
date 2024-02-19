@@ -10,7 +10,7 @@ TimeTogether es una APP totalmente gratuita diseñada para facilitar la gestión
 
 ## Contacto
 
-| ![Hugo Estellés](./integrants/hugo.png) | ![Carlos Asensi](./integrants/carlos.jpg) | ![Oscar Mercado](./integrants/oscar.jpg) | ![Elisabeth López](./integrants/elisabeth.jpg) | ![Tomás Chiva](./integrants/tomasjpg) |
+| ![Hugo Estellés](./integrants/hugo.png) | ![Carlos Asensi](./integrants/carlos.jpg) | ![Oscar Mercado](./integrants/oscar.jpg) | ![Elisabeth López](./integrants/elisabeth.jpg) | ![Tomás Chiva](./integrants/tomas.jpg) |
 |:---:|:---:|:---:|:---:|:---:|
 | [Hugo Estellés](mailto:huesga@floridauniversitaria.es) | [Carlos Asensi](mailto:caaslo@floridauniversitaria.es) | [Oscar Mercado](mailto:osmeal@floridauniversitaria.es) | [Elisabeth López](mailto:ellope01@floridauniversitaria.es) | [Tomás Chiva](mailto:tochmo@floridauniversitaria.es) |
 
