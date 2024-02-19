@@ -22,6 +22,8 @@ import React, { useState, useContext, useEffect } from 'react';
 import i18n from 'i18n-js';
 import { en, es } from './src/translation/localizations';
 import ScreensContext from './src/screens/ScreenContext';
+import 'react-native-gesture-handler';
+import { LogBox } from 'react-native';
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
@@ -126,9 +128,12 @@ const SettingsStack = () => {
 };
 
 export default function App() {
+  LogBox.ignoreLogs(["Require cycle:"])
+  LogBox.ignoreAllLogs();
+  console.disableYellowBox = true;
   return (
     <ScreensProvider>
-      <NavigationContainer independent={true}>
+      <NavigationContainer independent={true}  screenOptions={{ headerShown: false }}>
         <Stack.Navigator>
           <Stack.Screen
             name="Login"
