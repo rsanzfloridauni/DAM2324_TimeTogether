@@ -20,4 +20,4 @@ Puedes descargar el códgio de nuestra APP directamente en este repositorio de G
 
 ## Documentación
 
-Puedes acceder a la documentación de nuesta api pinchando en este [enlace](../api/doc/index.html) y a la documentación de nuestra aplicación pinchando en este otro [enlace](./out/index.html).
+Puedes acceder a la documentación de nuesta api pinchando en este [enlace](../api/doc) y a la documentación de nuestra aplicación pinchando en este otro [enlace](./out).
