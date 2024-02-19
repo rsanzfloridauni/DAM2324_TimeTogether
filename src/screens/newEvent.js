@@ -53,11 +53,9 @@ export default function App(props) {
 
 
   const handleOnPress = (params) => {
-    console.log(params.date)
-    const selectedDate = params.date;
+    const selectedDate = new Date (params.date);
     setDate(selectedDate);
     setFormattedDate(formatDate());
-    console.log(selectedDate);
   };
 
   const formatDate = () => {
@@ -182,8 +180,8 @@ export default function App(props) {
           <DateTimePicker
             mode="single"
             date={date}
-            onChange={(params) => {
-              handleOnPress(params);
+            onChange={(date) => {
+              handleOnPress(date);
             }}
             calendarTextStyle={null}
             headerTextStyle={null}
