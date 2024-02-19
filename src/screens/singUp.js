@@ -9,8 +9,7 @@ import {
 import { Slider } from '@react-native-assets/slider';
 import { TextInput, Button, Divider, Checkbox, HelperText } from 'react-native-paper';
 import { Avatar, Modal, Portal } from 'react-native-paper';
-import { DatePickerInput } from 'react-native-paper-dates';
-import snackIcon from "../../assets/snack-icon.png";
+import DateTimePicker from 'react-native-ui-datepicker';
 import i18n from 'i18n-js';
 import { en, es } from '../translation/localizations';
 import ScreensContext from './ScreenContext';
@@ -29,7 +28,7 @@ const SingUp = (props) => {
   const [allergies, setAllergies] = useState("");
   const [hobbies, setHobbies] = useState("");
   const [confirmationCode, setConfirmationCode] = useState("");
-  const [inputDate, setInputDate] = React.useState(undefined)
+  const [birthday, setBirthday] = React.useState(undefined);
   const { language } = useContext(ScreensContext);
   const [checked, setChecked] = React.useState(false);
   const [privacity, setPrivacity] = useState(false);
@@ -37,6 +36,7 @@ const SingUp = (props) => {
   const [confirmationVisible, setConfirmationVisible] = useState(false);
   const [modalComprovation, setModalComprovation] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
   const CryptoJS = require("crypto-js");
   const [selectedImage, setSelectedImage] = useState(require('../image/FotoHombre1.png'));
   const nombresImagenes = [
@@ -96,6 +96,18 @@ const SingUp = (props) => {
       setPrivacity(true);
     }
   }
+
+  const handleConfirmationBirthday = () => {
+    setModalVisible(false);
+    setBirthday(formatDate());
+  };
+
+  const formatDate = () => {
+    const day = date.getDate();
+    const month = date.getMonth() + 1;
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+  };
 
   const handleSubmit = async () => {
     if (!checkFieldsNotEmpty()) {
@@ -158,10 +170,16 @@ const SingUp = (props) => {
     }
   };
 
+  const handleOnPress = (params) => {
+    const selectedDate = new Date(params.date);
+    setDate(selectedDate);
+  }
+
   const handleConfirmation = async () => {
     const verificationData = {
       code: parseInt(confirmationCode, 10),
       email: mail,
+      
     };
 
     try {
@@ -224,13 +242,10 @@ const SingUp = (props) => {
             {i18n.t('helperText')}
           </HelperText>
 
-          <DatePickerInput
-            locale="en"
-            label={i18n.t('birthday')}
-            value={date}
-            onChange={(d) => setDate(d)}
-            inputMode="start"
-          />
+          <TouchableOpacity onPress={() => setModalVisible(true)}>
+            <Text style={styles.label}>{i18n.t("birthday")} : {birthday}</Text>
+          </TouchableOpacity>
+
           <TextInput
             style={styles.input}
             mode="outlined"
@@ -441,6 +456,44 @@ const SingUp = (props) => {
           </View>
         </Modal>
       </Portal>
+
+      <Portal>
+        <Modal
+          visible={modalVisible}
+          contentContainerStyle={[styles.modalContainer]}>
+          <View style={styles.modalContent}>
+            <DateTimePicker
+              style={{ flex: 1 }}
+              locale="en"
+              date={date}
+              onChange={(date) => {
+                handleOnPress(date);
+              }}
+              accessibilityRole="button"
+              selectedItemColor="#304999" />
+            <View style={{ flexDirection: 'row' }}>
+              <Button
+                mode="contained"
+                style={styles.button}
+                labelStyle={styles.buttonLabel}
+                theme={{ colors: { primary: "#EF9009" } }}
+                onPress={() => handleConfirmationBirthday()}>
+                {i18n.t("accept")}
+              </Button>
+
+              <Button
+                mode="contained"
+                style={styles.button}
+                labelStyle={styles.buttonLabel}
+                theme={{ colors: { primary: "#EF9009" } }}
+                onPress={() => setModalVisible(false)}>
+                {i18n.t("reject")}
+              </Button>
+            </View>
+          </View>
+        </Modal>
+      </Portal>
+
     </Portal.Host>
   );
 };
