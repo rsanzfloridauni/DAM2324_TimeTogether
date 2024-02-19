@@ -32,7 +32,9 @@ const InfoAmigo = ({ route, navigation }) => {
   const [birthday, setBirthday] = useState("");
   const [imgPerfil, setImgPerfil] = useState();
   const [date, setDate] = useState(new Date());
-  const [inputDate, setInputDate] = React.useState(undefined)
+  const [inputDate, setInputDate] = React.useState(undefined);
+  const tallas = ["XS", "S", "M", "L", "XL", "XXL"];
+
 
   useEffect(() => {
     i18n.locale = language;
@@ -125,21 +127,21 @@ const InfoAmigo = ({ route, navigation }) => {
         <Divider style={styles.divider} />
         <Text style={styles.label}>{i18n.t('sizes')}</Text>
         <View style={styles.sizeSection}>
-          <Text style={styles.sizeLabel}>
-          {i18n.t('tShirts')}: {shirtSize.toFixed(0)}
-          </Text>
-          <Slider
-            style={styles.slider}
-            minimumValue={0}
-            maximumValue={5}
-            step={1}
-            value={shirtSize}
-            minimumTrackTintColor="#EF9009"
-            maximumTrackTintColor="#000000"
-            thumbTintColor="#304999"
-            enabled={false}
-          />
-        </View>
+            <Text style={styles.sizeLabel}>
+              {i18n.t('tShirts')}: {tallas[shirtSize]}
+            </Text>
+            <Slider
+              style={styles.slider}
+              minimumValue={0}
+              maximumValue={tallas.length - 1}
+              step={1}
+              onValueChange={(value) => setShirtSize(value)}
+              value={shirtSize}
+              minimumTrackTintColor="#EF9009"
+              maximumTrackTintColor="#000000"
+              thumbTintColor="#304999"
+            />
+          </View>
 
         <View style={styles.sizeSection}>
           <Text style={styles.sizeLabel}>

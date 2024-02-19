@@ -33,6 +33,8 @@ const SingUp = ({ navigation }) => {
   const [isFocused, setIsFocused] = useState(false);
   const [modalComprovation, setModalComprovation] = useState(false);
   const [selectedImage, setSelectedImage] = useState(parsedUserData.profile_picture);
+  const tallas = ["XS", "S", "M", "L", "XL", "XXL"];
+
   const nombresImagenes = [
     require("../image/FotoHombre1.png"),
     require("../image/FotoHombre2.png"),
@@ -219,12 +221,12 @@ const SingUp = ({ navigation }) => {
           <Text style={styles.label}>{i18n.t("sizes")}</Text>
           <View style={styles.sizeSection}>
             <Text style={styles.sizeLabel}>
-              {i18n.t("tShirts")}: {shirtSize.toFixed(0)}
+              {i18n.t('tShirts')}: {tallas[shirtSize]}
             </Text>
             <Slider
               style={styles.slider}
               minimumValue={0}
-              maximumValue={5}
+              maximumValue={tallas.length - 1}
               step={1}
               onValueChange={(value) => setShirtSize(value)}
               value={shirtSize}
