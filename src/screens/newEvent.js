@@ -53,17 +53,19 @@ export default function App(props) {
 
 
   const handleOnPress = (params) => {
-    const selectedDate = new Date (params.date);
+    const selectedDate = new Date(params.date);
     setDate(selectedDate);
-    setFormattedDate(formatDate());
+    const formatted = formatDate(selectedDate);
+    setInfo(formatted);
   };
-
-  const formatDate = () => {
+  
+  const formatDate = (date) => {
     const day = date.getDate();
     const month = date.getMonth() + 1;
     const year = date.getFullYear();
     return `${day}/${month}/${year}`;
   };
+  
 
   const createEvent = async () => {
     if (!name || !description || !location || !formattedDate || !selectedGroup) {
@@ -173,7 +175,7 @@ export default function App(props) {
             mode="outlined"
             label={i18n.t('eventDay')}
             disabled={true}
-            value={formattedDate}
+            value={info}
             theme={{ colors: { primary: "#EF9009" } }}
             onChangeText={(texto) => setInfo(texto)} />
 
