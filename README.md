@@ -10,7 +10,11 @@ TimeTogether es una APP totalmente gratuita diseñada para facilitar la gestión
 
 ## Contacto
 
-| <img src="./integrants/hugo.png" alt="Hugo Estellés" width="100"/> | <img src="./integrants/carlos.jpg" alt="Carlos Asensi" width="100"/> | <img src="./integrants/oscar.jpg" alt="Oscar Mercado" width="100"/> | <img src="./integrants/elisabeth.jpg" alt="Elisabeth López" width="100"/> | <img src="./integrants/tomas.jpg" alt="Tomás Chiva" width="100"/> |
+| <img src="./integrants/hugo.png" alt="Hugo Estellés" height="100"/> | <img src="./integrants/carlos.jpg" alt="Carlos Asensi" height="100"/> | <img src="./integrants/oscar.jpg" alt="Oscar Mercado" height="100"/> | <img src="./integrants/elisabeth.jpg" alt="Elisabeth López" height="100"/> | <img src="./integrants/tomas.jpg" alt="Tomás Chiva" height="100"/> |
+|:---:|:---:|:---:|:---:|:---:|
+| [Hugo Estellés](mailto:huesga@floridauniversitaria.es) | [Carlos Asensi](mailto:caaslo@floridauniversitaria.es) | [Oscar Mercado](mailto:osmeal@floridauniversitaria.es) | [Elisabeth López](mailto:ellope01@floridauniversitaria.es) | [Tomás Chiva](mailto:tochmo@floridauniversitaria.es) |
+
+## Descarga
 |:---:|:---:|:---:|:---:|:---:|
 | [Hugo Estellés](mailto:huesga@floridauniversitaria.es) | [Carlos Asensi](mailto:caaslo@floridauniversitaria.es) | [Oscar Mercado](mailto:osmeal@floridauniversitaria.es) | [Elisabeth López](mailto:ellope01@floridauniversitaria.es) | [Tomás Chiva](mailto:tochmo@floridauniversitaria.es) |
 
