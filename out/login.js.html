@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: login.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: login.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { View, StyleSheet, Image, Text, ScrollView } from "react-native";
+import React, { useState, useContext } from 'react';
+import { Button, TextInput, Portal, Modal, HelperText } from "react-native-paper";
+import ScreensContext from './ScreenContext';
+import i18n from 'i18n-js';
+
+/**
+ * React component for user login.
+ * @param {Object} props - Component properties.
+ * @param {Object} props.navigation - React Navigation object for navigating between screens.
+ * @returns {JSX.Element} JSX Element representing the user login screen.
+ */
+export default function Login(props) {
+  // State variables for user login information
+  const [mail, setMail] = React.useState("");
+  const [password, setPassword] = React.useState("");
+  const [viewPassword, setViewPassword] = React.useState(true);
+  const { userData, setUserData } = useContext(ScreensContext);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
+
+  // External library for MD5 encryption
+  const CryptoJS = require("crypto-js");
+
+  /**
+   * Checks if there are errors in the email input.
+   * @returns {boolean} - True if there are errors, false otherwise.
+   */
+  const hasErrors = () => {
+    return isFocused &amp;&amp; !mail.includes('@');
+  };
+
+  /**
+   * Encrypts the password using MD5.
+   * @param {string} password - The password to be encrypted.
+   * @returns {string} - The MD5 encrypted password.
+   */
+  function encryptMD5(password) {
+    return CryptoJS.MD5(password).toString();
+  }
+
+  /**
+   * Handles the confirmation of the modal.
+   */
+  const handleConfirmation = () => {
+    setModalVisible(false);
+  };
+
+  /**
+   * Handles the login process.
+   */
+  const handleLogIn = async () => {
+    try {
+      const response = await fetch(
+        'http://44.194.67.133:8080/TimeTogether/user',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            mail: mail,
+            password: encryptMD5(password),
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        if (response.status === 404) {
+          setModalVisible(true);
+        }
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const json = await response.json();
+      setUserData(JSON.stringify(json));
+      props.navigation.navigate('Start');
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+
+  return (
+    &lt;Portal.Host>
+      &lt;View style={styles.container}>
+        &lt;Image style={styles.logo} source={require("../image/logo.png")} />
+        &lt;ScrollView style={styles.scroll}>
+          &lt;View style={[{ marginBottom: 100 }]}>
+            &lt;TextInput
+              style={styles.input}
+              mode="outlined"
+              label="Email"
+              value={mail}
+              theme={{ colors: { primary: "#EF9009" } }}
+              onChangeText={(mail) => setMail(mail)}
+              onFocus={() => setIsFocused(true)} />
+            &lt;HelperText type="error" visible={hasErrors()}>
+              {i18n.t('helperText')}
+            &lt;/HelperText>
+
+            &lt;TextInput
+              style={styles.input}
+              mode="outlined"
+              secureTextEntry={viewPassword}
+              label={i18n.t('password')}
+              value={password}
+              right={
+                &lt;TextInput.Icon
+                  name={viewPassword ? "eye-off" : "eye"}
+                  onPress={() => setViewPassword(!viewPassword)} />
+              }
+              theme={{ colors: { primary: "#EF9009" } }}
+              onChangeText={setPassword} />
+          &lt;/View>
+
+          &lt;Button
+            style={styles.button}
+            mode="contained"
+            theme={{ colors: { primary: "#304999" } }}
+            labelStyle={styles.text}
+            onPress={() => handleLogIn()}>
+            {i18n.t('logIn')}
+          &lt;/Button>
+
+          &lt;Button
+            style={styles.button}
+            mode="contained"
+            theme={{ colors: { primary: "#304999" } }}
+            labelStyle={styles.text}
+            onPress={() => props.navigation.navigate("SingUp")}>
+            {i18n.t('createAccount')}
+          &lt;/Button>
+        &lt;/ScrollView>
+      &lt;/View>
+
+      &lt;Portal>
+        &lt;Modal
+          visible={modalVisible}
+          contentContainerStyle={[styles.modalContainer]}>
+          &lt;View style={styles.modalContent}>
+            &lt;Text>{i18n.t('errorLogIn')}&lt;/Text>
+            &lt;Button
+              mode="contained"
+              style={styles.button}
+              labelStyle={styles.buttonLabel}
+              theme={{ colors: { primary: "#EF9009" } }}
+              onPress={() => handleConfirmation()}>
+              {i18n.t('accept')}
+            &lt;/Button>
+          &lt;/View>
+        &lt;/Modal>
+      &lt;/Portal>
+    &lt;/Portal.Host>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    padding: 8,
+    alignItems: "center",
+    textAlign: "center",
+  },
+  scroll: {
+    textAlign: "center",
+  },
+  logo: {
+    height: 300,
+    width: 300,
+  },
+  button: {
+    margin: 10,
+    height: 50,
+    width: 250,
+    borderRadius: 15,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  text: {
+    textTransform: "none",
+    fontSize: 18,
+  },
+  input: {
+    flex: 2,
+    marginBottom: 10,
+    width: 250,
+  },
+  modalContent: {
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(255, 255, 255, 0.9)",
+  },
+  modalContainer: {
+    backgroundColor: "white",
+    padding: 20,
+    borderRadius: 10,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+});
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#Calendari">Calendari</a></li><li><a href="global.html#CreateGroup">CreateGroup</a></li><li><a href="global.html#GroupsAll">GroupsAll</a></li><li><a href="global.html#InfoAmigo">InfoAmigo</a></li><li><a href="global.html#InfoEvento">InfoEvento</a></li><li><a href="global.html#InfoGroup">InfoGroup</a></li><li><a href="global.html#ScreensProvider">ScreensProvider</a></li><li><a href="global.html#Settings">Settings</a></li><li><a href="global.html#SignUp">SignUp</a></li><li><a href="global.html#SingUp">SingUp</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Mon Feb 19 2024 12:56:29 GMT+0100 (hora estándar de Europa central)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

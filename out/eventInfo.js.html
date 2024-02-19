@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: eventInfo.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: eventInfo.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useState, useContext, useEffect } from 'react';
+import { ScrollView, View, Text, StyleSheet } from 'react-native';
+import {
+  Card,
+  Divider,
+  List,
+  Button,
+  IconButton,
+} from 'react-native-paper';
+import Participantes from '../../components/miembros';
+import i18n from 'i18n-js';
+import { en, es } from '../translation/localizations';
+import ScreensContext from './ScreenContext';
+
+i18n.translations = {
+  en,
+  es,
+};
+
+/**
+ * InfoEvento component displays detailed information about a specific event.
+ *
+ * @component
+ * @param {object} route - The route object containing parameters.
+ * @param {object} navigation - The navigation object.
+ * @returns {JSX.Element} - JSX element representing the InfoEvento component.
+ */
+const InfoEvento = ({ route, navigation }) => {
+  // Context and state variables
+  const { language } = useContext(ScreensContext);
+  const [eventId, setEventId] = useState(route.params.eventId);
+  const [eventColor, setEventColor] = useState(route.params.color);
+  const [event, setEvent] = useState("");
+  const [group, setGroup] = useState("");
+  const [description, setDescription] = useState("");
+  const [date, setDate] = useState("");
+  const [place, setPlace] = useState("");
+  const [participants, setParticipants] = useState([]);
+
+  /**
+   * Sets the language for i18n when it changes.
+   */
+  useEffect(() => {
+    i18n.locale = language;
+  }, [language]);
+
+  /**
+   * Fetches event details from the server based on the eventId.
+   */
+  useEffect(() => {
+    fetch(`http://44.194.67.133:8080/TimeTogether/event?id=${eventId}`, {
+      method: "GET",
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setDate(data.date);
+        setParticipants(data.members);
+        setEvent(data.name);
+        setDescription(data.description);
+        setPlace(data.location);
+        console.log(eventColor);
+      })
+      .catch((error) => {
+        console.error("Error fetching friend info:", error);
+      });
+  }, [eventId]);
+
+  return (
+    &lt;ScrollView style={styles.container}>
+      &lt;Card style={styles.card}>
+        &lt;Card.Content>
+          &lt;IconButton
+            icon="arrow-left"
+            size={20}
+            onPress={() => navigation.navigate("Calendar")}
+          />
+          &lt;Text style={styles.label}>{event}&lt;/Text>
+          &lt;Text style={styles.label2}>{group}&lt;/Text>
+
+          &lt;Divider style={styles.divider} />
+
+          &lt;Text style={styles.titulo}>{i18n.t('description')}&lt;/Text>
+          &lt;Text style={styles.input}>{description}&lt;/Text>
+
+          &lt;Divider style={styles.divider} />
+
+          &lt;View style={{ flexDirection: 'row' }}>
+            &lt;Text style={styles.inputLabel}>{i18n.t('date')}:&lt;/Text>
+            &lt;Text style={styles.input}>{date}&lt;/Text>
+          &lt;/View>
+
+          &lt;View style={{ flexDirection: 'row' }}>
+            &lt;Text style={styles.inputLabel}>{i18n.t('place')}:&lt;/Text>
+            &lt;Text style={styles.input}>{place}&lt;/Text>
+          &lt;/View>
+
+          &lt;Divider style={styles.divider} />
+
+          &lt;Card style={styles.card2}>
+            &lt;Card.Content>
+              &lt;List.Section>
+                &lt;List.Subheader style={styles.label}>
+                  {i18n.t('participants')}
+                &lt;/List.Subheader>
+                &lt;ScrollView>
+                  {participants.map((obj, index) => (
+                    &lt;Participantes
+                      key={index}
+                      imageSource={require('../image/logo.png')}
+                      name={obj.name}
+                    />
+                  ))}
+                &lt;/ScrollView>
+              &lt;/List.Section>
+            &lt;/Card.Content>
+          &lt;/Card>
+
+          &lt;Divider style={styles.divider} />
+
+          &lt;View style={{ flexDirection: 'row', justifyContent: 'center' }}>
+            &lt;Button
+              mode="contained"
+              onPress={() => console.log('Button Pressed')}
+              style={{
+                ...styles.button,
+                borderColor: '#304999',
+                borderWidth: 2,
+                marginRight: 5,
+              }}
+              labelStyle={{ ...styles.buttonLabel, color: '#304999' }}
+              theme={{ colors: { primary: '#C9C9C9' } }}>
+              {i18n.t('reject')}
+            &lt;/Button>
+
+            &lt;Button
+              mode="contained"
+              onPress={() => navigation.navigate("Calendar")}
+              style={styles.button}
+              labelStyle={styles.buttonLabel}
+              theme={{ colors: { primary: '#304999' } }}>
+              {i18n.t('accept')}
+            &lt;/Button>
+          &lt;/View>
+        &lt;/Card.Content>
+      &lt;/Card>
+    &lt;/ScrollView>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 10,
+  },
+  card: {
+    marginVertical: 10,
+    backgroundColor: '#C9C9C9',
+    marginTop: 40,
+    borderRadius: 20,
+  },
+  card2: {
+    marginVertical: 10,
+    backgroundColor: '#304999',
+    marginTop: 40,
+    borderRadius: 20,
+  },
+  input: {
+    marginBottom: 10,
+    flex: 1,
+  },
+  inputLabel: {
+    flex: 1,
+    marginLeft: 5,
+    fontSize: 16,
+    color: 'black',
+  },
+  label: {
+    fontSize: 18,
+    color: 'black',
+    marginBottom: 5,
+    alignSelf: 'center',
+  },
+  label2: {
+    fontSize: 16,
+    color: 'black',
+    marginBottom: 10,
+    alignSelf: 'center',
+  },
+  button: {
+    marginTop: 10,
+    borderRadius: 20,
+  },
+  buttonLabel: {
+    color: 'white',
+  },
+  titulo: {
+    fontSize: 18,
+    color: 'black',
+    marginBottom: 5,
+  },
+  divider: {
+    marginVertical: 10,
+  },
+});
+
+export default InfoEvento;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#Calendari">Calendari</a></li><li><a href="global.html#CreateGroup">CreateGroup</a></li><li><a href="global.html#GroupsAll">GroupsAll</a></li><li><a href="global.html#InfoAmigo">InfoAmigo</a></li><li><a href="global.html#InfoEvento">InfoEvento</a></li><li><a href="global.html#InfoGroup">InfoGroup</a></li><li><a href="global.html#ScreensProvider">ScreensProvider</a></li><li><a href="global.html#Settings">Settings</a></li><li><a href="global.html#SignUp">SignUp</a></li><li><a href="global.html#SingUp">SingUp</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Mon Feb 19 2024 12:56:29 GMT+0100 (hora estándar de Europa central)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

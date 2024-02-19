@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: dateInfo.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: dateInfo.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import {
+  View,
+  StyleSheet,
+  Text,
+  ScrollView,
+  TouchableOpacity,
+} from "react-native";
+import * as React from "react";
+import { useState, useContext, useEffect } from "react";
+import ScreenContext from "./ScreenContext";
+import { IconButton } from 'react-native-paper';
+import Event from "../../components/event";
+
+/**
+ * DateInfo component displays information about events on a specific date.
+ *
+ * @component
+ * @param {object} route - The route object containing parameters.
+ * @param {object} navigation - The navigation object.
+ * @returns {JSX.Element} - JSX element representing the DateInfo component.
+ */
+export default function DateInfo({ route, navigation }) {
+  // Context and state variables
+  const { userData, setUserData } = useContext(ScreenContext);
+  const [date, setDate] = useState(new Date(route.params.day));
+  const [events, setEvents] = useState([]);
+
+  const parsedUserData = JSON.parse(userData);
+
+  /**
+   * Formats the given date into a string.
+   *
+   * @param {Date} date - The date to be formatted.
+   * @returns {string} - Formatted date string.
+   */
+  const formatDate = (date) => {
+    const day = date.getDate();
+    const month = date.getMonth() + 1;
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+  };
+
+  /**
+   * Fetches events from the server based on the user and selected date.
+   */
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        const response = await fetch("http://44.194.67.133:8080/TimeTogether/eventsByUserAndDate", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            userId: parsedUserData.id,
+            date: formatDate(date),
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const json = await response.json();
+        setEvents(json.events);
+      } catch (error) {
+        console.error("Failed to fetch events", error);
+      }
+    };
+
+    fetchEvents();
+  }, [date]);
+
+
+  return (
+    &lt;View style={styles.container}>
+      &lt;View style={styles.head}>
+        &lt;IconButton
+          icon="arrow-left"
+          size={20}
+          style={{ marginTop: 30 }}
+          onPress={() => navigation.navigate("Calendar")} />
+        &lt;Text style={styles.text}>{formatDate(date)}&lt;/Text>
+      &lt;/View>
+      &lt;View style={styles.panel}>
+
+        &lt;ScrollView>
+          {events.map((event, index) => (
+            &lt;TouchableOpacity key={event.id} onPress={() => navigation.navigate("EventInfo", { eventId: event.id, color: event.groupColor })}>
+              &lt;Event
+                key={index}
+                name={event.name}
+                color={event.groupColor}
+              />
+            &lt;/TouchableOpacity>
+          ))}
+        &lt;/ScrollView>
+      &lt;/View>
+    &lt;/View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: "center",
+    backgroundColor: "#ecf0f1",
+    padding: 20,
+
+  },
+  head: {
+    flexDirection: 'row',
+    alignContent: 'center',
+    alignItems: 'center',
+  },
+  panel: {
+    backgroundColor: "#C9C9C9",
+    flex: 1,
+    width: "100%",
+    padding: 20,
+    borderRadius: 15,
+  },
+  text: {
+    fontSize: 20,
+    textAlign: "center",
+    marginLeft: 70
+  },
+});</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#Calendari">Calendari</a></li><li><a href="global.html#CreateGroup">CreateGroup</a></li><li><a href="global.html#GroupsAll">GroupsAll</a></li><li><a href="global.html#InfoAmigo">InfoAmigo</a></li><li><a href="global.html#InfoEvento">InfoEvento</a></li><li><a href="global.html#InfoGroup">InfoGroup</a></li><li><a href="global.html#ScreensProvider">ScreensProvider</a></li><li><a href="global.html#Settings">Settings</a></li><li><a href="global.html#SignUp">SignUp</a></li><li><a href="global.html#SingUp">SingUp</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Mon Feb 19 2024 12:56:29 GMT+0100 (hora estándar de Europa central)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: newGroup.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: newGroup.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useState, useContext } from 'react';
+import {
+  ScrollView,
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  Alert,
+} from 'react-native';
+import {
+  TextInput,
+  Button,
+  Divider,
+  List,
+  Searchbar,
+  IconButton,
+  Card,
+} from 'react-native-paper';
+import i18n from 'i18n-js';
+import { en, es } from '../translation/localizations';
+import ScreensContext from './ScreenContext';
+import Participantes from '../../components/participantes.js';
+
+/**
+ * Componente de React Native para crear un grupo.
+ * @param {Object} props - Propiedades del componente.
+ * @returns {JSX.Element} Componente de creación de grupo JSX.
+ */
+const CreateGroup = (props) => {
+  const [groupName, setGroupName] = useState('');
+  const [groupDescription, setGroupDescription] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [colors, setColors] = useState(['lightblue', '#EC7063', '#82E0AA', '#F7DC6F', '#F8C471', 'lightpink', '#C39BD3', '#45B39D']);
+  const [names, setNames] = useState([]);
+  const [ids, setIds] = useState([]);
+  const [events, setEvents] = useState([]);
+  const [searching, setSearching] = useState(false);
+  const { language } = useContext(ScreensContext);
+
+  i18n.translations = { en, es };
+  i18n.locale = language;
+
+  /**
+   * Busca a un amigo por su dirección de correo electrónico.
+   */
+  const buscarAmigo = async () => {
+    try {
+      const response = await fetch(`http://44.194.67.133:8080/TimeTogether/userIdByEmail?email=${searchQuery}`, {
+        method: "GET",
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      setIds([...ids, data.id]);
+      setNames([...names, data.name]);
+
+      clearSearch();
+    } catch (error) {
+      console.error("Error fetching friend info:", error);
+      Alert.alert('Error', i18n.t('errorLookingFriends'));
+    }
+  };
+
+  /**
+   * Limpia la barra de búsqueda.
+   */
+  const clearSearch = () => {
+    setSearchQuery('');
+  };
+
+  /**
+   * Crea un grupo y lo envía al servidor.
+   */
+  const createGroup = async () => {
+    const randomNumber = Math.floor(Math.random() * 8);
+    try {
+      if (!groupName || !groupDescription || names.length === 0) {
+        Alert.alert('Error', i18n.t('errorCreatingGroup'));
+        return;
+      }
+
+      const response = await fetch(
+        'http://44.194.67.133:8080/TimeTogether/newGroup',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            description: groupDescription,
+            events: events,
+            members: ids,
+            name: groupName,
+            color: colors[randomNumber],
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      if (response.status === 204) {
+        console.log(i18n.t('groupSuccessFullyCreated'));
+        Alert.alert(i18n.t('success'), i18n.t('groupSuccessFullyCreated'), [
+          { text: 'OK', onPress: () => props.navigation.navigate('Group') },
+        ]);
+      } else {
+        const json = await response.json();
+        console.log('Response from server:', json);
+        Alert.alert('Error', i18n.t('groupWrongCreated'));
+      }
+    } catch (error) {
+      console.error(error);
+      Alert.alert('Error', i18n.t('groupWrongCreated'));
+    }
+  };
+
+  /**
+   * Maneja la eliminación de un participante del grupo.
+   * @param {string} participantName - Nombre del participante a eliminar.
+   */
+  const handleDeleteParticipant = (participantName) => {
+    Alert.alert(
+      i18n.t('confirmDeletion'),
+      `${i18n.t('askConfirm1')} ${participantName} ${i18n.t('askConfirm2')}`,
+      [
+        { text: i18n.t('cancelButton'), style: 'cancel' },
+        {
+          text: i18n.t('delete'),
+          onPress: () => {
+            const updatedNames = names.filter((name) => name !== participantName);
+            const updatedIds = ids.filter((_, index) => names[index] !== participantName);
+
+            setNames(updatedNames);
+            setIds(updatedIds);
+          },
+        },
+      ]
+    );
+  };
+  return (
+    &lt;ScrollView style={styles.container}>
+      &lt;View style={styles.form}>
+        &lt;View style={{ flexDirection: 'row' }}>
+          &lt;IconButton
+            icon="arrow-left"
+            size={20}
+            style={{ marginTop: 30 }}
+            onPress={() => props.navigation.navigate("Group")}
+          />
+          &lt;Image style={styles.logo} source={require('../image/logo.png')} />
+        &lt;/View>
+        &lt;Text style={styles.label}>{i18n.t('groupInformation')}&lt;/Text>
+        &lt;TextInput
+          style={styles.input}
+          mode="outlined"
+          label={i18n.t('groupName')}
+          placeholder={i18n.t('groupName')}
+          value={groupName}
+          theme={{ colors: { primary: '#EF9009' } }}
+          onChangeText={(txt) => setGroupName(txt)}
+        />
+        &lt;TextInput
+          style={styles.input}
+          mode="outlined"
+          label={i18n.t('groupDescription')}
+          placeholder={i18n.t('groupDescription')}
+          value={groupDescription}
+          theme={{ colors: { primary: '#EF9009' } }}
+          onChangeText={(txt) => setGroupDescription(txt)}
+        />
+        &lt;Divider style={styles.divider} />
+        &lt;Searchbar
+          placeholder={i18n.t('searchEmail')}
+          onChangeText={setSearchQuery}
+          value={searchQuery}
+          onSubmitEditing={buscarAmigo}
+        />
+        &lt;Divider style={styles.divider} />
+        &lt;Card style={styles.card}>
+          &lt;Card.Content>
+            &lt;List.Section>
+              &lt;List.Subheader style={styles.label}>
+                {i18n.t('membersGroup')}
+              &lt;/List.Subheader>
+              &lt;ScrollView>
+                {names.map((name, index) => (
+                  &lt;Participantes
+                    key={index}
+                    imageSource={require('../image/logo.png')}
+                    name={name}
+                    onDelete={() => handleDeleteParticipant(name)}
+                  />
+                ))}
+              &lt;/ScrollView>
+            &lt;/List.Section>
+          &lt;/Card.Content>
+        &lt;/Card>
+        &lt;Divider style={styles.divider} />
+        &lt;Button
+          mode="contained"
+          onPress={() => createGroup()}
+          style={styles.button}
+          labelStyle={styles.buttonLabel}
+          theme={{ colors: { primary: '#EF9009' } }}>
+          {i18n.t('createGroup')}
+        &lt;/Button>
+      &lt;/View>
+    &lt;/ScrollView>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  form: {
+    padding: 20,
+  },
+  input: {
+    marginBottom: 10,
+  },
+  logo: {
+    height: 250,
+    width: 250,
+    alignSelf: 'center',
+    marginBottom: 20,
+  },
+  card: {
+    marginVertical: 10,
+    backgroundColor: '#C9C9C9',
+    marginTop: 40,
+    borderRadius: 20,
+  },
+  label: {
+    fontSize: 18,
+    color: 'black',
+    marginBottom: 5,
+    alignSelf: 'center',
+  },
+  button: {
+    marginTop: 10,
+  },
+  buttonLabel: {
+    color: 'white',
+  },
+  divider: {
+    marginVertical: 20,
+  },
+});
+
+export default CreateGroup;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#Calendari">Calendari</a></li><li><a href="global.html#CreateGroup">CreateGroup</a></li><li><a href="global.html#GroupsAll">GroupsAll</a></li><li><a href="global.html#InfoAmigo">InfoAmigo</a></li><li><a href="global.html#InfoEvento">InfoEvento</a></li><li><a href="global.html#InfoGroup">InfoGroup</a></li><li><a href="global.html#ScreensProvider">ScreensProvider</a></li><li><a href="global.html#Settings">Settings</a></li><li><a href="global.html#SignUp">SignUp</a></li><li><a href="global.html#SingUp">SingUp</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Mon Feb 19 2024 12:56:29 GMT+0100 (hora estándar de Europa central)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

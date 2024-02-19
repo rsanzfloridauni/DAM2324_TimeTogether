@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: singUp.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: singUp.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useState, useEffect, useContext } from "react";
+import {
+  ScrollView,
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+} from 'react-native';
+import { Slider } from '@react-native-assets/slider';
+import { TextInput, Button, Divider, Checkbox, HelperText } from 'react-native-paper';
+import { Avatar, Modal, Portal } from 'react-native-paper';
+import DateTimePicker from 'react-native-ui-datepicker';
+import i18n from 'i18n-js';
+import { en, es } from '../translation/localizations';
+import ScreensContext from './ScreenContext';
+
+/**
+ * SignUp component for user registration.
+ * @param {Object} props - React props for the component.
+ * @returns {JSX.Element} SignUp component JSX.
+ */
+const SignUp = (props) => {
+  // State variables and their initial values
+  const [date, setDate] = useState(new Date());
+  const [shirtSize, setShirtSize] = useState(0);
+  const [pantsSize, setPantsSize] = useState(38);
+  const [shoeSize, setShoeSize] = useState(35);
+  const [mail, setMail] = useState("");
+  const [pass1, setPass1] = useState("");
+  const [pass2, setPass2] = useState("");
+  const [name, setName] = useState("");
+  const [color, setColor] = useState("");
+  const [address, setAddress] = useState("");
+  const [allergies, setAllergies] = useState("");
+  const [hobbies, setHobbies] = useState("");
+  const [confirmationCode, setConfirmationCode] = useState("");
+  const [birthday, setBirthday] = useState(undefined);
+  const { language } = useContext(ScreensContext);
+  const [checked, setChecked] = useState(false);
+  const [privacity, setPrivacity] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
+  const [confirmationVisible, setConfirmationVisible] = useState(false);
+  const [modalComprovation, setModalComprovation] = useState(false);
+  const [isFocused, setIsFocused] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+  const CryptoJS = require("crypto-js");
+  const [selectedImage, setSelectedImage] = useState(require('../image/FotoHombre1.png'));
+  const tallas = ["XS", "S", "M", "L", "XL", "XXL"];
+
+  const nombresImagenes = [
+    require("../image/FotoHombre1.png"),
+    require("../image/FotoHombre2.png"),
+    require("../image/FotoHombre3.png"),
+    require("../image/FotoHombre4.png"),
+    require("../image/FotoHombre5.png"),
+    require("../image/FotoMujer1.png"),
+    require("../image/FotoMujer2.png"),
+    require("../image/FotoMujer3.png"),
+    require("../image/FotoMujer4.png"),
+    require("../image/FotoMujer5.png"),
+  ];
+
+  /**
+   * Encrypt the password using MD5.
+   * @param {string} pass1 - Password to be encrypted.
+   * @returns {string} - Encrypted password.
+   */
+  function encryptMD5(pass1) {
+    return CryptoJS.MD5(pass1).toString();
+  }
+
+  // Localization setup
+  i18n.translations = { en, es };
+  i18n.locale = language;
+
+  /**
+   * Toggle the visibility of the confirmation modal.
+   */
+  const toggleConfirmationVisibility = () => {
+    setConfirmationVisible(!confirmationVisible);
+  };
+
+  /**
+   * Check if there are errors in the email input.
+   * @returns {boolean} - True if there are errors, otherwise false.
+   */
+  const hasErrors = () => {
+    return isFocused &amp;&amp; !mail.includes('@');
+  };
+
+  /**
+   * Check if all required fields are not empty.
+   * @returns {boolean} - True if all required fields are not empty, otherwise false.
+   */
+  const checkFieldsNotEmpty = () => {
+    if (
+      !name.trim() ||
+      !mail.trim() ||
+      !date ||
+      !color.trim() ||
+      !address.trim() ||
+      !allergies.trim() ||
+      !hobbies.trim() ||
+      !mail.includes('@')
+    ) {
+      return false;
+    }
+    return true;
+  };
+
+  /**
+   * Toggle the visibility of the image selection modal.
+   */
+  const toggleVisibility = () => {
+    setIsVisible(!isVisible);
+  };
+
+  /**
+   * Toggle the acceptance of privacy conditions.
+   */
+  const togglePrivacity = () => {
+    setPrivacity(!privacity);
+  };
+
+  /**
+   * Handle the acceptance or rejection of privacy conditions.
+   */
+  const handlePrivacity = () => {
+    if (privacity == true) {
+      setPrivacity(false);
+    } else {
+      setPrivacity(true);
+    }
+  };
+
+  /**
+   * Handle the confirmation of the birthday and set the formatted date.
+   */
+  const handleConfirmationBirthday = () => {
+    setModalVisible(false);
+    setBirthday(formatDate());
+  };
+
+  /**
+   * Format the selected date to a string.
+   * @returns {string} - Formatted date string.
+   */
+  const formatDate = () => {
+    const day = date.getDate();
+    const month = date.getMonth() + 1;
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+  };
+
+  /**
+   * Handle the form submission, validate inputs, and make a POST request.
+   */
+  const handleSubmit = async () => {
+    if (!checkFieldsNotEmpty()) {
+      setModalComprovation(true);
+    } else {
+      if (pass1 !== pass2) {
+        alert(i18n.t('notMatchPasswords'));
+        return;
+      }
+      if (checked == false) {
+        alert(i18n.t('acceptPrivacity'));
+        return;
+      }
+
+      if (checked) {
+        try {
+          const response = await fetch(
+            "http://44.194.67.133:8080/TimeTogether/newUser",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                mail: mail,
+                password: encryptMD5(pass1),
+                name: name,
+                surname: "aaa",
+                additional_information: "aaa",
+                addres: address,
+                alergies: allergies,
+                birthday: date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear(),
+                favourite_color: color,
+                friends: [],
+                hobbies: hobbies,
+                sizes: {
+                  shirt: shirtSize,
+                  trousers: pantsSize,
+                  shoes: shoeSize,
+                },
+                groups: [],
+                profile_picture: selectedImage.toString()
+              }),
+            }
+          );
+
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          alert(i18n.t('codeSuccessfully'));
+          console.log(date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate());
+        } catch (error) {
+          console.error("Error en la petición:", error);
+          alert(i18n.t('codeIncorrect'));
+        }
+        toggleConfirmationVisibility();
+      } else alert(i18n.t('acceptPrivacity'));
+    }
+  };
+
+  /**
+   * Handle the onPress event for date selection.
+   * @param {Object} params - Parameters related to date selection.
+   */
+  const handleOnPress = (params) => {
+    const selectedDate = new Date(params.date);
+    setDate(selectedDate);
+  };
+
+  /**
+   * Handle the confirmation of the verification code and make a POST request.
+   */
+  const handleConfirmation = async () => {
+    const verificationData = {
+      code: parseInt(confirmationCode, 10),
+      email: mail,
+    };
+
+    try {
+      const response = await fetch(
+        "http://44.194.67.133:8080/TimeTogether/verifyCode",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(verificationData),
+        }
+      );
+
+      const isValid = await response.json();
+
+      if (isValid) {
+        alert(i18n.t('codeSuccessfully'));
+        props.navigation.navigate("Login");
+      } else {
+        alert(i18n.t('codeIncorrect'));
+      }
+    } catch (error) {
+      console.error(i18n.t('errorCode'), error);
+      alert(i18n.t('errorProcessing'));
+    }
+  };
+
+  return (
+    &lt;Portal.Host>
+      &lt;ScrollView style={styles.container}>
+        &lt;View style={styles.form}>
+          &lt;TouchableOpacity onPress={() => { toggleVisibility(); }}>
+            &lt;Avatar.Image
+              style={styles.logo}
+              source={selectedImage}
+              onPress={() => console.log("Button Pressed")}
+            />
+          &lt;/TouchableOpacity>
+
+          &lt;TextInput
+            style={styles.input}
+            mode="outlined"
+            label={i18n.t('name')}
+            placeholder={i18n.t('name')}
+            value={name}
+            theme={{ colors: { primary: "#EF9009" } }}
+            onChangeText={(txt) => setName(txt)}
+          />
+          &lt;TextInput
+            style={styles.input}
+            mode="outlined"
+            label={i18n.t('email')}
+            placeholder={i18n.t('email')}
+            value={mail}
+            theme={{ colors: { primary: "#EF9009" } }}
+            onChangeText={(txt) => setMail(txt)}
+            onFocus={() => setIsFocused(true)} />
+          &lt;HelperText type="error" visible={hasErrors()}>
+            {i18n.t('helperText')}
+          &lt;/HelperText>
+
+          &lt;TouchableOpacity onPress={() => setModalVisible(true)}>
+            &lt;Text style={styles.label}>{i18n.t("birthday")} : {birthday}&lt;/Text>
+          &lt;/TouchableOpacity>
+
+          &lt;TextInput
+            style={styles.input}
+            mode="outlined"
+            label={i18n.t('password')}
+            placeholder={i18n.t('password')}
+            value={pass1}
+            theme={{ colors: { primary: "#EF9009" } }}
+            onChangeText={(txt) => setPass1(txt)}
+          />
+          &lt;TextInput
+            style={styles.input}
+            mode="outlined"
+            label={i18n.t('repeatPassword')}
+            placeholder={i18n.t('repeatPassword')}
+            value={pass2}
+            theme={{ colors: { primary: "#EF9009" } }}
+            onChangeText={(txt) => setPass2(txt)}
+          />
+          &lt;TextInput
+            style={styles.input}
+            mode="outlined"
+            label={i18n.t('favoriteColor')}
+            placeholder={i18n.t('favoriteColor')}
+            value={color}
+            theme={{ colors: { primary: "#EF9009" } }}
+            onChangeText={(txt) => setColor(txt)}
+          />
+          &lt;Divider style={styles.divider} />
+          &lt;Text style={styles.label}>{i18n.t('sizes')}&lt;/Text>
+          &lt;View style={styles.sizeSection}>
+            &lt;Text style={styles.sizeLabel}>
+              {i18n.t('tShirts')}: {tallas[shirtSize]}
+            &lt;/Text>
+            &lt;Slider
+              style={styles.slider}
+              minimumValue={0}
+              maximumValue={tallas.length - 1}
+              step={1}
+              onValueChange={(value) => setShirtSize(value)}
+              value={shirtSize}
+              minimumTrackTintColor="#EF9009"
+              maximumTrackTintColor="#000000"
+              thumbTintColor="#304999"
+            />
+          &lt;/View>
+
+          &lt;View style={styles.sizeSection}>
+            &lt;Text style={styles.sizeLabel}>
+              {i18n.t('pants')}: {pantsSize.toFixed(0)}
+            &lt;/Text>
+            &lt;Slider
+              style={styles.slider}
+              minimumValue={30}
+              maximumValue={50}
+              step={1}
+              onValueChange={(value) => setPantsSize(value)}
+              value={pantsSize}
+              minimumTrackTintColor="#EF9009"
+              maximumTrackTintColor="#000000"
+              thumbTintColor="#304999"
+            />
+          &lt;/View>
+
+          &lt;View style={styles.sizeSection}>
+            &lt;Text style={styles.sizeLabel}>{i18n.t('shoes')}: {shoeSize.toFixed(0)}&lt;/Text>
+            &lt;Slider
+              style={styles.slider}
+              minimumValue={30}
+              maximumValue={50}
+              step={1}
+              onValueChange={(value) => setShoeSize(value)}
+              value={shoeSize}
+              minimumTrackTintColor="#EF9009"
+              maximumTrackTintColor="#000000"
+              thumbTintColor="#304999"
+            />
+          &lt;/View>
+          &lt;Divider style={styles.divider} />
+          &lt;TextInput
+            style={styles.input}
+            mode="outlined"
+            label={i18n.t('address')}
+            placeholder={i18n.t('address')}
+            value={address}
+            theme={{ colors: { primary: "#EF9009" } }}
+            onChangeText={(txt) => setAddress(txt)}
+          />
+          &lt;TextInput
+            style={styles.input}
+            mode="outlined"
+            label={i18n.t('allergies')}
+            placeholder={i18n.t('allergies')}
+            value={allergies}
+            theme={{ colors: { primary: "#EF9009" } }}
+            onChangeText={(txt) => setAllergies(txt)}
+          />
+          &lt;TextInput
+            style={styles.input}
+            mode="outlined"
+            label={i18n.t('hobbies')}
+            placeholder={i18n.t('hobbies')}
+            value={hobbies}
+            theme={{ colors: { primary: "#EF9009" } }}
+            onChangeText={(txt) => setHobbies(txt)}
+          />
+          &lt;View style={{ flexDirection: 'row' }}>
+            &lt;Checkbox status={checked ? 'checked' : 'unchecked'}
+              onPress={() => {
+                setChecked(!checked);
+              }}
+            />
+
+            &lt;TouchableOpacity style={{ top: 4 }}
+              onPress={handlePrivacity}
+            >
+              &lt;Text>{i18n.t('acceptCondicions')}&lt;/Text>
+            &lt;/TouchableOpacity>
+          &lt;/View>
+          &lt;View>
+            &lt;Portal>
+              &lt;Modal
+                visible={privacity}
+                onDismiss={togglePrivacity}
+                contentContainerStyle={styles.modalContainer}
+              >
+                &lt;View style={styles.modalContent}>
+                  &lt;Text>{i18n.t('privacity')}&lt;/Text>
+                &lt;/View>
+              &lt;/Modal>
+            &lt;/Portal>
+
+          &lt;/View>
+          &lt;Button
+            mode="contained"
+            style={styles.button}
+            labelStyle={styles.buttonLabel}
+            theme={{ colors: { primary: "#EF9009" } }}
+            onPress={() => {
+              handleSubmit();
+            }}
+          >
+            {i18n.t('accept')}
+          &lt;/Button>
+        &lt;/View>
+      &lt;/ScrollView>
+
+      &lt;Portal>
+        &lt;Modal
+          visible={isVisible}
+          onDismiss={toggleVisibility}
+          contentContainerStyle={styles.modalContainer}
+        >
+          &lt;View style={styles.modalContent}>
+            {nombresImagenes.map((ruta, index) => (
+              &lt;TouchableOpacity onPress={() => { setSelectedImage(ruta); toggleVisibility(); }}>
+                &lt;Avatar.Image key={index} style={styles.modalLogo} source={ruta} />
+              &lt;/TouchableOpacity>
+
+            ))}
+          &lt;/View>
+        &lt;/Modal>
+      &lt;/Portal>
+
+      &lt;Portal>
+        &lt;Modal
+          visible={confirmationVisible}
+          onDismiss={toggleConfirmationVisibility}
+          contentContainerStyle={[styles.modalContainer]}
+        >
+          &lt;View style={styles.modalContent}>
+            &lt;Text>{i18n.t('enterConfirmationCode')}:&lt;/Text>
+            &lt;TextInput
+              style={styles.inputCode}
+              mode="outlined"
+              label={i18n.t('confirmationCode')}
+              placeholder={i18n.t('enterConfirmationCode')}
+              keyboardType="numeric"
+              theme={{ colors: { primary: "#EF9009" } }}
+              onChangeText={(text) => setConfirmationCode(text)}
+            />
+            &lt;Button
+              mode="contained"
+              style={styles.button}
+              labelStyle={styles.buttonLabel}
+              theme={{ colors: { primary: "#EF9009" } }}
+              onPress={() => handleConfirmation()}
+            >
+              {i18n.t('send')}
+            &lt;/Button>
+          &lt;/View>
+        &lt;/Modal>
+      &lt;/Portal>
+
+      &lt;Portal>
+        &lt;Modal
+          visible={modalComprovation}
+          contentContainerStyle={[styles.modalContainer]}>
+          &lt;View style={styles.modalContent}>
+            &lt;Text style={{ textAlign: 'center', fontSize: 18 }}> {i18n.t("comprovation")}&lt;/Text>
+            &lt;Button
+              mode="contained"
+              style={styles.button}
+              labelStyle={styles.buttonLabel}
+              theme={{ colors: { primary: "#EF9009" } }}
+              onPress={() => setModalComprovation(false)}>
+              {i18n.t("accept")}
+            &lt;/Button>
+          &lt;/View>
+        &lt;/Modal>
+      &lt;/Portal>
+
+      &lt;Portal>
+        &lt;Modal
+          visible={modalVisible}
+          contentContainerStyle={[styles.modalContainer]}>
+          &lt;View style={styles.modalContent}>
+            &lt;DateTimePicker
+              style={{ flex: 1 }}
+              locale="en"
+              date={date}
+              onChange={(date) => {
+                handleOnPress(date);
+              }}
+              accessibilityRole="button"
+              selectedItemColor="#304999" />
+            &lt;View style={{ flexDirection: 'row' }}>
+              &lt;Button
+                mode="contained"
+                style={styles.button}
+                labelStyle={styles.buttonLabel}
+                theme={{ colors: { primary: "#EF9009" } }}
+                onPress={() => handleConfirmationBirthday()}>
+                {i18n.t("accept")}
+              &lt;/Button>
+
+              &lt;Button
+                mode="contained"
+                style={styles.button}
+                labelStyle={styles.buttonLabel}
+                theme={{ colors: { primary: "#EF9009" } }}
+                onPress={() => setModalVisible(false)}>
+                {i18n.t("reject")}
+              &lt;/Button>
+            &lt;/View>
+          &lt;/View>
+        &lt;/Modal>
+      &lt;/Portal>
+
+    &lt;/Portal.Host>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 15,
+  },
+  modalContent: {
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(255, 255, 255, 0.9)",
+    flexWrap: 'wrap',
+    flexDirection: 'row',
+  },
+  modalContainer: {
+    backgroundColor: "white",
+    padding: 20,
+    borderRadius: 10,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+
+  logo: {
+    alignSelf: "center",
+    marginBottom: 20,
+    size: 80,
+  },
+  form: {
+    padding: 20,
+  },
+  input: {
+    flex: 1,
+    marginBottom: 10,
+  },
+  label: {
+    fontSize: 18,
+    color: "black",
+    marginBottom: 5,
+    alignSelf: "center",
+  },
+  slider: {
+    width: "100%",
+    marginVertical: 10,
+  },
+
+  button: {
+    marginTop: 10,
+  },
+  buttonLabel: {
+    color: "white",
+  },
+  divider: {
+    marginVertical: 20,
+  },
+  sizeSection: {
+    alignItems: "center",
+    marginBottom: 20,
+  },
+  sizeLabel: {
+    fontSize: 16,
+  },
+  inputCode: {
+    width: 300,
+    height: 50,
+  },
+});
+
+export default SignUp;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#Calendari">Calendari</a></li><li><a href="global.html#CreateGroup">CreateGroup</a></li><li><a href="global.html#GroupsAll">GroupsAll</a></li><li><a href="global.html#InfoAmigo">InfoAmigo</a></li><li><a href="global.html#InfoEvento">InfoEvento</a></li><li><a href="global.html#InfoGroup">InfoGroup</a></li><li><a href="global.html#ScreensProvider">ScreensProvider</a></li><li><a href="global.html#Settings">Settings</a></li><li><a href="global.html#SignUp">SignUp</a></li><li><a href="global.html#SingUp">SingUp</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Mon Feb 19 2024 12:56:29 GMT+0100 (hora estándar de Europa central)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

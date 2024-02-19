@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: group.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: group.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import React, { useState, useEffect, useContext } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
+import { Button } from 'react-native-paper';
+import ScreenContext from "./ScreenContext";
+import i18n from 'i18n-js';
+import { en, es } from '../translation/localizations';
+
+/**
+ * GroupsAll component displays a list of groups associated with the user.
+ *
+ * @component
+ * @param {object} navigation - The navigation object.
+ * @returns {JSX.Element} - JSX element representing the GroupsAll component.
+ */
+const GroupsAll = ({ navigation }) => {
+  // Accessing user data and language from context
+  const { userData, language } = useContext(ScreenContext);
+
+  // State variable to store groups data
+  const [groupsData, setGroupsData] = useState([]);
+
+  /**
+   * Fetch groups data from the server.
+   *
+   * @function
+   * @inner
+   */
+  const fetchGroups = () => {
+    try {
+      const parsedUserData = JSON.parse(userData);
+      if (parsedUserData &amp;&amp; parsedUserData.id) {
+        fetch(`http://44.194.67.133:8080/TimeTogether/userGroups?userId=${parsedUserData.id}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            setGroupsData(data.groups);
+          })
+          .catch((error) => {
+            console.error("Error:", error);
+          });
+      }
+    } catch (error) {
+      console.error("Error parsing userData:", error);
+    }
+  };
+
+  // Fetch groups data when the component is focused or mounted
+  useEffect(() => {
+    // Adding focus listener to fetch groups data when the component is focused
+    const focusListener = navigation.addListener('focus', () => {
+      fetchGroups();
+    });
+
+    // Fetch groups data when the component is mounted
+    fetchGroups();
+
+    // Cleanup by removing the focus listener
+    return () => focusListener.remove();
+  }, [navigation, userData]);
+
+  // Set the language for i18n
+  useEffect(() => {
+    i18n.locale = language;
+  }, [language]);
+
+  // Render the component
+  return (
+    &lt;View style={styles.outerContainer}>
+      &lt;View style={styles.buttonsContainer}>
+        &lt;TouchableOpacity
+          style={styles.buttonFriends}
+          onPress={() => navigation.navigate('FriendsList')}>
+          &lt;Text style={styles.textButton} > {i18n.t('friends')} &lt;/Text>
+        &lt;/TouchableOpacity>
+
+        &lt;TouchableOpacity
+          style={styles.buttonGroup}
+          onPress={() => navigation.navigate('Group')}>
+          &lt;Text style={styles.textButton} > {i18n.t('groups')} &lt;/Text>
+        &lt;/TouchableOpacity>
+      &lt;/View>
+
+      &lt;View style={styles.container}>
+
+        &lt;ScrollView contentContainerStyle={styles.scrollViewContent}>
+          {groupsData.map((group, index) => (
+            &lt;TouchableOpacity
+              style={[styles.groupWrapper, { backgroundColor: group.color }]}
+              key={index}
+              onPress={() => navigation.navigate('InfoGrupo', { userId: group.id })}>
+              &lt;View style={styles.groupContainer}>
+                &lt;Text style={styles.groupName}>{group.name}&lt;/Text>
+              &lt;/View>
+            &lt;/TouchableOpacity>
+          ))}
+
+        &lt;/ScrollView>
+
+
+      &lt;/View>
+
+      &lt;Button
+        mode="contained"
+        theme={{ colors: { primary: '#304999' } }}
+        style={styles.createGroupButton}
+        onPress={() => navigation.navigate('NewGroup')}>
+        {i18n.t('createNewGroup')}
+      &lt;/Button>
+
+    &lt;/View>
+  );
+};
+
+// Styles for the component
+const styles = StyleSheet.create({
+  outerContainer: {
+    flex: 1,
+    marginTop: 50,
+  },
+  container: {
+    flex: 1,
+    padding: 16,
+    backgroundColor: '#C9C9C9',
+    borderRadius: 20,
+    margin: 20,
+    marginBottom: 10,
+  },
+  groupWrapper: {
+    backgroundColor: '#C9C9C9',
+    marginBottom: 8,
+    borderRadius: 10,
+    padding: 16,
+  },
+  groupContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  groupName: {
+    fontSize: 16,
+    marginRight: 10,
+    fontWeight: 'bold',
+  },
+  createGroupButton: {
+    margin: 20,
+    marginBottom: 10,
+    marginTop: 0,
+    borderRadius: 20,
+    alignItems: 'center',
+  },
+  scrollViewContent: {
+    paddingBottom: 10,
+  },
+  buttonsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  buttonFriends: {
+    backgroundColor: '#5C6361',
+    alignContent: 'center',
+    textAlign: 'center',
+    borderRadius: 5,
+  },
+  buttonGroup: {
+    backgroundColor: '#EF9009',
+    alignContent: 'center',
+    textAlign: 'center',
+    borderRadius: 5,
+  },
+  textButton: {
+    textAlign: 'center',
+    margin: 10,
+    color: 'white'
+  }
+});
+
+export default GroupsAll;
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#Calendari">Calendari</a></li><li><a href="global.html#CreateGroup">CreateGroup</a></li><li><a href="global.html#GroupsAll">GroupsAll</a></li><li><a href="global.html#InfoAmigo">InfoAmigo</a></li><li><a href="global.html#InfoEvento">InfoEvento</a></li><li><a href="global.html#InfoGroup">InfoGroup</a></li><li><a href="global.html#ScreensProvider">ScreensProvider</a></li><li><a href="global.html#Settings">Settings</a></li><li><a href="global.html#SignUp">SignUp</a></li><li><a href="global.html#SingUp">SingUp</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Mon Feb 19 2024 12:56:29 GMT+0100 (hora estándar de Europa central)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
