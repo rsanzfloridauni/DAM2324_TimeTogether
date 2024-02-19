@@ -15,10 +15,6 @@ TimeTogether es una APP totalmente gratuita diseñada para facilitar la gestión
 | [Hugo Estellés](mailto:huesga@floridauniversitaria.es) | [Carlos Asensi](mailto:caaslo@floridauniversitaria.es) | [Oscar Mercado](mailto:osmeal@floridauniversitaria.es) | [Elisabeth López](mailto:ellope01@floridauniversitaria.es) | [Tomás Chiva](mailto:tochmo@floridauniversitaria.es) |
 
 ## Descarga
-|:---:|:---:|:---:|:---:|:---:|
-| [Hugo Estellés](mailto:huesga@floridauniversitaria.es) | [Carlos Asensi](mailto:caaslo@floridauniversitaria.es) | [Oscar Mercado](mailto:osmeal@floridauniversitaria.es) | [Elisabeth López](mailto:ellope01@floridauniversitaria.es) | [Tomás Chiva](mailto:tochmo@floridauniversitaria.es) |
-
-## Descarga
 
 Puedes descargar el códgio de nuestra APP directamente en este repositorio de GitHub, tambien puedes descargar la APK para probar la applicacíon en tu dispositivo Android pinchando en este [enlace](link).
 
