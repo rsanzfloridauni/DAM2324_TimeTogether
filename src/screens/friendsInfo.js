@@ -1,5 +1,5 @@
-import React, { useState, useEffect,useContext  } from "react";
-import { ScrollView, View, Text, StyleSheet} from "react-native";
+import React, { useState, useEffect, useContext } from "react";
+import { ScrollView, View, Text, StyleSheet } from "react-native";
 import { Slider } from "@react-native-assets/slider";
 import {
   TextInput,
@@ -12,14 +12,22 @@ import i18n from 'i18n-js';
 import { en, es } from '../translation/localizations';
 import ScreensContext from './ScreenContext';
 
-i18n.translations = {
-  en,
-  es,
-};
-
+/**
+ * InfoAmigo component displays detailed information about a friend.
+ *
+ * @component
+ * @param {object} route - The route object containing navigation parameters.
+ * @param {object} navigation - The navigation object.
+ * @returns {JSX.Element} - JSX element representing the InfoAmigo component.
+ */
 const InfoAmigo = ({ route, navigation }) => {
+  // Extracting userId from route parameters
   const userId = route.params.userId;
+
+  // Accessing language from context
   const { language } = useContext(ScreensContext);
+
+  // State variables to store friend information
   const [name, setName] = useState("");
   const [mail, setMail] = useState("");
   const [favouriteColor, setFavouriteColor] = useState("");
@@ -31,13 +39,17 @@ const InfoAmigo = ({ route, navigation }) => {
   const [allergies, setAllergies] = useState("");
   const [birthday, setBirthday] = useState("");
   const [imgPerfil, setImgPerfil] = useState();
-  const [date, setDate] = useState(new Date());
-  const [inputDate, setInputDate] = React.useState(undefined);
+
+  // Arrays for clothing sizes and hobbies
   const tallas = ["XS", "S", "M", "L", "XL", "XXL"];
 
+  // Set the translations for i18n
+  i18n.translations = { en, es };
 
+  // Fetch friend information from the server
   useEffect(() => {
     i18n.locale = language;
+
     fetch(`http://44.194.67.133:8080/TimeTogether/friendInfo?id=${userId}`, {
       method: "GET",
     })
@@ -58,7 +70,7 @@ const InfoAmigo = ({ route, navigation }) => {
       .catch((error) => {
         console.error("Error fetching friend info:", error);
       });
-  }, [userId,, language]);
+  }, [userId, language]);
 
   return (
     <ScrollView style={styles.container}>

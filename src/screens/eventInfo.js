@@ -17,7 +17,16 @@ i18n.translations = {
   es,
 };
 
+/**
+ * InfoEvento component displays detailed information about a specific event.
+ *
+ * @component
+ * @param {object} route - The route object containing parameters.
+ * @param {object} navigation - The navigation object.
+ * @returns {JSX.Element} - JSX element representing the InfoEvento component.
+ */
 const InfoEvento = ({ route, navigation }) => {
+  // Context and state variables
   const { language } = useContext(ScreensContext);
   const [eventId, setEventId] = useState(route.params.eventId);
   const [eventColor, setEventColor] = useState(route.params.color);
@@ -28,10 +37,16 @@ const InfoEvento = ({ route, navigation }) => {
   const [place, setPlace] = useState("");
   const [participants, setParticipants] = useState([]);
 
+  /**
+   * Sets the language for i18n when it changes.
+   */
   useEffect(() => {
     i18n.locale = language;
   }, [language]);
 
+  /**
+   * Fetches event details from the server based on the eventId.
+   */
   useEffect(() => {
     fetch(`http://44.194.67.133:8080/TimeTogether/event?id=${eventId}`, {
       method: "GET",

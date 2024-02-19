@@ -14,15 +14,25 @@ i18n.translations = {
   en,
   es,
 };
-
+/**
+ * Settings component for configuring user preferences.
+ * @param {Object} props - React props for the component.
+ * @returns {JSX.Element} Settings component JSX.
+ */
 const Settings = (props) => {
+  // State variables and their initial values
   const [darkMode, setDarkMode] = useState(false);
   const { language, setLanguage } = useContext(ScreensContext);
 
+  // Update i18n locale when language changes
   useEffect(() => {
     i18n.locale = language;
   }, [language]);
 
+  /**
+   * Toggle the language between English and Spanish.
+   * @param {string} lang - Language code ('en' or 'es').
+   */
   const toggleLanguage = (lang) => {
     if (language !== lang) {
       setLanguage((prevLanguage) => {

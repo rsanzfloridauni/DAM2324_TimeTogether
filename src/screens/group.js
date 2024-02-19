@@ -5,23 +5,36 @@ import ScreenContext from "./ScreenContext";
 import i18n from 'i18n-js';
 import { en, es } from '../translation/localizations';
 
-i18n.translations = { en, es };
-
+/**
+ * GroupsAll component displays a list of groups associated with the user.
+ *
+ * @component
+ * @param {object} navigation - The navigation object.
+ * @returns {JSX.Element} - JSX element representing the GroupsAll component.
+ */
 const GroupsAll = ({ navigation }) => {
-  const { userData, language  } = useContext(ScreenContext);
+  // Accessing user data and language from context
+  const { userData, language } = useContext(ScreenContext);
+
+  // State variable to store groups data
   const [groupsData, setGroupsData] = useState([]);
 
-  useEffect(() => {
-    const fetchGroups = () => {
-      try {
-        const parsedUserData = JSON.parse(userData);
-        if (parsedUserData && parsedUserData.id) {
-          fetch(`http://44.194.67.133:8080/TimeTogether/userGroups?userId=${parsedUserData.id}`, {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          })
+  /**
+   * Fetch groups data from the server.
+   *
+   * @function
+   * @inner
+   */
+  const fetchGroups = () => {
+    try {
+      const parsedUserData = JSON.parse(userData);
+      if (parsedUserData && parsedUserData.id) {
+        fetch(`http://44.194.67.133:8080/TimeTogether/userGroups?userId=${parsedUserData.id}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
           .then((response) => response.json())
           .then((data) => {
             setGroupsData(data.groups);
@@ -29,25 +42,32 @@ const GroupsAll = ({ navigation }) => {
           .catch((error) => {
             console.error("Error:", error);
           });
-        }
-      } catch (error) {
-        console.error("Error parsing userData:", error);
       }
-    };
+    } catch (error) {
+      console.error("Error parsing userData:", error);
+    }
+  };
 
+  // Fetch groups data when the component is focused or mounted
+  useEffect(() => {
+    // Adding focus listener to fetch groups data when the component is focused
     const focusListener = navigation.addListener('focus', () => {
       fetchGroups();
     });
 
+    // Fetch groups data when the component is mounted
     fetchGroups();
 
+    // Cleanup by removing the focus listener
     return () => focusListener.remove();
   }, [navigation, userData]);
 
+  // Set the language for i18n
   useEffect(() => {
     i18n.locale = language;
   }, [language]);
 
+  // Render the component
   return (
     <View style={styles.outerContainer}>
       <View style={styles.buttonsContainer}>
@@ -94,6 +114,8 @@ const GroupsAll = ({ navigation }) => {
     </View>
   );
 };
+
+// Styles for the component
 const styles = StyleSheet.create({
   outerContainer: {
     flex: 1,

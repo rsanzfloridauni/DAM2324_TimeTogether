@@ -4,7 +4,14 @@ import { Button, TextInput, Portal, Modal, HelperText } from "react-native-paper
 import ScreensContext from './ScreenContext';
 import i18n from 'i18n-js';
 
+/**
+ * React component for user login.
+ * @param {Object} props - Component properties.
+ * @param {Object} props.navigation - React Navigation object for navigating between screens.
+ * @returns {JSX.Element} JSX Element representing the user login screen.
+ */
 export default function Login(props) {
+  // State variables for user login information
   const [mail, setMail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [viewPassword, setViewPassword] = React.useState(true);
@@ -12,20 +19,36 @@ export default function Login(props) {
   const [modalVisible, setModalVisible] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
 
+  // External library for MD5 encryption
   const CryptoJS = require("crypto-js");
 
+  /**
+   * Checks if there are errors in the email input.
+   * @returns {boolean} - True if there are errors, false otherwise.
+   */
   const hasErrors = () => {
     return isFocused && !mail.includes('@');
   };
 
+  /**
+   * Encrypts the password using MD5.
+   * @param {string} password - The password to be encrypted.
+   * @returns {string} - The MD5 encrypted password.
+   */
   function encryptMD5(password) {
     return CryptoJS.MD5(password).toString();
   }
 
+  /**
+   * Handles the confirmation of the modal.
+   */
   const handleConfirmation = () => {
     setModalVisible(false);
   };
 
+  /**
+   * Handles the login process.
+   */
   const handleLogIn = async () => {
     try {
       const response = await fetch(

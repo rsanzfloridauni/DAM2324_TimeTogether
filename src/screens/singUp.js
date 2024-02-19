@@ -14,7 +14,13 @@ import i18n from 'i18n-js';
 import { en, es } from '../translation/localizations';
 import ScreensContext from './ScreenContext';
 
-const SingUp = (props) => {
+/**
+ * SignUp component for user registration.
+ * @param {Object} props - React props for the component.
+ * @returns {JSX.Element} SignUp component JSX.
+ */
+const SignUp = (props) => {
+  // State variables and their initial values
   const [date, setDate] = useState(new Date());
   const [shirtSize, setShirtSize] = useState(0);
   const [pantsSize, setPantsSize] = useState(38);
@@ -28,11 +34,11 @@ const SingUp = (props) => {
   const [allergies, setAllergies] = useState("");
   const [hobbies, setHobbies] = useState("");
   const [confirmationCode, setConfirmationCode] = useState("");
-  const [birthday, setBirthday] = React.useState(undefined);
+  const [birthday, setBirthday] = useState(undefined);
   const { language } = useContext(ScreensContext);
-  const [checked, setChecked] = React.useState(false);
+  const [checked, setChecked] = useState(false);
   const [privacity, setPrivacity] = useState(false);
-  const [isVisible, setIsVisible] = React.useState(false);
+  const [isVisible, setIsVisible] = useState(false);
   const [confirmationVisible, setConfirmationVisible] = useState(false);
   const [modalComprovation, setModalComprovation] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
@@ -54,21 +60,38 @@ const SingUp = (props) => {
     require("../image/FotoMujer5.png"),
   ];
 
-
+  /**
+   * Encrypt the password using MD5.
+   * @param {string} pass1 - Password to be encrypted.
+   * @returns {string} - Encrypted password.
+   */
   function encryptMD5(pass1) {
     return CryptoJS.MD5(pass1).toString();
   }
+
+  // Localization setup
   i18n.translations = { en, es };
   i18n.locale = language;
 
+  /**
+   * Toggle the visibility of the confirmation modal.
+   */
   const toggleConfirmationVisibility = () => {
     setConfirmationVisible(!confirmationVisible);
   };
 
+  /**
+   * Check if there are errors in the email input.
+   * @returns {boolean} - True if there are errors, otherwise false.
+   */
   const hasErrors = () => {
     return isFocused && !mail.includes('@');
   };
 
+  /**
+   * Check if all required fields are not empty.
+   * @returns {boolean} - True if all required fields are not empty, otherwise false.
+   */
   const checkFieldsNotEmpty = () => {
     if (
       !name.trim() ||
@@ -84,26 +107,44 @@ const SingUp = (props) => {
     }
     return true;
   };
+
+  /**
+   * Toggle the visibility of the image selection modal.
+   */
   const toggleVisibility = () => {
     setIsVisible(!isVisible);
   };
 
+  /**
+   * Toggle the acceptance of privacy conditions.
+   */
   const togglePrivacity = () => {
     setPrivacity(!privacity);
   };
+
+  /**
+   * Handle the acceptance or rejection of privacy conditions.
+   */
   const handlePrivacity = () => {
     if (privacity == true) {
       setPrivacity(false);
     } else {
       setPrivacity(true);
     }
-  }
+  };
 
+  /**
+   * Handle the confirmation of the birthday and set the formatted date.
+   */
   const handleConfirmationBirthday = () => {
     setModalVisible(false);
     setBirthday(formatDate());
   };
 
+  /**
+   * Format the selected date to a string.
+   * @returns {string} - Formatted date string.
+   */
   const formatDate = () => {
     const day = date.getDate();
     const month = date.getMonth() + 1;
@@ -111,11 +152,13 @@ const SingUp = (props) => {
     return `${day}/${month}/${year}`;
   };
 
+  /**
+   * Handle the form submission, validate inputs, and make a POST request.
+   */
   const handleSubmit = async () => {
     if (!checkFieldsNotEmpty()) {
       setModalComprovation(true);
-    }
-    else {
+    } else {
       if (pass1 !== pass2) {
         alert(i18n.t('notMatchPasswords'));
         return;
@@ -167,21 +210,26 @@ const SingUp = (props) => {
           alert(i18n.t('codeIncorrect'));
         }
         toggleConfirmationVisibility();
-      }
-      else alert(i18n.t('acceptPrivacity'));
+      } else alert(i18n.t('acceptPrivacity'));
     }
   };
 
+  /**
+   * Handle the onPress event for date selection.
+   * @param {Object} params - Parameters related to date selection.
+   */
   const handleOnPress = (params) => {
     const selectedDate = new Date(params.date);
     setDate(selectedDate);
-  }
+  };
 
+  /**
+   * Handle the confirmation of the verification code and make a POST request.
+   */
   const handleConfirmation = async () => {
     const verificationData = {
       code: parseInt(confirmationCode, 10),
       email: mail,
-      
     };
 
     try {

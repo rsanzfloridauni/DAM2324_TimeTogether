@@ -1,5 +1,12 @@
 import React, { useState, useContext } from 'react';
-import { ScrollView, View, Text, StyleSheet, Image, Alert } from 'react-native';
+import {
+  ScrollView,
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  Alert,
+} from 'react-native';
 import {
   TextInput,
   Button,
@@ -14,6 +21,11 @@ import { en, es } from '../translation/localizations';
 import ScreensContext from './ScreenContext';
 import Participantes from '../../components/participantes.js';
 
+/**
+ * Componente de React Native para crear un grupo.
+ * @param {Object} props - Propiedades del componente.
+ * @returns {JSX.Element} Componente de creación de grupo JSX.
+ */
 const CreateGroup = (props) => {
   const [groupName, setGroupName] = useState('');
   const [groupDescription, setGroupDescription] = useState('');
@@ -28,6 +40,9 @@ const CreateGroup = (props) => {
   i18n.translations = { en, es };
   i18n.locale = language;
 
+  /**
+   * Busca a un amigo por su dirección de correo electrónico.
+   */
   const buscarAmigo = async () => {
     try {
       const response = await fetch(`http://44.194.67.133:8080/TimeTogether/userIdByEmail?email=${searchQuery}`, {
@@ -49,10 +64,16 @@ const CreateGroup = (props) => {
     }
   };
 
+  /**
+   * Limpia la barra de búsqueda.
+   */
   const clearSearch = () => {
     setSearchQuery('');
   };
 
+  /**
+   * Crea un grupo y lo envía al servidor.
+   */
   const createGroup = async () => {
     const randomNumber = Math.floor(Math.random() * 8);
     try {
@@ -98,7 +119,10 @@ const CreateGroup = (props) => {
     }
   };
 
-
+  /**
+   * Maneja la eliminación de un participante del grupo.
+   * @param {string} participantName - Nombre del participante a eliminar.
+   */
   const handleDeleteParticipant = (participantName) => {
     Alert.alert(
       i18n.t('confirmDeletion'),
@@ -117,7 +141,6 @@ const CreateGroup = (props) => {
         },
       ]
     );
-    
   };
   return (
     <ScrollView style={styles.container}>

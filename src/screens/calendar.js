@@ -1,5 +1,5 @@
-import React, { useState,useContext  } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import React, { useState, useContext } from 'react';
+import { View, StyleSheet } from 'react-native';
 import { Divider, Button } from 'react-native-paper';
 import dayjs from 'dayjs';
 import DateTimePicker from 'react-native-ui-datepicker';
@@ -7,19 +7,34 @@ import i18n from 'i18n-js';
 import { en, es } from '../translation/localizations';
 import ScreensContext from './ScreenContext';
 
+/**
+ * Calendari component for displaying a calendar and handling date selection.
+ *
+ * @component
+ * @param {object} props - The component props.
+ * @param {object} props.navigation - The navigation object.
+ * @returns {JSX.Element} - JSX element representing the Calendari component.
+ */
 const Calendari = (props) => {
+  // State and context variables
   const [date, setDate] = useState(dayjs());
   const { language } = useContext(ScreensContext);
 
+  // Set translations and locale
   i18n.translations = { en, es };
   i18n.locale = language;
 
+  /**
+   * Handles date selection and navigates to DateInfo screen.
+   *
+   * @param {object} params - The date selection parameters.
+   */
   const handleOnPress = (params) => {
-    console.log(params.date)
     const selectedDate = params.date;
     setDate(selectedDate);
     props.navigation.navigate('DateInfo', { day: selectedDate.toISOString() });
-  }
+  };
+  
   return (
     <View style={styles.outerContainer}>
       <View style={styles.titleContainer}></View>

@@ -1,41 +1,52 @@
-import React, { useState, useEffect,useContext } from 'react';
-import { ScrollView, View, Text, StyleSheet} from 'react-native';
-import {
-  TextInput,
-  Divider,
-  List,
-  IconButton,
-  Card,
-} from 'react-native-paper';
+import React, { useState, useEffect, useContext } from 'react';
+import { ScrollView, View, Text, StyleSheet } from 'react-native';
+import { TextInput, Divider, List, IconButton, Card } from 'react-native-paper';
 import Members from '../../components/miembros.js';
 import i18n from 'i18n-js';
 import { en, es } from '../translation/localizations';
 import ScreensContext from './ScreenContext';
 
-const InfoGroup = ({route, navigation}) => {
+/**
+ * InfoGroup component displays information about a group.
+ *
+ * @param {object} route - The route object containing parameters.
+ * @param {object} navigation - The navigation object.
+ * @returns {JSX.Element} - JSX element representing the InfoGroup component.
+ */
+const InfoGroup = ({ route, navigation }) => {
+  // Extracting userId from route parameters
   const userId = route.params.userId;
+
+  // State variables for group information
   const [groupName, setGroupName] = useState();
   const [groupDescription, setGroupDescription] = useState();
   const [names, setNames] = useState([]);
   const [color, setColor] = useState();
   const { language } = useContext(ScreensContext);
 
+  // Setting up localization with i18n
   i18n.translations = { en, es };
   i18n.locale = language;
 
+  /**
+   * Fetch group information from the server.
+   *
+   * @param {string} userId - The user ID for the group.
+   */
   useEffect(() => {
     fetch(`http://44.194.67.133:8080/TimeTogether/group?id=${userId}`, {
       method: "GET",
     })
       .then((response) => response.json())
       .then((data) => {
+        // Update state with fetched data
         setGroupName(data.name);
         setGroupDescription(data.description);
         setNames(data.members);
         setColor(data.color);
       })
       .catch((error) => {
-        console.error("Error fetching friend info:", error);
+        console.error("Error fetching group info:", error);
       });
   }, [userId]);
 

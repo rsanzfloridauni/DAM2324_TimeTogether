@@ -14,7 +14,14 @@ import i18n from "i18n-js";
 import ScreensContext from "./ScreenContext";
 import { en, es } from "../translation/localizations";
 
+/**
+ * React component for user sign-up and profile update.
+ * @param {Object} props - Component properties.
+ * @param {Object} navigation - React Navigation object for navigating between screens.
+ * @returns {JSX.Element} JSX Element representing the user sign-up and profile update screen.
+ */
 const SingUp = ({ navigation }) => {
+  // State variables for user data
   const { userData, setUserData, language } = useContext(ScreensContext);
   const parsedUserData = JSON.parse(userData);
   const [date, setDate] = useState(new Date());
@@ -35,6 +42,7 @@ const SingUp = ({ navigation }) => {
   const [selectedImage, setSelectedImage] = useState(parsedUserData.profile_picture);
   const tallas = ["XS", "S", "M", "L", "XL", "XXL"];
 
+  // Array of image paths for profile pictures
   const nombresImagenes = [
     require("../image/FotoHombre1.png"),
     require("../image/FotoHombre2.png"),
@@ -48,11 +56,18 @@ const SingUp = ({ navigation }) => {
     require("../image/FotoMujer5.png"),
   ];
 
-
+  /**
+   * Checks if the email has errors.
+   * @returns {boolean} - True if there are errors, false otherwise.
+   */
   const hasErrors = () => {
     return !mail.includes('@');
   };
 
+  /**
+   * Checks if all required fields are not empty.
+   * @returns {boolean} - True if all fields are not empty, false otherwise.
+   */
   const checkFieldsNotEmpty = () => {
     if (
       !name.trim() ||
@@ -68,37 +83,55 @@ const SingUp = ({ navigation }) => {
     return true;
   };
 
-
+  /**
+   * Formats the selected date to a string.
+   * @returns {string} - Formatted date string.
+   */
   const formatDate = () => {
     const day = date.getDate();
     const month = date.getMonth() + 1;
     const year = date.getFullYear();
     return `${day}/${month}/${year}`;
   };
+
+  /**
+   * Handles the onPress event for selecting a date.
+   * @param {Object} params - Date parameters.
+   */
   const handleOnPress = (params) => {
     const selectedDate = new Date(params.date);
     setDate(selectedDate);
-  }
+  };
+
+  /**
+   * Toggles the visibility of the profile picture selection modal.
+   */
   const toggleVisibility = () => {
     setIsVisible(!isVisible);
   };
+
+  // Set language translations and locale for internationalization
   i18n.translations = {
     en,
     es,
   };
-
   i18n.locale = language;
 
+  /**
+   * Handles the confirmation of the selected date in the modal.
+   */
   const handleConfirmation = () => {
     setModalVisible(false);
     setBirthday(formatDate());
   };
 
+  /**
+   * Updates the user profile on the server.
+   */
   const updateUser = async () => {
     if (hasErrors() || !checkFieldsNotEmpty()) {
       setModalComprovation(true);
-    }
-    else {
+    } else {
       try {
         const response = await fetch(
           `http://44.194.67.133:8080/TimeTogether/updateUser/${parsedUserData.id}`,
@@ -140,8 +173,12 @@ const SingUp = ({ navigation }) => {
         console.error("Error en la solicitud:", error);
         alert(`Error en la solicitud: ${error.message}`);
       }
-    };
-  }
+    }
+  };
+
+  /**
+   * Updates the user data after profile update.
+   */
   const updateData = async () => {
     try {
       const response = await fetch(

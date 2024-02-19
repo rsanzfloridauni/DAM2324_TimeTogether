@@ -7,21 +7,34 @@ import i18n from 'i18n-js';
 import { en, es } from '../translation/localizations';
 i18n.translations = { en, es };
 
+/**
+ * Friends component displays the list of friends and provides functionality to add and remove friends.
+ *
+ * @component
+ * @param {object} navigation - The navigation object.
+ * @returns {JSX.Element} - JSX element representing the Friends component.
+ */
 export default function Friends({ navigation }) {
+  // Context and state variables
   const { userData, setUserData, language } = useContext(ScreenContext);
   const [mail, setMail] = useState("");
   const [friendList, setFriendList] = useState([]);
   const [confirmationVisible, setConfirmationVisible] = useState(false);
   const parsedUserData = JSON.parse(userData);
 
-  useEffect(() => {
-    i18n.locale = language;
-  }, [language]);
-
+  /**
+   * Toggles the visibility of the confirmation modal.
+   */
   const toggleConfirmationVisibility = () => {
     setConfirmationVisible(!confirmationVisible);
   };
 
+  // Set the language for i18n when it changes
+  useEffect(() => {
+    i18n.locale = language;
+  }, [language]);
+
+  // Fetch friend list from the server when userData or confirmationVisible changes
   useEffect(() => {
     try {
       if (parsedUserData && parsedUserData.id) {
@@ -44,8 +57,10 @@ export default function Friends({ navigation }) {
     }
   }, [userData, confirmationVisible]);
 
+  /**
+   * Sends a request to add a friend with the specified email.
+   */
   const addFriend = async () => {
-
     try {
       const response = await fetch('http://44.194.67.133:8080/TimeTogether/addFriend', {
         method: 'POST',
@@ -73,8 +88,11 @@ export default function Friends({ navigation }) {
     }
   };
 
+  /**
+   * Sends a request to remove a friend with the specified ID.
+   * @param {string} param - The ID of the friend to be removed.
+   */
   const removeFriend = async (param) => {
-
     try {
       const response = await fetch('http://44.194.67.133:8080/TimeTogether/removeFriend', {
         method: 'POST',
@@ -97,7 +115,7 @@ export default function Friends({ navigation }) {
       } else {
         alert(i18n.t('userDeleted'))
         setConfirmationVisible(true);
-        setConfirmationVisible(false);      
+        setConfirmationVisible(false);
       }
     } catch (error) {
       alert(i18n.t('userNotFound'))
