@@ -1,0 +1,53 @@
+[{
+  "_id": {
+    "$oid": "65cb88e36e989f306afdee5e"
+  },
+  "name": "Prueba 1",
+  "members": [
+    "65c5114e7824b86e210102601",
+    "65c672ea42b0e3f3cd1ac316"
+  ],
+  "description": "Prueba 1",
+  "events": [
+    "65cb88e36e989f306afdee5e",
+    "65cb88e36e989f306afdee5e",
+    "65cf7aedff96d67ca2ed954d",
+    "65cf81ebff96d67ca2ed954e",
+    "65d33d930ad0b7050d7958eb",
+    "65d33dcd0ad0b7050d7958ec",
+    "65d33e370ad0b7050d7958ee"
+  ],
+  "color": "lightblue",
+  "_class": "timetogether.model.Grupo"
+},
+{
+  "_id": {
+    "$oid": "65cb8a086e989f306afdee61"
+  },
+  "name": "Grupo cena",
+  "members": [
+    "65c5114e7824b86e21010260"
+  ],
+  "description": "Grupo cena",
+  "events": [
+    "65c511317824b86e2101025c",
+    "65d33de30ad0b7050d7958ed"
+  ],
+  "color": "lightgreen",
+  "_class": "timetogether.model.Grupo"
+},
+{
+  "_id": {
+    "$oid": "65d3411c0ad0b7050d7958f0"
+  },
+  "name": "Prueba",
+  "members": [
+    "65cfb01ab3006b13c7694631"
+  ],
+  "description": "Prueba",
+  "events": [
+    "65d3412e0ad0b7050d7958f2"
+  ],
+  "color": "lightpink",
+  "_class": "timetogether.model.Grupo"
+}]

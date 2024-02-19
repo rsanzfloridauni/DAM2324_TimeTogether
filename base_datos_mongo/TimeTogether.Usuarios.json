@@ -1,0 +1,132 @@
+[{
+  "_id": {
+    "$oid": "65c5114e7824b86e21010260"
+  },
+  "name": "Kike",
+  "surname": "",
+  "mail": "1@",
+  "password": "f688ae26e9cfa3ba6235477831d5122e",
+  "friends": [
+    "65cfb01ab3006b13c7694631"
+  ],
+  "groups": [
+    "65cb8a086e989f306afdee61",
+    "65cb88e36e989f306afdee5e",
+    "65cb8a086e989f306afdee61",
+    "65ccf97a09d9dc61d9830592",
+    "65ccfb0c09d9dc61d9830593",
+    "65ccfb5b09d9dc61d9830594",
+    "65ccfc1909d9dc61d9830595",
+    "65ccfc7e09d9dc61d9830596",
+    "65ccfd0b09d9dc61d9830597",
+    "65ccfd6409d9dc61d9830598",
+    "65cd077f3459bb2977fa2f0c",
+    "65d33c710ad0b7050d7958e8"
+  ],
+  "favourite_color": "Verde",
+  "sizes": {
+    "shirt": 4,
+    "trousers": 43,
+    "shoes": 43
+  },
+  "hobbies": "Hobbies del usuariodd",
+  "profile_picture": "18",
+  "alergies": "Alergias conocidas del usuariodd",
+  "additional_information": "",
+  "addres": "Dirección del usuarioxx",
+  "birthday": "20/2/2024",
+  "_class": "timetogether.model.Usuario"
+},
+{
+  "_id": {
+    "$oid": "65c672e342b0e3f3cd1ac315"
+  },
+  "name": "Juan2",
+  "surname": "Pérez",
+  "mail": "12",
+  "password": "1",
+  "friends": [
+    "65c27aaebecd32311ee39640",
+    "65c27ab4becd32311ee39641"
+  ],
+  "groups": [
+    "65c5113f7824b86e2101025e",
+    "65c244e37b5b4bc89f9c67a7",
+    "65c66fbf42b0e3f3cd1ac311",
+    "65cbb09df1b20a5af11c8d4c"
+  ],
+  "favourite_color": "Azul",
+  "sizes": {
+    "shirt": 0,
+    "trousers": 32,
+    "shoes": 40
+  },
+  "hobbies": "Futbol, Padel y Natación",
+  "profile_picture": "https://example.com/imagenes/juan.jpg",
+  "alergies": "Polen y Nueces",
+  "additional_information": "Hola",
+  "addres": "Casa Paco",
+  "birthday": "1990-01-15",
+  "_class": "timetogether.model.Usuario"
+},
+{
+  "_id": {
+    "$oid": "65c672ea42b0e3f3cd1ac316"
+  },
+  "name": "Carlitos",
+  "surname": "Pérez",
+  "mail": "4",
+  "password": "1",
+  "friends": [
+    "65c27aaebecd32311ee39640",
+    "65c27ab4becd32311ee39641"
+  ],
+  "groups": [
+    "65c5113f7824b86e2101025e",
+    "65c244e37b5b4bc89f9c67a7",
+    "65c66fbf42b0e3f3cd1ac311"
+  ],
+  "favourite_color": "Azul",
+  "sizes": {
+    "shirt": 0,
+    "trousers": 32,
+    "shoes": 40
+  },
+  "hobbies": "Futbol, Padel y Natación",
+  "profile_picture": "https://example.com/imagenes/juan.jpg",
+  "alergies": "Polen y Nueces",
+  "additional_information": "Hola",
+  "addres": "Casa Paco",
+  "birthday": "1990-01-15",
+  "_class": "timetogether.model.Usuario"
+},
+{
+  "_id": {
+    "$oid": "65ca6ae1e3bae8331098633c"
+  },
+  "name": "Paco",
+  "surname": "Apellido del Usuario",
+  "mail": "44",
+  "password": "contraseñaSegura123",
+  "friends": [
+    "amigo1@example.com",
+    "amigo2@example.com"
+  ],
+  "groups": [
+    "grupo1",
+    "grupo2"
+  ],
+  "favourite_color": "Azul",
+  "sizes": {
+    "shirt": 42,
+    "trousers": 32,
+    "shoes": 9
+  },
+  "hobbies": "Leer, nadar, viajar",
+  "profile_picture": "url_a_la_imagen_del_perfil",
+  "alergies": "Ninguna",
+  "additional_information": "Información adicional del usuario",
+  "addres": "Calle Falsa 123, Ciudad, País",
+  "birthday": "1990-01-01",
+  "_class": "timetogether.model.Usuario"
+}]

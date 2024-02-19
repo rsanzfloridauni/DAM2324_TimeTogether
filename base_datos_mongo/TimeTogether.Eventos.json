@@ -1,0 +1,10 @@
+[{
+  "_id": {
+    "$oid": "65cf78d6318a935887933103"
+  },
+  "name": "Prueba",
+  "date": "16/2/2024",
+  "location": "H",
+  "description": "H",
+  "_class": "timetogether.model.Evento"
+}]
