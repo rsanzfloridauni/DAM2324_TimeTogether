@@ -140,6 +140,7 @@ const InfoAmigo = ({ route, navigation }) => {
               minimumTrackTintColor="#EF9009"
               maximumTrackTintColor="#000000"
               thumbTintColor="#304999"
+              enabled={false}
             />
           </View>
 
