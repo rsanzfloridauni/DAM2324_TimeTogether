@@ -1,7 +1,7 @@
-# TimeTogether API
+# TimeTogether APP
 
 <p align="center">
-  <img src="./imagenes/Logo.png" alt="TimeTogether Logo" />
+  <img src="../api/imagenes/Logo.png" alt="TimeTogether Logo" />
 </p>
 
 ## Descripción
@@ -16,4 +16,8 @@ TimeTogether es una APP totalmente gratuita diseñada para facilitar la gestión
 
 ## Descarga
 
-Puedes descargar el códgio de nuestra APP directamente en este repositorio de GitHub, tambien puedes descargar la APK para probar la applicacíon en tu dispositivo Android pinchando en este [enlace](link)
+Puedes descargar el códgio de nuestra APP directamente en este repositorio de GitHub, tambien puedes descargar la APK para probar la applicacíon en tu dispositivo Android pinchando en este [enlace](link).
+
+## Documentación
+
+Puedes acceder a la documentación de nuesta api pinchando en este [enlace](link) y a la documentación de nuestra aplicación pinchando en este otro [enlace](link).
