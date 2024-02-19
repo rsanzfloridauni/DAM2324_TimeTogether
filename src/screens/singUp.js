@@ -613,4 +613,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SingUp;
+export default SignUp;
