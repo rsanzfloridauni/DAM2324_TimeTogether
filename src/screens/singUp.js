@@ -194,7 +194,7 @@ const SingUp = (props) => {
     <Portal.Host>
       <ScrollView style={styles.container}>
         <View style={styles.form}>
-          <TouchableOpacity key={index} onPress={() => { setSelectedImage(ruta); toggleVisibility(); }}>
+          <TouchableOpacity onPress={() => { toggleVisibility(); }}>
             <Avatar.Image
               style={styles.logo}
               source={selectedImage}

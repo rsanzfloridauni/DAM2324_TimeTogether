@@ -175,7 +175,7 @@ const SingUp = ({ navigation }) => {
           size={20}
           onPress={() => navigation.navigate("Settings")} />
         <View style={styles.form}>
-          <TouchableOpacity key={index} onPress={() => { setSelectedImage(ruta); toggleVisibility(); }}>
+          <TouchableOpacity onPress={() => { toggleVisibility(); }}>
             <Avatar.Image
               style={styles.logo}
               source={selectedImage}
