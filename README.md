@@ -10,9 +10,9 @@ TimeTogether es una APP totalmente gratuita diseñada para facilitar la gestión
 
 ## Contacto
 
-| ![Hugo Estellés](imagen1.jpg) | ![Carlos Asensi](imagen2.jpg) | ![Oscar Mercado](imagen3.jpg) | ![Elisabeth López](imagen4.jpg) | ![Tomás Chiva](imagen5.jpg) |
+| <img src="./integrants/hugo.png" alt="Hugo Estellés" height="100"/> | <img src="./integrants/carlos.jpg" alt="Carlos Asensi" height="100"/> | <img src="./integrants/oscar.jpg" alt="Oscar Mercado" height="100"/> | <img src="./integrants/elisabeth.jpg" alt="Elisabeth López" height="100"/> | <img src="./integrants/tomas.jpg" alt="Tomás Chiva" height="100"/> |
 |:---:|:---:|:---:|:---:|:---:|
-| [Hugo Estellés](mailto:huesga@floridauniversitaria.es) | [Carlos Asensi](mailto:usuario2@example.com) | [Oscar Mercado](mailto:usuario3@example.com) | [Elisabeth López](mailto:usuario4@example.com) | [Tomás Chiva](mailto:usuario5@example.com) |
+| [Hugo Estellés](mailto:huesga@floridauniversitaria.es) | [Carlos Asensi](mailto:caaslo@floridauniversitaria.es) | [Oscar Mercado](mailto:osmeal@floridauniversitaria.es) | [Elisabeth López](mailto:ellope01@floridauniversitaria.es) | [Tomás Chiva](mailto:tochmo@floridauniversitaria.es) |
 
 ## Descarga
 
@@ -20,4 +20,4 @@ Puedes descargar el códgio de nuestra APP directamente en este repositorio de G
 
 ## Documentación
 
-Puedes acceder a la documentación de nuesta api pinchando en este [enlace](link) y a la documentación de nuestra aplicación pinchando en este otro [enlace](link).
+Puedes acceder a la documentación de nuesta api pinchando en este [enlace](../api/doc) y a la documentación de nuestra aplicación pinchando en este otro [enlace](./out).
