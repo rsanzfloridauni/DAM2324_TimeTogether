@@ -27,15 +27,17 @@ import Participantes from '../../components/participantes.js';
  * @returns {JSX.Element} Componente de creación de grupo JSX.
  */
 const CreateGroup = (props) => {
+  const { userData, setUserData, language } = useContext(ScreensContext);
+  const parsedUserData = JSON.parse(userData);
   const [groupName, setGroupName] = useState('');
   const [groupDescription, setGroupDescription] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
   const [colors, setColors] = useState(['lightblue', '#EC7063', '#82E0AA', '#F7DC6F', '#F8C471', 'lightpink', '#C39BD3', '#45B39D']);
-  const [names, setNames] = useState([]);
-  const [ids, setIds] = useState([]);
+  const [names, setNames] = useState([parsedUserData.name]);
+  const [ids, setIds] = useState([parsedUserData.id]);
   const [events, setEvents] = useState([]);
   const [searching, setSearching] = useState(false);
-  const { language } = useContext(ScreensContext);
+
 
   i18n.translations = { en, es };
   i18n.locale = language;
